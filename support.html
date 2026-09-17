@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Customer Support | AI Pharma Developments</title>
+  <meta name="description" content="Customer support for AI Pharma Developments — contact channels, SLA guidance, and request form." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">AI</span>
+        <span>AI Pharma Developments</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html#platform">Platform</a>
+        <a href="index.html#solutions">Solutions</a>
+        <a class="active" href="support.html">Customer Support</a>
+        <a class="btn btn-primary" href="#contact">Contact support</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="container support-hero">
+      <div class="eyebrow">Customer Support</div>
+      <h1>We’re here for onboarding, incidents, and product questions.</h1>
+      <p class="lead">
+        Reach the AI Pharma Developments support desk for access requests, technical issues,
+        validation evidence packs, and partnership inquiries.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="container contact-grid">
+        <div class="card" id="channels">
+          <h2>Support channels</h2>
+          <ul class="contact-list">
+            <li>
+              <div>
+                <strong>Support email</strong>
+                <a href="mailto:troy.windsor1989@gmail.com?subject=AI%20Pharma%20Developments%20Support">troy.windsor1989@gmail.com</a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Support portal</strong>
+                <span>This page — submit a request below and we’ll follow up by email.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Priority incidents</strong>
+                <span>Mark severity as Sev-1 / Sev-2 in the form. We respond first to production-impacting issues.</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Hours</strong>
+                <span>24/7 monitoring for contracted production systems · Standard requests: business hours AEST</span>
+              </div>
+            </li>
+            <li>
+              <div>
+                <strong>Company site</strong>
+                <a href="index.html">AI Pharma Developments home</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card" id="contact">
+          <h2>Submit a support request</h2>
+          <p class="form-note">Sending opens your email client with a pre-filled message to our support inbox.</p>
+          <form id="support-form">
+            <label>
+              Full name
+              <input name="name" required placeholder="Jane Researcher" autocomplete="name" />
+            </label>
+            <label>
+              Work email
+              <input type="email" name="email" required placeholder="you@company.com" autocomplete="email" />
+            </label>
+            <label>
+              Organization
+              <input name="org" placeholder="Company / hospital / lab" />
+            </label>
+            <label>
+              Request type
+              <select name="type" required>
+                <option value="Technical issue">Technical issue</option>
+                <option value="Access / onboarding">Access / onboarding</option>
+                <option value="Billing">Billing</option>
+                <option value="Partnership">Partnership</option>
+                <option value="Security / compliance">Security / compliance</option>
+                <option value="Other">Other</option>
+              </select>
+            </label>
+            <label>
+              Severity
+              <select name="severity" required>
+                <option value="Sev-3 (general)">Sev-3 (general)</option>
+                <option value="Sev-2 (degraded)">Sev-2 (degraded)</option>
+                <option value="Sev-1 (production down)">Sev-1 (production down)</option>
+              </select>
+            </label>
+            <label>
+              How can we help?
+              <textarea name="message" required placeholder="Describe the issue, environment, and any error messages."></textarea>
+            </label>
+            <button class="btn btn-primary" type="submit">Email support</button>
+            <div class="toast" id="toast" role="status">Support email draft opened. If nothing appeared, write us at troy.windsor1989@gmail.com.</div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container panel">
+        <h2>What to include for faster resolution</h2>
+        <div class="grid-3" style="margin-top:1rem">
+          <article class="card">
+            <h3>Environment</h3>
+            <p>Tenant name, region, workspace ID, and whether the issue is staging or production.</p>
+          </article>
+          <article class="card">
+            <h3>Reproduction</h3>
+            <p>Steps, screenshots, timestamps (UTC), and user role affected.</p>
+          </article>
+          <article class="card">
+            <h3>Impact</h3>
+            <p>Who is blocked, clinical/quality risk notes, and whether a workaround exists.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div>
+        <a href="index.html">Home</a> ·
+        <a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+</body>
+</html>
