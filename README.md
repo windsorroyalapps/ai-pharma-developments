@@ -1,17 +1,37 @@
 # AI Pharma Developments
 
-Public website for **AI Pharma Developments** — AI-accelerated pharmaceutical research, operations, and customer support.
+Public website for **AI Pharma Developments**.
 
 ## Live URLs
 
-- Site: https://windsorroyalapps.github.io/ai-pharma-developments/
-- Customer Support: https://windsorroyalapps.github.io/ai-pharma-developments/support.html
+- Site: https://aipharmadevelopments.com/
+- www: https://www.aipharmadevelopments.com/
+- Customer Support: https://aipharmadevelopments.com/support.html
+- GitHub Pages fallback: https://windsorroyalapps.github.io/ai-pharma-developments/
 - Support email: troy.windsor1989@gmail.com
 
-## Local preview
+## DNS (GitHub Pages)
 
-```bash
-python3 -m http.server 4173 --directory .
+Apex `aipharmadevelopments.com` A records:
+
+```
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
 ```
 
-Open http://127.0.0.1:4173/
+Optional AAAA:
+
+```
+2606:50c0:8000::153
+2606:50c0:8001::153
+2606:50c0:8002::153
+2606:50c0:8003::153
+```
+
+`www` CNAME:
+
+```
+www -> windsorroyalapps.github.io
+```
