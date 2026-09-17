@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pay | AI Pharma Developments</title>
+  <meta name="description" content="Pay AI Pharma Developments securely with Google Pay." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <script src="https://pay.google.com/gp/p/js/pay.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">AI</span>
+        <span>AI Pharma Developments</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html#solutions">Solutions</a>
+        <a href="support.html">Support</a>
+        <a class="active" href="pay.html">Pay</a>
+        <a class="btn btn-primary" href="support.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Google Pay</div>
+    <h1>Secure checkout</h1>
+    <p class="lead">Pay invoices or deposits for AI Pharma Developments services using Google Pay.</p>
+
+    <div class="grid-2" style="margin-top:1.5rem">
+      <section class="card">
+        <h2>Payment details</h2>
+        <form id="pay-form" style="margin-top:1rem">
+          <label>
+            Amount (AUD)
+            <input id="amount" name="amount" type="number" min="1" step="0.01" value="100.00" required />
+          </label>
+          <label>
+            Description
+            <input id="description" name="description" value="AI Pharma Developments services" required />
+          </label>
+          <label>
+            Your email (receipt)
+            <input id="email" name="email" type="email" placeholder="you@company.com" required />
+          </label>
+          <p class="form-note">
+            Mode: <strong id="pay-mode">TEST</strong>.
+            Replace merchant ID in production via Google Pay &amp; Wallet Console.
+          </p>
+          <div id="google-pay-button" style="margin-top:1rem;min-height:48px"></div>
+          <div class="toast" id="pay-toast" role="status"></div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>How agent orders work</h2>
+        <p>
+          Authorized agent-executed orders are confirmation-gated. The local AI can prepare or
+          record an order only after you explicitly confirm. Customer Google Pay checkouts on this
+          page collect a payment token for processing by your configured gateway.
+        </p>
+        <ul style="color:var(--muted);padding-left:1.1rem">
+          <li>Inbound: customers pay here with Google Pay</li>
+          <li>Outbound: agent tools require <code>confirm=true</code> per order</li>
+          <li>Ledger: <code>/mnt/2tb/google-pay-orders/ledger.jsonl</code></li>
+          <li>Support: <a href="support.html">Customer Support</a></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/google-pay.js"></script>
+</body>
+</html>
