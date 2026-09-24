@@ -1,154 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Customer Support | AI Pharma Developments</title>
-  <meta name="description" content="Customer support for AI Pharma Developments — contact channels, SLA guidance, and request form." />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <meta name="description" content="Contact AI Pharma Developments for platform, evaluation, security, onboarding, research, clinical, quality, or patient-support enquiries.">
+  <meta name="theme-color" content="#06131f">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://aipharmadevelopments.com/support.html">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Customer Support | AI Pharma Developments">
+  <meta property="og:description" content="Talk with AI Pharma Developments about a pharmaceutical AI workflow.">
+  <meta property="og:url" content="https://aipharmadevelopments.com/support.html">
 </head>
 <body>
-  <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">AI</span>
-        <span>AI Pharma Developments</span>
-      </a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="index.html#platform">Platform</a>
-        <a href="index.html#solutions">Solutions</a>
-        <a href="support.html">Customer Support</a>
-        <a href="pay.html">Pay</a>
-        <a class="btn btn-primary" href="#contact">Contact support</a>
-      </nav>
-    </div>
-  </header>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header"><div class="container nav-shell"><a class="brand" href="index.html" aria-label="AI Pharma Developments home"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="brand-gradient-support" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#66f4d2"/><stop offset="1" stop-color="#7aa7ff"/></linearGradient></defs><rect width="48" height="48" rx="15" fill="url(#brand-gradient-support)"/><path d="M13 33.5 20.5 15l4.2 9.1 3.5-5.4L36 33.5h-6.2l-3.1-6.3-3.5 6.3H13Z" fill="#06131f"/><circle cx="35" cy="13" r="3" fill="#06131f"/></svg><span class="brand-copy"><strong>AI Pharma</strong><small>Developments</small></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="sr-only">Toggle navigation</span><span></span><span></span><span></span></button><nav class="nav-links" id="site-navigation" aria-label="Primary navigation"><a href="platform.html">Platform</a><a href="solutions.html">Solutions</a><a href="research.html">Research</a><a href="trust.html">Trust</a><a href="resources.html">Resources</a><a href="support.html" aria-current="page">Support</a><a class="btn btn-primary btn-small" href="#contact">Contact support</a></nav></div></header>
 
-  <main>
-    <section class="container support-hero">
-      <div class="eyebrow">Customer Support</div>
-      <h1>We’re here for onboarding, incidents, and product questions.</h1>
-      <p class="lead">
-        Reach the AI Pharma Developments support desk for access requests, technical issues,
-        validation evidence packs, and partnership inquiries.
-      </p>
+  <main id="main">
+    <section class="page-hero"><div class="container page-hero-grid"><div><div class="eyebrow"><span class="eyebrow-dot"></span>Customer support</div><h1>Start with the decision you need to make better.</h1><p class="lead">Tell us about the workflow, evidence, users, and constraints. We will help clarify the next useful step—whether that is a scoping conversation, evaluation plan, technical review, or partner introduction.</p></div><aside class="page-hero-aside" aria-label="Support enquiries"><span>Support enquiries</span><ul><li>New use-case discovery</li><li>Platform and architecture</li><li>Evaluation and due diligence</li><li>Security and governance</li><li>Onboarding and partnerships</li></ul></aside></div></section>
+
+    <section class="section" id="contact">
+      <div class="container support-layout">
+        <aside class="support-card" aria-label="Support contact channels">
+          <h2>Contact channels</h2>
+          <p>Email is the simplest route. Please do not include patient-identifiable, confidential, or export-controlled information in an initial message.</p>
+          <div class="support-channels">
+            <div class="support-channel"><strong>General &amp; new enquiries</strong><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+            <div class="support-channel"><strong>Existing customer support</strong><span>Use the agreed support channel in your statement of work or service agreement.</span></div>
+            <div class="support-channel"><strong>Security or privacy concern</strong><span>Use the subject line “Security request” and provide a concise description.</span></div>
+            <div class="support-channel"><strong>What to include</strong><span>Team, intended decision, evidence types, data sensitivity, timeline, and desired outcome.</span></div>
+          </div>
+          <div class="callout"><p><strong>No real-time status promise.</strong> Response times should be agreed for the specific service. Urgent production incidents should use the escalation route in the relevant agreement.</p></div>
+        </aside>
+
+        <section class="support-form-card" aria-labelledby="form-title">
+          <h2 id="form-title">Tell us about your use case</h2>
+          <p>This static form opens a pre-filled message in your email application. It does not transmit information to a web server.</p>
+          <form id="support-form">
+            <div class="form-grid">
+              <label class="form-field">Full name<input type="text" name="name" autocomplete="name" placeholder="Your name" required></label>
+              <label class="form-field">Work email<input type="email" name="email" autocomplete="email" placeholder="you@company.com" required></label>
+              <label class="form-field">Organization<input type="text" name="organization" autocomplete="organization" placeholder="Company, university, hospital, or lab"></label>
+              <label class="form-field">Area of interest<select name="requestType" required><option value="">Choose an area</option><option value="Research and discovery">Research &amp; discovery</option><option value="Clinical and medical">Clinical &amp; medical</option><option value="Manufacturing and quality">Manufacturing &amp; quality</option><option value="Patient support">Patient support</option><option value="Platform evaluation">Platform evaluation</option><option value="Trust and security">Trust &amp; security</option><option value="Partnership">Partnership</option><option value="Other">Other</option></select></label>
+              <label class="form-field form-field-full">Urgency<select name="urgency" required><option value="Exploratory">Exploratory—no fixed date</option><option value="Planned evaluation">Planned evaluation</option><option value="Time-sensitive project">Time-sensitive project</option><option value="Existing service issue">Existing service issue</option></select></label>
+              <label class="form-field form-field-full">What decision or workflow are you trying to improve?<textarea name="message" placeholder="Describe the users, decision, evidence, current process, and what a useful outcome would look like." required></textarea></label>
+              <label class="checkbox-field form-field-full"><input type="checkbox" name="consent" required><span>I confirm this message does not contain patient-identifiable, confidential, or export-controlled information.</span></label>
+            </div>
+            <p class="form-note">Submitting opens your default email application with this request. You can review the message before sending it.</p>
+            <div class="form-actions"><button class="btn btn-primary" type="submit">Open email draft <span aria-hidden="true">↗</span></button><div class="toast" data-form-status role="status" aria-live="polite"></div></div>
+          </form>
+        </section>
+      </div>
     </section>
 
-    <section class="section">
-      <div class="container contact-grid">
-        <div class="card" id="channels">
-          <h2>Support channels</h2>
-          <ul class="contact-list">
-            <li>
-              <div>
-                <strong>Support email</strong>
-                <a href="mailto:troy.windsor1989@gmail.com?subject=AI%20Pharma%20Developments%20Support">troy.windsor1989@gmail.com</a>
-              </div>
-            </li>
-            <li>
-              <div>
-                <strong>Support portal</strong>
-                <span>This page — submit a request below and we’ll follow up by email.</span>
-              </div>
-            </li>
-            <li>
-              <div>
-                <strong>Priority incidents</strong>
-                <span>Mark severity as Sev-1 / Sev-2 in the form. We respond first to production-impacting issues.</span>
-              </div>
-            </li>
-            <li>
-              <div>
-                <strong>Hours</strong>
-                <span>24/7 monitoring for contracted production systems · Standard requests: business hours AEST</span>
-              </div>
-            </li>
-            <li>
-              <div>
-                <strong>Company site</strong>
-                <a href="index.html">AI Pharma Developments home</a>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div class="card" id="contact">
-          <h2>Submit a support request</h2>
-          <p class="form-note">Sending opens your email client with a pre-filled message to our support inbox.</p>
-          <form id="support-form">
-            <label>
-              Full name
-              <input name="name" required placeholder="Jane Researcher" autocomplete="name" />
-            </label>
-            <label>
-              Work email
-              <input type="email" name="email" required placeholder="you@company.com" autocomplete="email" />
-            </label>
-            <label>
-              Organization
-              <input name="org" placeholder="Company / hospital / lab" />
-            </label>
-            <label>
-              Request type
-              <select name="type" required>
-                <option value="Technical issue">Technical issue</option>
-                <option value="Access / onboarding">Access / onboarding</option>
-                <option value="Billing">Billing</option>
-                <option value="Partnership">Partnership</option>
-                <option value="Security / compliance">Security / compliance</option>
-                <option value="Other">Other</option>
-              </select>
-            </label>
-            <label>
-              Severity
-              <select name="severity" required>
-                <option value="Sev-3 (general)">Sev-3 (general)</option>
-                <option value="Sev-2 (degraded)">Sev-2 (degraded)</option>
-                <option value="Sev-1 (production down)">Sev-1 (production down)</option>
-              </select>
-            </label>
-            <label>
-              How can we help?
-              <textarea name="message" required placeholder="Describe the issue, environment, and any error messages."></textarea>
-            </label>
-            <button class="btn btn-primary" type="submit">Email support</button>
-            <div class="toast" id="toast" role="status">Support email draft opened. If nothing appeared, write us at troy.windsor1989@gmail.com.</div>
-          </form>
+    <section class="section section-soft" aria-labelledby="before-title">
+      <div class="container">
+        <div class="section-heading centered-heading"><div class="eyebrow">Before you contact us</div><h2 id="before-title">A little context makes the first conversation useful.</h2><p>You do not need a finished specification. Clear starting points are enough.</p></div>
+        <div class="grid-4">
+          <article class="mini-card"><span>01</span><h3>Decision</h3><p>What choice or task needs to improve, and who makes or approves it?</p></article>
+          <article class="mini-card"><span>02</span><h3>Evidence</h3><p>Which literature, studies, documents, records, or datasets are relevant?</p></article>
+          <article class="mini-card"><span>03</span><h3>Risk</h3><p>What would be harmful if the system were wrong, incomplete, or misused?</p></article>
+          <article class="mini-card"><span>04</span><h3>Success</h3><p>What would make a bounded pilot worth continuing or stopping?</p></article>
         </div>
       </div>
     </section>
 
     <section class="section">
-      <div class="container panel">
-        <h2>What to include for faster resolution</h2>
-        <div class="grid-3" style="margin-top:1rem">
-          <article class="card">
-            <h3>Environment</h3>
-            <p>Tenant name, region, workspace ID, and whether the issue is staging or production.</p>
-          </article>
-          <article class="card">
-            <h3>Reproduction</h3>
-            <p>Steps, screenshots, timestamps (UTC), and user role affected.</p>
-          </article>
-          <article class="card">
-            <h3>Impact</h3>
-            <p>Who is blocked, clinical/quality risk notes, and whether a workaround exists.</p>
-          </article>
+      <div class="container content-grid">
+        <aside class="sticky-aside" aria-label="Support guide"><h2>Support guide</h2><a href="#contact">Contact</a><a href="#scope">How we can help</a><a href="#boundaries">Important boundaries</a><a href="#faq">Frequently asked questions</a></aside>
+        <div class="prose-stack">
+          <section class="prose-block" id="scope"><div class="eyebrow">How we can help</div><h2>Scoping, evaluation, and delivery conversations.</h2><p>We can discuss a proposed workflow, evidence and access requirements, deployment options, evaluation design, and the controls needed for a responsible pilot.</p><div class="grid-2"><article class="detail-card"><h3>New enquiries</h3><p>Use the form to describe the use case and desired next step.</p></article><article class="detail-card"><h3>Existing customers</h3><p>Use the named support and escalation details in the applicable agreement.</p></article><article class="detail-card"><h3>Partnerships</h3><p>Explain the area of expertise, organisation type, and proposed collaboration.</p></article><article class="detail-card"><h3>Speaking</h3><p>Include the event, audience, date, and topic so the request can be routed.</p></article></div></section>
+          <section class="prose-block" id="boundaries"><div class="eyebrow">Important boundaries</div><h2>Protect sensitive information in the first message.</h2><p>Do not send patient-identifiable data, credentials, secrets, proprietary datasets, or export-controlled information through the public support form. For a live engagement, agree approved channels, access controls, retention, and deletion before sharing sensitive material.</p><div class="callout"><p>AI Pharma Developments does not provide medical advice, diagnosis, treatment, or autonomous clinical decisions through this website.</p></div></section>
+          <section class="prose-block" id="faq"><div class="eyebrow">Frequently asked questions</div><h2>Common questions before an enquiry.</h2><div class="faq-list"><details><summary>Do I need a fully defined AI use case?</summary><div class="faq-answer"><p>No. A clear decision, current workflow, users, and evidence are enough to begin. We can help structure the rest.</p></div></details><details><summary>Can you work with our existing data and tools?</summary><div class="faq-answer"><p>Potentially. The first step is to understand permissions, formats, interfaces, data ownership, and operating constraints before recommending an integration pattern.</p></div></details><details><summary>Can you guarantee regulatory approval?</summary><div class="faq-answer"><p>No. We help design and evidence a system for its intended use. Validation, approval, and compliance depend on the actual system, organisation, jurisdiction, and applicable requirements.</p></div></details><details><summary>Do you offer a proof of concept?</summary><div class="faq-answer"><p>A bounded pilot may be appropriate when the decision, evidence, success measures, and review path are sufficiently clear. We can discuss scope and controls before recommending one.</p></div></details><details><summary>Where is my data hosted?</summary><div class="faq-answer"><p>That depends on the proposed deployment. Shared, private-cloud, and customer-environment options have different controls. We document the chosen boundary before data is used.</p></div></details></div></section>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container footer-row">
-      <div>© <span id="year"></span> AI Pharma Developments</div>
-      <div>
-        <a href="index.html">Home</a> ·
-        <a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a>
-      </div>
-    </div>
-  </footer>
+  <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand" href="index.html"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="15" fill="#66f4d2"/><path d="M13 33.5 20.5 15l4.2 9.1 3.5-5.4L36 33.5h-6.2l-3.1-6.3-3.5 6.3H13Z" fill="#06131f"/><circle cx="35" cy="13" r="3" fill="#06131f"/></svg><span class="brand-copy"><strong>AI Pharma</strong><small>Developments</small></span></a><p>Human-supervised intelligence for pharmaceutical discovery, evidence, operations, and support.</p><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div><div class="footer-column"><h2>Platform</h2><a href="platform.html">Overview</a><a href="platform.html#evidence-engine">Evidence engine</a><a href="research.html#evaluation">Evaluation</a><a href="trust.html#governance">Governance</a></div><div class="footer-column"><h2>Solutions</h2><a href="solutions.html#research-discovery">Research &amp; discovery</a><a href="solutions.html#clinical-medical">Clinical &amp; medical</a><a href="solutions.html#manufacturing-quality">Manufacturing &amp; quality</a><a href="solutions.html#patient-access">Patient access</a></div><div class="footer-column"><h2>Company</h2><a href="about.html">About</a><a href="resources.html">Resources</a><a href="support.html">Customer support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div><div class="container footer-bottom"><p>© <span data-year></span> AI Pharma Developments. All rights reserved.</p><p>For research and operational support—not medical advice, diagnosis, or treatment.</p></div></footer>
   <script src="js/site.js"></script>
 </body>
 </html>

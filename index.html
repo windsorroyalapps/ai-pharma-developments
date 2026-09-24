@@ -1,171 +1,431 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Pharma Developments | AI-Accelerated Medicine</title>
-  <meta name="description" content="AI Pharma Developments builds AI systems for drug discovery, clinical insight, manufacturing quality, and patient support." />
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Pharma Developments | Intelligence from discovery to delivery</title>
+  <meta name="description" content="AI Pharma Developments builds human-supervised AI systems for pharmaceutical discovery, clinical evidence, quality operations, and patient support.">
+  <meta name="theme-color" content="#06131f">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://aipharmadevelopments.com/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AI Pharma Developments">
+  <meta property="og:description" content="Human-supervised intelligence for pharmaceutical discovery, clinical, quality, and patient workflows.">
+  <meta property="og:url" content="https://aipharmadevelopments.com/">
+  <meta property="og:site_name" content="AI Pharma Developments">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AI Pharma Developments",
+    "url": "https://aipharmadevelopments.com/",
+    "email": "troy.windsor1989@gmail.com",
+    "description": "Human-supervised AI systems for pharmaceutical research and operations.",
+    "areaServed": "Worldwide"
+  }
+  </script>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
   <header class="site-header">
-    <div class="container nav">
-      <a class="brand" href="index.html">
-        <span class="brand-mark">AI</span>
-        <span>AI Pharma Developments</span>
+    <div class="container nav-shell">
+      <a class="brand" href="index.html" aria-label="AI Pharma Developments home">
+        <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+          <defs>
+            <linearGradient id="brand-gradient-home" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#66f4d2"/>
+              <stop offset="1" stop-color="#7aa7ff"/>
+            </linearGradient>
+          </defs>
+          <rect width="48" height="48" rx="15" fill="url(#brand-gradient-home)"/>
+          <path d="M13 33.5 20.5 15l4.2 9.1 3.5-5.4L36 33.5h-6.2l-3.1-6.3-3.5 6.3H13Z" fill="#06131f"/>
+          <circle cx="35" cy="13" r="3" fill="#06131f"/>
+        </svg>
+        <span class="brand-copy"><strong>AI Pharma</strong><small>Developments</small></span>
       </a>
-      <nav class="nav-links" aria-label="Primary">
-        <a href="#platform">Platform</a>
-        <a href="#solutions">Solutions</a>
-        <a href="#research">Research</a>
-        <a href="#compliance">Compliance</a>
-        <a href="support.html">Customer Support</a>
-        <a href="pay.html">Pay</a>
-        <a class="btn btn-primary" href="support.html#contact">Contact</a>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav-links" id="site-navigation" aria-label="Primary navigation">
+        <a href="platform.html">Platform</a>
+        <a href="solutions.html">Solutions</a>
+        <a href="research.html">Research</a>
+        <a href="trust.html">Trust</a>
+        <a href="resources.html">Resources</a>
+        <a href="support.html">Support</a>
+        <a class="btn btn-primary btn-small" href="support.html#contact">Talk to an expert</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="container hero">
-      <div>
-        <div class="eyebrow">Pharmaceutical AI · Discovery to Delivery</div>
-        <h1>Intelligent systems for safer, faster medicine development.</h1>
-        <p class="lead">
-          AI Pharma Developments designs and deploys machine learning platforms that help research teams,
-          manufacturers, and care organizations turn complex biomedical data into decisions they can trust.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="support.html#contact">Talk to support</a>
-          <a class="btn btn-ghost" href="#solutions">Explore solutions</a>
-        </div>
-        <div class="stats">
-          <div class="stat"><strong>24/7</strong><span>Support coverage</span></div>
-          <div class="stat"><strong>GxP</strong><span>Aligned workflows</span></div>
-          <div class="stat"><strong>Secure</strong><span>Data residency options</span></div>
-          <div class="stat"><strong>Audit</strong><span>Ready model trails</span></div>
-        </div>
-      </div>
-      <aside class="hero-card">
-        <h3>What we ship</h3>
-        <ul>
-          <li>Target & compound prioritization copilots</li>
-          <li>Clinical evidence summarization with citations</li>
-          <li>Quality & deviation intelligence for manufacturing</li>
-          <li>Patient support assistants with escalation paths</li>
-          <li>Private model hosting for regulated environments</li>
-        </ul>
-      </aside>
-    </section>
-
-    <section class="section" id="platform">
-      <div class="container">
-        <div class="section-head">
-          <h2>One platform across the pharma lifecycle</h2>
-          <p>Modular AI services that plug into R&D, clinical, quality, and commercial operations without forcing a rip-and-replace.</p>
-        </div>
-        <div class="grid-3">
-          <article class="card">
-            <div class="icon-pill">01</div>
-            <h3>Discovery Engine</h3>
-            <p>Multi-modal models for literature, assays, and structure data to surface promising hypotheses faster.</p>
-          </article>
-          <article class="card">
-            <div class="icon-pill">02</div>
-            <h3>Clinical Insight</h3>
-            <p>Protocol, CSR, and real-world evidence assistants with source-linked answers for medical teams.</p>
-          </article>
-          <article class="card">
-            <div class="icon-pill">03</div>
-            <h3>Ops & Quality Guard</h3>
-            <p>Deviation clustering, CAPA drafting support, and batch documentation checks for plant teams.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="solutions">
-      <div class="container">
-        <div class="section-head">
-          <h2>Solutions by team</h2>
-          <p>Built for the people who move medicines from lab bench to patient.</p>
-        </div>
-        <div class="grid-2">
-          <article class="card">
-            <h3>R&D leadership</h3>
-            <p>Portfolio triage dashboards, experiment planning assistants, and knowledge graph search across internal and public data.</p>
-          </article>
-          <article class="card">
-            <h3>Medical & safety</h3>
-            <p>Signal detection support, narrative drafting aids, and controlled retrieval over SOPs and label texts.</p>
-          </article>
-          <article class="card">
-            <h3>Manufacturing & QA</h3>
-            <p>Process monitoring copilots, deviation insights, and change-control document helpers with role-based access.</p>
-          </article>
-          <article class="card">
-            <h3>Patient services</h3>
-            <p>Branded support agents for education and logistics FAQs, with warm handoff to human specialists.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="research">
-      <div class="container panel">
-        <div class="section-head">
-          <h2>Research posture</h2>
-          <p>We combine foundation models with domain adapters, evaluation harnesses, and human-in-the-loop review gates suitable for regulated work.</p>
-        </div>
-        <div class="grid-3">
-          <div class="card">
-            <h3>Evaluation first</h3>
-            <p>Gold-set scoring, hallucination checks, and red-team suites before production rollout.</p>
+  <main id="main">
+    <section class="hero section">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>Human-supervised pharmaceutical AI</div>
+          <h1>Move medicine forward with intelligence you can inspect.</h1>
+          <p class="lead">We connect discovery, clinical, manufacturing, and support data to focused AI workflows—so qualified teams can find signal sooner, review the evidence, and stay accountable for every decision.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="support.html#contact">Discuss your use case <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-secondary" href="platform.html">Explore the platform</a>
           </div>
-          <div class="card">
-            <h3>Traceable outputs</h3>
-            <p>Citations, prompt/version logs, and reviewer annotations for audit packages.</p>
+          <div class="hero-note">
+            <span class="note-icon" aria-hidden="true">✓</span>
+            <p><strong>Built for accountable use.</strong> Source-linked outputs, evaluation gates, and human approval are part of the workflow—not an afterthought.</p>
           </div>
-          <div class="card">
-            <h3>Private by design</h3>
-            <p>VPC / on-prem options, encryption in transit and at rest, and least-privilege service accounts.</p>
+        </div>
+
+        <div class="workspace-card" role="img" aria-label="Illustrative AI Pharma research workspace">
+          <div class="workspace-glow" aria-hidden="true"></div>
+          <div class="workspace-topbar">
+            <div>
+              <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <strong>Evidence workspace</strong>
+            </div>
+            <span class="status-label"><i></i>Example view</span>
+          </div>
+
+          <div class="workspace-query">
+            <span>Research question</span>
+            <p>Which evidence supports this target across preclinical and translational datasets?</p>
+          </div>
+
+          <div class="workspace-flow" aria-hidden="true">
+            <div class="flow-node">
+              <span class="flow-number">01</span>
+              <div><strong>Retrieve</strong><small>Approved sources</small></div>
+              <span class="flow-check" aria-hidden="true">✓</span>
+            </div>
+            <div class="flow-connector" aria-hidden="true"></div>
+            <div class="flow-node">
+              <span class="flow-number">02</span>
+              <div><strong>Analyse</strong><small>Structured signals</small></div>
+              <span class="flow-check" aria-hidden="true">✓</span>
+            </div>
+            <div class="flow-connector" aria-hidden="true"></div>
+            <div class="flow-node">
+              <span class="flow-number">03</span>
+              <div><strong>Review</strong><small>Human decision</small></div>
+              <span class="flow-check" aria-hidden="true">✓</span>
+            </div>
+          </div>
+
+          <div class="workspace-result">
+            <div class="result-symbol" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7V3Z"/><path d="M14 3v5h5M9.5 12h6M9.5 15.5h6"/></svg>
+            </div>
+            <div>
+              <span>Traceable synthesis</span>
+              <p>Evidence summary with source links, model trace, and reviewer state.</p>
+            </div>
+            <span class="review-badge">Review ready</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="compliance">
-      <div class="container">
-        <div class="section-head">
-          <h2>Compliance & trust</h2>
-          <p>AI Pharma Developments aligns delivery with GxP-aware process design, privacy expectations, and clear human accountability.</p>
+    <section class="lifecycle-bar" aria-label="Pharmaceutical lifecycle coverage">
+      <div class="container lifecycle-inner">
+        <p>One connected foundation</p>
+        <div class="lifecycle-list">
+          <span><i>01</i>Discovery</span>
+          <span><i>02</i>Preclinical</span>
+          <span><i>03</i>Clinical</span>
+          <span><i>04</i>Manufacturing</span>
+          <span><i>05</i>Patient access</span>
         </div>
-        <div class="grid-2">
-          <article class="card">
-            <h3>Operating principles</h3>
-            <p>No autonomous prescribing. Clinical and quality decisions remain with qualified humans. Models assist; people decide.</p>
+      </div>
+    </section>
+
+    <section class="section section-soft" aria-labelledby="challenge-title">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <div class="eyebrow">The operating challenge</div>
+            <h2 id="challenge-title">Important knowledge is spread across systems, teams, and stages.</h2>
+          </div>
+          <p>Pharmaceutical teams rarely lack data. They lack a safe, efficient way to connect it to the next decision. Generic AI can retrieve text, but regulated work needs stronger boundaries, traceability, and review.</p>
+        </div>
+
+        <div class="grid-3 challenge-grid">
+          <article class="card challenge-card">
+            <span class="card-index">01</span>
+            <h3>Scattered evidence</h3>
+            <p>Literature, internal studies, protocols, and operational records are difficult to search consistently.</p>
           </article>
-          <article class="card">
-            <h3>Need help now?</h3>
-            <p>Our customer support desk handles onboarding, incidents, and access requests.</p>
-            <p style="margin-top:1rem"><a class="btn btn-primary" href="support.html">Open Customer Support</a></p>
+          <article class="card challenge-card">
+            <span class="card-index">02</span>
+            <h3>High-cost review</h3>
+            <p>Experts spend too much time locating context instead of assessing it, synthesising it, and making the call.</p>
           </article>
+          <article class="card challenge-card">
+            <span class="card-index">03</span>
+            <h3>Accountability gap</h3>
+            <p>Teams need a visible path from source to recommendation, with evaluation and approval before action.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="platform-title">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <div class="eyebrow">The platform</div>
+            <h2 id="platform-title">A modular AI layer designed around pharmaceutical work.</h2>
+          </div>
+          <p>Start with one bounded workflow, prove value and controls, then expand on a shared foundation for identity, retrieval, evaluation, and audit evidence.</p>
+        </div>
+
+        <div class="bento-grid">
+          <article class="feature-card feature-wide">
+            <div class="feature-copy">
+              <span class="feature-kicker">Evidence engine</span>
+              <h3>Connect the right sources before generating an answer.</h3>
+              <p>Permission-aware retrieval brings together approved literature, internal documents, structured datasets, and knowledge graphs—with citations attached.</p>
+              <a class="text-link" href="platform.html#evidence-engine">Explore the evidence engine <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="source-stack" aria-hidden="true">
+              <div class="source-card source-a"><span>01</span><strong>Literature</strong><small>Approved corpus</small></div>
+              <div class="source-card source-b"><span>02</span><strong>Studies</strong><small>Structured evidence</small></div>
+              <div class="source-card source-c"><span>03</span><strong>Knowledge graph</strong><small>Linked entities</small></div>
+            </div>
+          </article>
+
+          <article class="feature-card feature-tall">
+            <span class="feature-icon" aria-hidden="true">◎</span>
+            <span class="feature-kicker">Evaluation layer</span>
+            <h3>Measure usefulness before production.</h3>
+            <p>Task-specific gold sets, groundedness checks, red-team cases, and reviewer feedback make quality measurable.</p>
+            <a class="text-link" href="research.html#evaluation">See our research posture <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="feature-card feature-accent">
+            <span class="feature-icon" aria-hidden="true">◇</span>
+            <span class="feature-kicker">Workflow layer</span>
+            <h3>Deliver inside the tools teams already use.</h3>
+            <p>Design copilots, guided assistants, and review queues around real operating procedures.</p>
+            <a class="text-link" href="solutions.html">View solutions <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="feature-card feature-wide feature-governance">
+            <div class="feature-copy">
+              <span class="feature-kicker">Governance by design</span>
+              <h3>Keep evidence, permissions, and human decisions visible.</h3>
+              <p>Role-based access, data boundaries, versioned prompts, source traces, and approval states support controlled operation and audit preparation.</p>
+              <a class="text-link" href="trust.html">Review trust principles <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="governance-visual" aria-hidden="true">
+              <span>Source</span><i></i><span>Model trace</span><i></i><span>Reviewer</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft" id="solutions" aria-labelledby="solutions-title">
+      <div class="container">
+        <div class="section-heading centered-heading">
+          <div class="eyebrow">Built around your team</div>
+          <h2 id="solutions-title">Focused applications. Shared responsible-AI foundations.</h2>
+          <p>Every engagement begins with the decision your team needs to make—not with a generic list of AI features.</p>
+        </div>
+
+        <div class="solution-grid">
+          <article class="solution-card">
+            <span class="solution-number">R&amp;D</span>
+            <h3>Research &amp; discovery</h3>
+            <p>Prioritise targets, map evidence, compare programmes, and accelerate literature synthesis with traceable context.</p>
+            <ul class="check-list">
+              <li>Target and indication landscape</li>
+              <li>Literature and patent synthesis</li>
+              <li>Experiment planning support</li>
+            </ul>
+            <a class="text-link" href="solutions.html#research-discovery">Explore R&amp;D solutions <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="solution-card">
+            <span class="solution-number">CLIN</span>
+            <h3>Clinical &amp; medical</h3>
+            <p>Navigate protocols, evidence, safety information, and real-world data without losing source context.</p>
+            <ul class="check-list">
+              <li>Protocol and CSR intelligence</li>
+              <li>Medical review dossiers</li>
+              <li>Signal and evidence summaries</li>
+            </ul>
+            <a class="text-link" href="solutions.html#clinical-medical">Explore clinical solutions <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="solution-card">
+            <span class="solution-number">QUAL</span>
+            <h3>Manufacturing &amp; quality</h3>
+            <p>Support faster information retrieval, investigation preparation, and controlled document workflows.</p>
+            <ul class="check-list">
+              <li>Deviation and CAPA support</li>
+              <li>Batch knowledge retrieval</li>
+              <li>Change-control assistance</li>
+            </ul>
+            <a class="text-link" href="solutions.html#manufacturing-quality">Explore quality solutions <span aria-hidden="true">→</span></a>
+          </article>
+
+          <article class="solution-card">
+            <span class="solution-number">PX</span>
+            <h3>Patient access</h3>
+            <p>Create consistent, accessible support experiences that know when to hand a conversation to a person.</p>
+            <ul class="check-list">
+              <li>Approved education and guidance</li>
+              <li>Case routing and triage</li>
+              <li>Conversation quality review</li>
+            </ul>
+            <a class="text-link" href="solutions.html#patient-access">Explore patient solutions <span aria-hidden="true">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section workflow-section" aria-labelledby="workflow-title">
+      <div class="container workflow-grid">
+        <div class="workflow-intro">
+          <div class="eyebrow">How we deliver</div>
+          <h2 id="workflow-title">Prove the workflow before scaling the technology.</h2>
+          <p>A focused implementation creates a practical foundation: one decision, clear success measures, visible controls, and an operating owner.</p>
+          <a class="btn btn-secondary" href="support.html#contact">Start a discovery conversation</a>
+        </div>
+
+        <ol class="process-list">
+          <li>
+            <span>01</span>
+            <div><h3>Frame the decision</h3><p>Define the user, task, source boundary, risk, and measurable outcome.</p></div>
+          </li>
+          <li>
+            <span>02</span>
+            <div><h3>Build the evidence path</h3><p>Connect approved data and make citations, confidence, and gaps visible.</p></div>
+          </li>
+          <li>
+            <span>03</span>
+            <div><h3>Evaluate with experts</h3><p>Test realistic cases with domain reviewers before any production decision.</p></div>
+          </li>
+          <li>
+            <span>04</span>
+            <div><h3>Operate with control</h3><p>Add human approval, monitoring, feedback, and a clear rollback plan.</p></div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section section-soft" aria-labelledby="evidence-title">
+      <div class="container evidence-grid">
+        <div class="evidence-visual" aria-hidden="true">
+          <div class="evidence-orbit orbit-one"></div>
+          <div class="evidence-orbit orbit-two"></div>
+          <div class="evidence-core"><span>Human</span><strong>decision</strong></div>
+          <span class="orbit-label orbit-label-a">Sources</span>
+          <span class="orbit-label orbit-label-b">Evaluation</span>
+          <span class="orbit-label orbit-label-c">Trace</span>
+          <span class="orbit-label orbit-label-d">Review</span>
+        </div>
+        <div class="evidence-copy">
+          <div class="eyebrow">Responsible by design</div>
+          <h2 id="evidence-title">Useful AI should show its work.</h2>
+          <p>Our delivery model keeps the chain from question to recommendation inspectable. Teams can see which sources were used, where the system was uncertain, how it was evaluated, and who approved the outcome.</p>
+          <ul class="check-list check-list-large">
+            <li><span>✓</span>Grounded answers with source links</li>
+            <li><span>✓</span>Task-specific evaluation and red-team testing</li>
+            <li><span>✓</span>Role-based access and data minimisation</li>
+            <li><span>✓</span>Human review for consequential decisions</li>
+          </ul>
+          <a class="text-link" href="research.html">Read our research and evaluation approach <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section trust-preview" aria-labelledby="trust-title">
+      <div class="container">
+        <div class="section-heading split-heading">
+          <div>
+            <div class="eyebrow">Trust centre</div>
+            <h2 id="trust-title">Controls that support regulated, changing environments.</h2>
+          </div>
+          <p>Security, privacy, quality, and AI governance need to work together. We document assumptions and design the operating model around your requirements.</p>
+        </div>
+        <div class="grid-4 trust-grid">
+          <article class="mini-card"><span>01</span><h3>Data boundaries</h3><p>Approved sources, access controls, retention choices, and deployment patterns.</p></article>
+          <article class="mini-card"><span>02</span><h3>Model governance</h3><p>Versioned configurations, evaluation records, change control, and monitoring.</p></article>
+          <article class="mini-card"><span>03</span><h3>Human oversight</h3><p>Approval states, escalation paths, and clear ownership for every workflow.</p></article>
+          <article class="mini-card"><span>04</span><h3>Operational evidence</h3><p>Traceable artefacts designed to support audits, investigations, and review.</p></article>
+        </div>
+        <div class="center-action"><a class="btn btn-secondary" href="trust.html">Review trust principles</a></div>
+      </div>
+    </section>
+
+    <section class="section cta-section">
+      <div class="container">
+        <div class="cta-panel">
+          <div class="cta-grid" aria-hidden="true"></div>
+          <div class="cta-content">
+            <span class="eyebrow">Build the first useful workflow</span>
+            <h2>Bring us the decision your team cannot make quickly enough.</h2>
+            <p>We will help clarify the use case, evidence requirements, risks, and the smallest responsible path to a useful pilot.</p>
+            <div class="hero-actions">
+              <a class="btn btn-light" href="support.html#contact">Talk to an expert <span aria-hidden="true">↗</span></a>
+              <a class="btn btn-outline-light" href="resources.html">Explore resources</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container footer-row">
-      <div>© <span id="year"></span> AI Pharma Developments. All rights reserved.</div>
-      <div>
-        <a href="support.html">Support</a> ·
-        <a href="support.html#contact">Contact</a> ·
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="AI Pharma Developments home">
+          <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+            <rect width="48" height="48" rx="15" fill="#66f4d2"/>
+            <path d="M13 33.5 20.5 15l4.2 9.1 3.5-5.4L36 33.5h-6.2l-3.1-6.3-3.5 6.3H13Z" fill="#06131f"/>
+            <circle cx="35" cy="13" r="3" fill="#06131f"/>
+          </svg>
+          <span class="brand-copy"><strong>AI Pharma</strong><small>Developments</small></span>
+        </a>
+        <p>Human-supervised intelligence for pharmaceutical discovery, evidence, operations, and support.</p>
         <a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a>
       </div>
+      <div class="footer-column">
+        <h2>Platform</h2>
+        <a href="platform.html">Overview</a>
+        <a href="platform.html#evidence-engine">Evidence engine</a>
+        <a href="research.html#evaluation">Evaluation</a>
+        <a href="trust.html#governance">Governance</a>
+      </div>
+      <div class="footer-column">
+        <h2>Solutions</h2>
+        <a href="solutions.html#research-discovery">Research &amp; discovery</a>
+        <a href="solutions.html#clinical-medical">Clinical &amp; medical</a>
+        <a href="solutions.html#manufacturing-quality">Manufacturing &amp; quality</a>
+        <a href="solutions.html#patient-access">Patient access</a>
+      </div>
+      <div class="footer-column">
+        <h2>Company</h2>
+        <a href="about.html">About</a>
+        <a href="resources.html">Resources</a>
+        <a href="support.html">Customer support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span data-year></span> AI Pharma Developments. All rights reserved.</p>
+      <p>For research and operational support—not medical advice, diagnosis, or treatment.</p>
     </div>
   </footer>
+
   <script src="js/site.js"></script>
 </body>
 </html>
