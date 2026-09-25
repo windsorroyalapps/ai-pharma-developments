@@ -32,12 +32,14 @@
   const allowedCardNetworks = ["VISA", "MASTERCARD", "AMEX"];
   const allowedCardAuthMethods = ["PAN_ONLY", "CRYPTOGRAM_3DS"];
 
+  // Stripe as payment gateway (recommended). Replace with real Stripe merchant ID from dashboard.
+  // Docs: https://stripe.com/docs/google-pay
   const tokenizationSpecification = {
     type: "PAYMENT_GATEWAY",
     parameters: {
-      // Placeholder gateway params — replace with Stripe/Adyen/etc when ready
-      gateway: "example",
-      gatewayMerchantId: "exampleGatewayMerchantId",
+      gateway: "stripe",
+      "stripe:version": "2024-06-20",
+      "stripe:publishableKey": window.STRIPE_PUBLISHABLE_KEY || "pk_test_placeholder",
     },
   };
 

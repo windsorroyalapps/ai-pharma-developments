@@ -1,0 +1,36 @@
+# Cloud Run service definition (names only — secrets via Secret Manager)
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: apd-payment-worker
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/maxScale: "10"
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      serviceAccountName: apd-payment-sa  # create SA with Secret Manager accessor
+      containers:
+        - image: REGION-docker.pkg.dev/PROJECT/apd-repo/apd-payment-worker:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ALLOWED_ORIGINS
+              value: "https://aipharmadevelopments.com,https://windsorroyalapps.github.io"
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret-key
+                  key: latest
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-webhook-secret
+                  key: latest
+          resources:
+            limits:
+              cpu: "1"
+              memory: 512Mi

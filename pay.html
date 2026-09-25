@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Pay | AI Pharma Developments</title>
-  <meta name="description" content="Pay AI Pharma Developments securely with Google Pay." />
+  <meta name="description" content="Pay AI Pharma Developments securely with Stripe Checkout or Google Pay." />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <script src="https://js.stripe.com/v3/"></script>
   <script src="https://pay.google.com/gp/p/js/pay.js"></script>
 </head>
 <body>
@@ -26,9 +27,9 @@
   </header>
 
   <main class="container" style="padding:3rem 0">
-    <div class="eyebrow">Google Pay</div>
-    <h1>Secure checkout</h1>
-    <p class="lead">Pay invoices or deposits for AI Pharma Developments services using Google Pay.</p>
+    <div class="eyebrow">Secure payments</div>
+    <h1>Checkout</h1>
+    <p class="lead">Pay invoices or deposits for AI Pharma Developments services. Stripe Checkout (card + Google Pay) or direct Google Pay token.</p>
 
     <div class="grid-2" style="margin-top:1.5rem">
       <section class="card">
@@ -48,26 +49,34 @@
           </label>
           <p class="form-note">
             Mode: <strong id="pay-mode">TEST</strong>.
-            Replace merchant ID in production via Google Pay &amp; Wallet Console.
+            Live keys + Cloud Run worker required for production charges.
           </p>
-          <div id="google-pay-button" style="margin-top:1rem;min-height:48px"></div>
+          <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:1rem">
+            <button type="button" id="stripe-pay-button" class="btn btn-primary" style="width:100%">
+              Pay with Stripe Checkout
+            </button>
+            <div id="google-pay-button" style="min-height:48px"></div>
+          </div>
           <div class="toast" id="pay-toast" role="status"></div>
         </form>
       </section>
 
       <section class="card">
-        <h2>How agent orders work</h2>
+        <h2>How payments & agent orders work</h2>
         <p>
-          Authorized agent-executed orders are confirmation-gated. The local AI can prepare or
-          record an order only after you explicitly confirm. Customer Google Pay checkouts on this
-          page collect a payment token for processing by your configured gateway.
+          Customer checkouts use Stripe-hosted pages (PCI-compliant). Google Pay tokens route through Stripe gateway when configured.
+          Authorized agent-executed orders remain confirmation-gated (<code>confirm=true</code>).
         </p>
         <ul style="color:var(--muted);padding-left:1.1rem">
-          <li>Inbound: customers pay here with Google Pay</li>
-          <li>Outbound: agent tools require <code>confirm=true</code> per order</li>
-          <li>Ledger: <code>/mnt/2tb/google-pay-orders/ledger.jsonl</code></li>
+          <li>Inbound: Stripe Checkout or Google Pay on this page</li>
+          <li>Backend: Cloud Run worker creates sessions + verifies webhooks</li>
+          <li>Ledger: append-only (JSONL / Firestore) on <code>checkout.session.completed</code></li>
+          <li>Outbound agent orders: require explicit confirm</li>
           <li>Support: <a href="support.html">Customer Support</a></li>
         </ul>
+        <p style="margin-top:1rem;font-size:0.9rem;color:var(--muted)">
+          Secrets live in Google Secret Manager. Never commit keys. Stripe account verification (ID docs) required before live mode.
+        </p>
       </section>
     </div>
   </main>
@@ -79,6 +88,12 @@
     </div>
   </footer>
   <script src="js/site.js"></script>
+  <script>
+    // Override these after Cloud Run deploy
+    window.STRIPE_PUBLISHABLE_KEY = 'pk_test_placeholder';
+    window.CREATE_CHECKOUT_SESSION_URL = 'https://YOUR-CLOUD-RUN-URL/create-checkout-session';
+  </script>
+  <script src="js/stripe-checkout.js"></script>
   <script src="js/google-pay.js"></script>
 </body>
 </html>
