@@ -1,0 +1,90 @@
+/* CareFlow preview status page.
+   Additions only. The rest of the site stylesheet is untouched, so this page inherits the
+   same design tokens as every other page and cannot drift from them.
+
+   The status colours are never the only signal: the bar and the pill both carry the words
+   "synthetic data only", so the meaning survives a colourblind reader, a monochrome
+   print, and a screen reader with no colour information at all. */
+
+.careflow-status-bar {
+  border-bottom: 1px solid rgba(255, 139, 156, 0.4);
+  background: rgba(255, 139, 156, 0.08);
+}
+
+.careflow-status-bar p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 0.9rem;
+  margin: 0;
+  padding: 0.8rem 0;
+}
+
+.careflow-status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.6rem;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #2a0a12;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.careflow-status-text {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.status-table {
+  margin: 1.5rem 0 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: rgba(13, 36, 53, 0.4);
+}
+
+.status-table .status-row {
+  display: grid;
+  grid-template-columns: minmax(12rem, 17rem) 1fr;
+  gap: 0.35rem 1.25rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.status-table .status-row:last-child {
+  border-bottom: 0;
+}
+
+.status-table dt {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.status-table dd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0;
+  color: var(--muted-strong);
+  font-size: 0.9rem;
+}
+
+.status-table dd .tag {
+  color: var(--muted-strong);
+  white-space: nowrap;
+}
+
+/* Narrow viewports: the two-column status row becomes a single column so the label and
+   value are not pushed into a very short measure. */
+@media (max-width: 46rem) {
+  .status-table .status-row {
+    grid-template-columns: 1fr;
+  }
+}
