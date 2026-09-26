@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assistant Workspace (Design Only) | AI Pharma Developments</title>
+  <meta name="description" content="Design status for the employee-only clinical assistant workspace. Not built, not available, and not being piloted.">
+  <meta name="theme-color" content="#06131f">
+  <meta name="color-scheme" content="dark">
+  <link rel="canonical" href="https://aipharmadevelopments.com/assistant.html">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/careflow.css">
+  <!-- Design-status page, not a product page: kept out of search indexes deliberately. -->
+  <meta name="robots" content="noindex, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Assistant Workspace (Design Only) | AI Pharma Developments">
+  <meta property="og:description" content="Design status for the employee-only clinical assistant. Not built and not available.">
+  <meta property="og:url" content="https://aipharmadevelopments.com/assistant.html">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header"><div class="container nav-shell"><a class="brand" href="index.html" aria-label="AI Pharma Developments home"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="brand-gradient-assistant" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse"><stop stop-color="#66f4d2"/><stop offset="1" stop-color="#7aa7ff"/></linearGradient></defs><rect width="48" height="48" rx="15" fill="url(#brand-gradient-assistant)"/><path d="M13 33.5 20.5 15l4.2 9.1 3.5-5.4L36 33.5h-6.2l-3.1-6.3-3.5 6.3H13Z" fill="#06131f"/><circle cx="35" cy="13" r="3" fill="#06131f"/></svg><span class="brand-copy"><strong>AI Pharma</strong><small>Developments</small></span></a><button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation"><span class="sr-only">Toggle navigation</span><span></span><span></span><span></span></button><nav class="nav-links" id="site-navigation" aria-label="Primary navigation"><a href="platform.html">Platform</a><a href="solutions.html">Solutions</a><a href="research.html">Research</a><a href="trust.html">Trust</a><a href="careflow.html">CareFlow</a><a href="resources.html">Resources</a><a href="support.html">Support</a><a class="btn btn-primary btn-small" href="support.html#contact">Talk to an expert</a></nav></div></header>
+
+  <main id="main">
+    <!-- Inside the main landmark, matching careflow.html: content outside a landmark is
+         harder to navigate, and axe correctly flags it. -->
+    <div class="careflow-status-bar"><div class="container">
+      <p><span class="careflow-status-pill">Design only</span><span class="careflow-status-text">Not built, not available, and not being piloted</span></p>
+    </div></div>
+
+    <section class="page-hero"><div class="container page-hero-grid"><div><div class="eyebrow"><span class="eyebrow-dot"></span>Employee workspace</div><h1>The assistant workspace is a design, not a product.</h1><p class="lead">This page records the intended shape of an employee-only clinical assistant so staff and reviewers can see the plan. No model has been trained, no credentials exist, and the workspace is not available to anyone.</p></div><aside class="page-hero-aside" aria-label="Assistant principles"><span>Design principles</span><ul><li>Grounded in licensed sources</li><li>Cited or not shown</li><li>Declines when unsupported</li><li>Clinician decides everything</li><li>Never touches a patient record</li></ul></aside></div></section>
+
+    <section class="section">
+      <div class="container content-grid">
+        <aside class="sticky-aside" aria-label="Assistant guide"><h2>On this page</h2><a href="#shape">Intended shape</a><a href="#limits">Hard limits</a><a href="#access">Access</a><a href="#status">Current status</a></aside>
+        <div class="prose-stack">
+          <section class="prose-block" id="shape"><div class="eyebrow">Intended shape</div><h2>Retrieval, not recall.</h2><p>The intended system is a clinician-facing retrieval assistant. A qualified health professional asks a question; the system retrieves relevant passages from licensed Australian clinical sources, returns an answer that cites those sources, and explicitly declines when the corpus does not support an answer.</p><p>This is a deliberate design choice rather than a temporary limitation. An assistant that answers clinical questions from memory produces confident, fluent and occasionally wrong output, and the clinician has no way to tell which output to trust. An assistant that answers from a cited source lets the clinician verify the claim in seconds.</p><div class="callout"><p><strong>No clinical model is being trained.</strong> Training a clinical model from scratch is a multi-year, multi-million-dollar undertaking, and training on clinical text we are not licensed to use is a liability that lives in the model weights permanently. Grounded retrieval is cheaper, auditable, and re-pointable when the corpus is updated.</p></div></section>
+
+          <section class="prose-block" id="limits"><div class="eyebrow">Hard limits</div><h2>What it will never do.</h2><p>These are enforced in the serving gateway as code, not as prompt instructions. A prompt instruction is not a control, and a control that lives only in a prompt can be removed by whoever writes the next prompt.</p><div class="grid-2">
+            <article class="detail-card"><h3>No diagnosis</h3><p>It will not suggest a diagnosis, and it will not present a differential as a conclusion.</p></article>
+            <article class="detail-card"><h3>No dosing</h3><p>It will not give a dose or calculate one, including renal, paediatric and weight-based adjustments.</p></article>
+            <article class="detail-card"><h3>No prescribing</h3><p>It will not recommend a specific medicine for a specific person, or produce a prescription.</p></article>
+            <article class="detail-card"><h3>No record access</h3><p>It has no write access to any patient record, and is not being connected to one.</p></article>
+            <article class="detail-card"><h3>No uncited claims</h3><p>Every clinical claim must carry a citation to a licensed source, or it is not shown at all.</p></article>
+            <article class="detail-card"><h3>Explicit refusal</h3><p>Out-of-corpus questions get a specific answer about what is missing and what to consult, not a vague disclaimer.</p></article>
+          </div><div class="callout"><p><strong>Why the refusals are a feature.</strong> A clinical assistant that must always produce an answer is more dangerous than one that sometimes declines, because the clinician loses the ability to distinguish a well-supported answer from a confident guess. These boundaries are what keep both the patients and the clinicians using the system safe.</p></div></section>
+
+          <section class="prose-block" id="access"><div class="eyebrow">Access</div><h2>Employee-only, and provisioned rather than self-registered.</h2><p>Access is intended to be employee-only, authenticated through the organisation's identity provider with multi-factor authentication, and granted by an administrator. It is not intended to be available to customers or to the public.</p><p>A self-service signup that grants access to a clinical assistant would be a clinical governance failure rather than a convenience. Entitlement is also enforced server-side on every request; hiding a control in the browser is presentation, not access control.</p></section>
+
+          <section class="prose-block" id="status"><div class="eyebrow">Status</div><h2>Nothing below is complete.</h2><p>This status changes only when there is evidence for the change. The full programme plan, including the regulatory pathway, corpus licensing, evaluation gates and budget, is held in the private programme repository.</p><dl class="status-table">
+        <div class="status-row"><dt>Identity and entitlements</dt><dd><span class="tag">Designed</span><span>Architecture decided, not implemented</span></dd></div>
+        <div class="status-row"><dt>Corpus licensing</dt><dd><span class="tag">Blocked</span><span>No licensed clinical source in place</span></dd></div>
+        <div class="status-row"><dt>Regulatory determination</dt><dd><span class="tag">Not obtained</span><span>Written opinion on medical device scope outstanding</span></dd></div>
+        <div class="status-row"><dt>Clinical advisory board</dt><dd><span class="tag">Not appointed</span><span>Two clinicians and a pharmacist required</span></dd></div>
+        <div class="status-row"><dt>Evaluation benchmark</dt><dd><span class="tag">Not authored</span><span>300&ndash;500 labelled clinical cases outstanding</span></dd></div>
+        <div class="status-row"><dt>Prospective evaluation</dt><dd><span class="tag">Not started</span><span>Silent mode with real clinicians</span></dd></div>
+        <div class="status-row"><dt>Patient data</dt><dd><span class="tag">Out of scope</span><span>No patient data will be connected</span></dd></div>
+      </dl><div class="hero-actions"><a class="btn btn-primary" href="support.html?topic=Clinical%20assistant#contact">Ask about the programme</a><a class="btn btn-secondary" href="trust.html#governance">Read the governance approach</a></div></section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-soft"><div class="container"><div class="cta-panel"><div class="cta-grid" aria-hidden="true"></div><div class="cta-content"><span class="eyebrow">Questions welcome</span><h2>Ask hard questions before it exists.</h2><p>If you are a clinician, a safety officer or a privacy reviewer, the most useful thing you can do is tell us what would make this unsafe, before anyone builds it. Those conversations shape the design more than any specification we write.</p><div class="hero-actions"><a class="btn btn-light" href="support.html?topic=Clinical%20assistant#contact">Start a conversation <span aria-hidden="true">&nearr;</span></a><a class="btn btn-outline-light" href="careflow.html">CareFlow preview status</a></div></div></div></div></section>
+  </main>
+
+  <footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><a class="brand" href="index.html"><svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" rx="15" fill="#66f4d2"/><path d="M13 33.5 20.5 15l4.2 9.1 3.5-5.4L36 33.5h-6.2l-3.1-6.3-3.5 6.3H13Z" fill="#06131f"/><circle cx="35" cy="13" r="3" fill="#06131f"/></svg><span class="brand-copy"><strong>AI Pharma</strong><small>Developments</small></span></a><p>Human-supervised intelligence for pharmaceutical discovery, evidence, operations, and support.</p><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div><div class="footer-column"><h2>Platform</h2><a href="platform.html">Overview</a><a href="platform.html#evidence-engine">Evidence engine</a><a href="research.html#evaluation">Evaluation</a><a href="trust.html#governance">Governance</a></div><div class="footer-column"><h2>Solutions</h2><a href="solutions.html#research-discovery">Research &amp; discovery</a><a href="solutions.html#clinical-medical">Clinical &amp; medical</a><a href="solutions.html#manufacturing-quality">Manufacturing &amp; quality</a><a href="solutions.html#patient-access">Patient access</a></div><div class="footer-column"><h2>Company</h2><a href="assistant.html">Assistant workspace</a><a href="careflow.html">CareFlow preview</a><a href="about.html">About</a><a href="resources.html">Resources</a><a href="support.html">Customer support</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></div><div class="container footer-bottom"><p>© <span data-year></span> AI Pharma Developments. All rights reserved.</p><p>For research and operational support—not medical advice, diagnosis, or treatment.</p></div></footer>
+  <script src="js/site.js"></script>
+</body>
+</html>

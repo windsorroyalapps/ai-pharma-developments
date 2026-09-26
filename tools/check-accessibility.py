@@ -15,7 +15,7 @@ import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PLATFORM = pathlib.Path("/home/dhh/Work/gp-practice-platform")
-PAGES = ["index.html", "trust.html", "careflow.html"]
+PAGES = ["index.html", "trust.html", "careflow.html", "assistant.html"]
 
 RUNNER = r"""
 import { createRequire } from "node:module";
