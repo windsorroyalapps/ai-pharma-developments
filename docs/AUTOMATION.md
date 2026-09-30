@@ -3,8 +3,10 @@
 ## Already in repo
 - Static site on GitHub Pages / custom domain aipharmadevelopments.com
 - Stripe Checkout + Google Pay frontend (`pay.html`)
-- Cloud Run worker (`cloud/worker`) — sessions, signed webhooks, agent `confirm=true` gate
-- Skills on operator machine: `gcloud`, `stripe`, `stripe-full`, `payment-api`
+- Cloud Run worker (`cloud/worker`) — sessions (card + Google Pay), signed webhooks, agent `confirm=true` gate
+- IAM bootstrap: `cloud/iam/bootstrap.sh` + `docs/GCP_ACCESS.md` + `docs/OPERATOR_CHECKLIST.md`
+- Skills: `gcloud`, `stripe`, `stripe-full`, `payment-api`
+- Grok automation: weekly Monday 09:00 Australia/Sydney `apd-weekly-payment-gcp-status`
 
 ## Privileges this session cannot apply alone
 Sandbox has **no gcloud auth**. You must run:

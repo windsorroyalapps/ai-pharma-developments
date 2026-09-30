@@ -31,7 +31,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/healthz', (_req, res) => res.json({ ok: true, service: 'apd-payment-worker' }));
+app.get('/healthz', (_req, res) => res.json({
+  ok: true,
+  service: 'apd-payment-worker',
+  stripe_configured: Boolean(STRIPE_SECRET_KEY),
+  webhook_configured: Boolean(STRIPE_WEBHOOK_SECRET),
+}));
 
 function ledger(event, payload) {
   console.log(JSON.stringify({ event, ts: new Date().toISOString(), ...payload }));
@@ -62,7 +67,7 @@ app.post('/create-checkout-session', express.json(), async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'google_pay'],
       line_items: [{
         price_data: {
           currency,
