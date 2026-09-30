@@ -1,0 +1,37 @@
+name: deploy-payment-worker
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cloud/worker/**'
+      - '.github/workflows/deploy-worker.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: ${{ vars.GCP_PROJECT_ID != '' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SA }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Build and deploy Cloud Run
+        env:
+          PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          REGION: ${{ vars.GCP_REGION || 'australia-southeast1' }}
+        run: |
+          gcloud artifacts repositories create apd-repo --repository-format=docker --location="$REGION" || true
+          gcloud builds submit cloud/worker --tag "$REGION-docker.pkg.dev/$PROJECT_ID/apd-repo/apd-payment-worker:$GITHUB_SHA"
+          gcloud run deploy apd-payment-worker \
+            --image "$REGION-docker.pkg.dev/$PROJECT_ID/apd-repo/apd-payment-worker:$GITHUB_SHA" \
+            --region "$REGION" \
+            --service-account "apd-payment-sa@$PROJECT_ID.iam.gserviceaccount.com" \
+            --allow-unauthenticated \
+            --set-secrets=STRIPE_SECRET_KEY=stripe-secret-key:latest,STRIPE_WEBHOOK_SECRET=stripe-webhook-secret:latest \
+            --set-env-vars=ALLOWED_ORIGINS=https://aipharmadevelopments.com,https://windsorroyalapps.github.io

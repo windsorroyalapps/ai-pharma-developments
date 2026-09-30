@@ -6,6 +6,7 @@ Operator must authenticate before any IAM mutation:
 gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
 gcloud config set project PROJECT_ID
+bash cloud/iam/bootstrap.sh
 ```
 
 This sandbox cannot complete those steps without your login URL approval.
@@ -14,10 +15,10 @@ This sandbox cannot complete those steps without your login URL approval.
 
 | Account | Roles |
 |---|---|
-| `apd-payment-sa@PROJECT.iam.gserviceaccount.com` | secretmanager.secretAccessor (named secrets only), logging.logWriter, optional pubsub.publisher / datastore.user |
-| `apd-deploy-sa@PROJECT.iam.gserviceaccount.com` | run.admin, artifactregistry.writer, cloudbuild.builds.editor, iam.serviceAccountUser on payment SA |
+| `apd-payment-sa@PROJECT.iam.gserviceaccount.com` | secretmanager.secretAccessor, logging.logWriter, run.invoker |
+| `apd-deploy-sa@PROJECT.iam.gserviceaccount.com` | run.admin, artifactregistry.writer, cloudbuild.builds.editor, iam.serviceAccountUser |
 
-Runtime SA must never be project Owner.
+Runtime SA must never be project Owner. No JSON keys in git — use WIF.
 
 ## APIs
 
@@ -32,6 +33,10 @@ Create after test keys exist. Live keys only after Stripe identity verification.
 - `stripe-publishable-key`
 
 Grant accessor only to `apd-payment-sa`.
+
+```bash
+echo -n 'sk_test_...' | gcloud secrets versions add stripe-secret-key --data-file=-
+```
 
 ## Deploy (after auth)
 
@@ -54,8 +59,8 @@ Copy the Cloud Run URL into `pay.html` as `window.CREATE_CHECKOUT_SESSION_URL`.
 
 ## GitHub WIF
 
-Bind pool `github-apd` to repo `windsorroyalapps/ai-pharma-developments` and `apd-deploy-sa`. No JSON keys in git.
+Pool `github-apd` is bound to repo `windsorroyalapps/ai-pharma-developments` and `apd-deploy-sa`. Workflow: `.github/workflows/deploy-worker.yml` (no-ops until repo variables are set).
 
 ## Stripe live mode
 
-Blocked until you supply ID documents to Stripe Dashboard (not to this repo).
+Blocked until you complete identity verification in Stripe Dashboard (do not commit ID documents).
