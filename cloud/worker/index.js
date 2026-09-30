@@ -67,7 +67,7 @@ app.post('/create-checkout-session', express.json(), async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
-      payment_method_types: ['card', 'google_pay'],
+      payment_method_types: ['card'],
       line_items: [{
         price_data: {
           currency,
@@ -113,11 +113,25 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
+    const email = session.customer_email || session.customer_details?.email;
+    let customerId = session.customer || null;
+    try {
+      if (!customerId && email) {
+        const existing = await stripe.customers.list({ email, limit: 1 });
+        customerId = existing.data[0]?.id || (await stripe.customers.create({
+          email,
+          metadata: { source: session.metadata?.source || 'website' },
+        })).id;
+      }
+    } catch (err) {
+      console.error('customer upsert failed', err.message);
+    }
     ledger('payment_completed', {
       session_id: session.id,
+      customer_id: customerId,
       amount_total: session.amount_total,
       currency: session.currency,
-      customer_email: session.customer_email || session.customer_details?.email,
+      customer_email: email,
       payment_status: session.payment_status,
     });
   }
