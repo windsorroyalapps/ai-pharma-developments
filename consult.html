@@ -24,7 +24,7 @@
   <main class="container" style="padding:3rem 0">
     <div class="eyebrow">Automation-ready intake</div>
     <h1>Request a consult</h1>
-    <p class="lead">Describe the decision, evidence, and timeline. This form opens a draft email until the Cloud Run intake endpoint is deployed.</p>
+    <p class="lead">Describe the decision, evidence, and timeline. Posts to the Cloud Run intake endpoint when deployed, then opens an email draft.</p>
     <section class="card" style="margin-top:1.5rem;max-width:40rem">
       <form id="consult-form">
         <label>Name<input name="name" required></label>
@@ -33,27 +33,15 @@
         <label>Preferred window<input name="when" placeholder="e.g. week of 13 Oct AEST"></label>
         <label>Decision / workflow<textarea name="need" required placeholder="What should get better, who reviews it, what evidence exists."></textarea></label>
         <p class="form-note">No PHI, credentials, or export-controlled data.</p>
-        <button class="btn btn-primary" type="submit">Open email draft</button>
+        <button class="btn btn-primary" type="submit">Submit request</button>
+        <div class="toast" id="consult-toast" role="status"></div>
       </form>
     </section>
   </main>
   <script src="js/site.js"></script>
   <script>
-    document.getElementById('consult-form').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var f = e.target;
-      var body = [
-        'Name: ' + f.name.value,
-        'Email: ' + f.email.value,
-        'Org: ' + f.org.value,
-        'Window: ' + f.when.value,
-        '',
-        f.need.value
-      ].join('\n');
-      location.href = 'mailto:troy.windsor1989@gmail.com?subject=' +
-        encodeURIComponent('Consult request — AI Pharma Developments') +
-        '&body=' + encodeURIComponent(body);
-    });
+    window.INTAKE_URL = 'https://YOUR-CLOUD-RUN-URL/intake';
   </script>
+  <script src="js/intake.js"></script>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Worker status | AI Pharma Developments</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="pay.html">Pay</a>
+        <a href="consult.html">Consult</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Operator</div>
+    <h1>Payment worker status</h1>
+    <p class="lead">Checks the Cloud Run health endpoint. Stays idle until the worker URL is set.</p>
+    <section class="card" style="margin-top:1.5rem;max-width:40rem">
+      <label>Health URL<input id="health-url" value="https://YOUR-CLOUD-RUN-URL/healthz"></label>
+      <button class="btn btn-primary" id="check" type="button" style="margin-top:1rem">Check</button>
+      <pre id="out" style="margin-top:1rem;white-space:pre-wrap"></pre>
+    </section>
+  </main>
+  <script>
+    document.getElementById('check').addEventListener('click', function () {
+      var url = document.getElementById('health-url').value;
+      var out = document.getElementById('out');
+      out.textContent = 'Checking...';
+      fetch(url).then(function (r) { return r.text(); }).then(function (t) {
+        out.textContent = t;
+      }).catch(function (err) {
+        out.textContent = String(err);
+      });
+    });
+  </script>
+</body>
+</html>

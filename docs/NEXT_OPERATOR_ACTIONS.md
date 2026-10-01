@@ -1,26 +1,33 @@
-# Next operator actions (cannot be finished in the unauthenticated sandbox)
+# Next operator actions
 
-Repo already contains IAM bootstrap, Cloud Run worker, Stripe/Google Pay frontend, and WIF wiring.
+IAM was not mutated. Sandbox has gcloud installed and zero credentialed accounts. Project is unset.
 
-## Blockers this session
-
-1. `gcloud` is not installed/authenticated in the agent sandbox.
-2. Stripe live mode waits on Dashboard identity verification. Do not upload ID docs to GitHub.
-3. GitHub Actions deploy no-ops until repo variables exist.
-
-## Run locally (one sitting)
+## 1. Authenticate (required before bootstrap)
 
 ```bash
 gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
 gcloud config set project YOUR_PROJECT_ID
-cd /path/to/ai-pharma-developments
 bash cloud/iam/bootstrap.sh
 ```
 
-Then set Actions variables `GCP_PROJECT_ID`, `GCP_REGION=australia-southeast1`, `GCP_WIF_PROVIDER`, `GCP_DEPLOY_SA` as documented in `docs/GCP_ACCESS.md`.
+Paste the verification code back in chat after the browser step. Do not send ID documents.
 
-Add **test** Stripe secret versions:
+Bootstrap creates (least privilege, no Owner, no JSON keys):
+
+- `apd-payment-sa` — secretAccessor, logWriter, run.invoker
+- `apd-deploy-sa` — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser
+- WIF pool `github-apd` bound to `windsorroyalapps/ai-pharma-developments`
+- Secret shells: `stripe-secret-key`, `stripe-webhook-secret`, `stripe-publishable-key`
+
+## 2. GitHub Actions variables
+
+- `GCP_PROJECT_ID`
+- `GCP_REGION` = `australia-southeast1`
+- `GCP_WIF_PROVIDER` = `projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-apd/providers/github`
+- `GCP_DEPLOY_SA` = `apd-deploy-sa@PROJECT_ID.iam.gserviceaccount.com`
+
+## 3. Test keys only (live waits on Stripe identity)
 
 ```bash
 echo -n 'sk_test_...' | gcloud secrets versions add stripe-secret-key --data-file=-
@@ -28,9 +35,9 @@ echo -n 'whsec_...' | gcloud secrets versions add stripe-webhook-secret --data-f
 echo -n 'pk_test_...' | gcloud secrets versions add stripe-publishable-key --data-file=-
 ```
 
-Deploy worker (or push `cloud/worker/**` to trigger `.github/workflows/deploy-worker.yml`).
-Paste Cloud Run URL into `pay.html` as `window.CREATE_CHECKOUT_SESSION_URL` and set `window.STRIPE_PUBLISHABLE_KEY` to the **publishable** test key only.
+Deploy worker, then set in the site:
 
-## After ID verification
+- `pay.html` → `window.CREATE_CHECKOUT_SESSION_URL` and `window.STRIPE_PUBLISHABLE_KEY`
+- `consult.html` → `window.INTAKE_URL`
 
-Switch Secret Manager to live keys only when you explicitly say live. Keep agent orders gated on `confirm=true`.
+Agent orders stay gated on `confirm=true`.

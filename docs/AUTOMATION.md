@@ -1,30 +1,21 @@
 # Site + payment automation
 
-## Already in repo
-- Static site on GitHub Pages / custom domain aipharmadevelopments.com
-- Stripe Checkout + Google Pay frontend (`pay.html`)
-- Cloud Run worker (`cloud/worker`) — sessions, signed webhooks, agent `confirm=true` gate
-- IAM bootstrap: `cloud/iam/bootstrap.sh` + `docs/GCP_ACCESS.md`
-- Consult intake: `consult.html` (mailto until worker intake is live)
-- Skills: `gcloud`, `stripe`, `stripe-full`, `payment-api`, `apd-gcp-access`
+## Skills already loaded (do not duplicate)
 
-## Privileges this session cannot apply alone
-Sandbox has **no gcloud auth**. Operator must run:
+- `apd-gcp-access` — least-privilege IAM + WIF
+- `gcloud` — CLI/auth
+- `payment-api` — checkout, ledger, agent gate
+- `stripe` / `stripe-full` — Checkout, webhooks, Google Pay, live blocked on ID verification
 
-```bash
-gcloud auth login --no-launch-browser
-gcloud config set project YOUR_PROJECT_ID
-bash cloud/iam/bootstrap.sh
-```
+## In repo
 
-GitHub Actions variables:
-- `GCP_PROJECT_ID`
-- `GCP_REGION` = `australia-southeast1`
-- `GCP_WIF_PROVIDER` = `projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-apd/providers/github`
-- `GCP_DEPLOY_SA` = `apd-deploy-sa@PROJECT_ID.iam.gserviceaccount.com`
+- Static site (GitHub Pages / aipharmadevelopments.com)
+- Stripe Checkout + Google Pay (`pay.html`)
+- Cloud Run worker: sessions, signed webhooks, `/intake`, agent `confirm=true`
+- Consult form posts to worker when `INTAKE_URL` is real, else mailto
+- Operator status page: `status.html`
+- IAM bootstrap: `cloud/iam/bootstrap.sh`
 
-## Stripe live
-Do **not** send ID documents into git. Complete Stripe Dashboard identity verification, then store keys in Secret Manager only.
+## Blocked until operator login
 
-## Agent rule
-Outbound charges from any agent require `confirm=true` in `/create-checkout-session`.
+No project ID discovered. No IAM bindings applied. Live Stripe keys wait on Dashboard identity verification. Do not commit ID documents.

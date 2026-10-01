@@ -25,7 +25,7 @@ app.use((req, res, next) => {
   if (origin && ALLOWED_ORIGINS.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Stripe-Signature');
   if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
@@ -36,6 +36,7 @@ app.get('/healthz', (_req, res) => res.json({
   service: 'apd-payment-worker',
   stripe_configured: Boolean(STRIPE_SECRET_KEY),
   webhook_configured: Boolean(STRIPE_WEBHOOK_SECRET),
+  intake: true,
 }));
 
 function ledger(event, payload) {
@@ -95,6 +96,24 @@ app.post('/create-checkout-session', express.json(), async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message });
   }
+});
+
+app.post('/intake', express.json({ limit: '32kb' }), (req, res) => {
+  const { name, email, org, when, need } = req.body || {};
+  if (!name || !email || !need) {
+    return res.status(400).json({ error: 'name, email, and need are required' });
+  }
+  if (String(need).length > 4000) {
+    return res.status(400).json({ error: 'need too long' });
+  }
+  ledger('consult_intake', {
+    name: String(name).slice(0, 120),
+    email: String(email).slice(0, 200),
+    org: String(org || '').slice(0, 200),
+    when: String(when || '').slice(0, 200),
+    need: String(need).slice(0, 4000),
+  });
+  res.json({ ok: true, queued: true });
 });
 
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
