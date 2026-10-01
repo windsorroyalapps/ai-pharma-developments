@@ -1,8 +1,7 @@
 (() => {
-  // Stripe publishable key from env or placeholder (replace with live pk_ when ready)
   const STRIPE_PK = window.STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder';
-  const CREATE_SESSION_URL = window.CREATE_CHECKOUT_SESSION_URL || '/api/create-checkout-session';
-  // For static GitHub Pages use full Cloud Run URL once deployed
+  const CREATE_SESSION_URL = window.CREATE_CHECKOUT_SESSION_URL || '';
+  const PLACEHOLDER = !CREATE_SESSION_URL || CREATE_SESSION_URL.indexOf('YOUR-CLOUD-RUN-URL') !== -1;
 
   const form = document.getElementById('pay-form');
   const toast = document.getElementById('pay-toast');
@@ -17,10 +16,32 @@
     toast.classList.add('show');
   }
 
-  if (modeEl && STRIPE_PK.startsWith('pk_test')) {
-    modeEl.textContent = 'TEST (Stripe)';
-  } else if (modeEl) {
-    modeEl.textContent = 'LIVE (Stripe)';
+  if (modeEl) {
+    if (PLACEHOLDER) modeEl.textContent = 'LOCAL DRY-RUN (no Cloud Run yet)';
+    else if (STRIPE_PK.indexOf('pk_live_') === 0) modeEl.textContent = 'LIVE (Stripe)';
+    else modeEl.textContent = 'TEST (Stripe)';
+  }
+
+  function localDryRun(amount, description, email) {
+    const id = 'cs_local_' + Math.random().toString(16).slice(2, 10);
+    const record = {
+      event: 'local_dry_run',
+      id,
+      amount_aud: amount,
+      description,
+      email,
+      ts: new Date().toISOString(),
+      charged: false,
+    };
+    try {
+      const key = 'apd_ledger';
+      const prev = JSON.parse(localStorage.getItem(key) || '[]');
+      prev.push(record);
+      localStorage.setItem(key, JSON.stringify(prev.slice(-50)));
+    } catch (e) {
+      console.warn(e);
+    }
+    showToast('Dry-run only. No charge. Session ' + id + '. Worker URL not set.');
   }
 
   async function createCheckoutSession() {
@@ -32,6 +53,11 @@
 
     if (amount < 1) {
       showToast('Minimum amount is 1.00 AUD', false);
+      return;
+    }
+
+    if (PLACEHOLDER) {
+      localDryRun(amount, description, email);
       return;
     }
 
@@ -57,20 +83,24 @@
       }
 
       const data = await res.json();
+      if (data.dry_run) {
+        showToast('Worker dry-run. No charge. Session ' + data.id);
+        return;
+      }
       if (data.url) {
         window.location.href = data.url;
         return;
       }
-      if (data.id && window.Stripe) {
+      if (data.id && window.Stripe && STRIPE_PK.indexOf('pk_') === 0 && STRIPE_PK.indexOf('placeholder') === -1) {
         const stripe = Stripe(STRIPE_PK);
-        const { error } = await stripe.redirectToCheckout({ sessionId: data.id });
-        if (error) throw error;
+        const result = await stripe.redirectToCheckout({ sessionId: data.id });
+        if (result.error) throw result.error;
         return;
       }
       throw new Error('No checkout URL or session id returned');
     } catch (err) {
       console.error(err);
-      showToast(`Checkout error: ${err.message || err}. Backend may be offline — use Google Pay test mode.`, false);
+      showToast('Checkout error: ' + (err.message || err) + '. Backend may be offline.', false);
     }
   }
 
@@ -81,9 +111,10 @@
     });
   }
 
-  // Handle success / cancel query params
   const params = new URLSearchParams(window.location.search);
-  if (params.get('success') === '1') {
+  if (params.get('success') === '1' && params.get('dry_run') === '1') {
+    showToast('Dry-run session ' + (params.get('session') || '') + '. No charge.');
+  } else if (params.get('success') === '1') {
     showToast('Payment successful. Receipt will arrive by email.');
   } else if (params.get('canceled') === '1') {
     showToast('Checkout canceled.', false);

@@ -7,18 +7,24 @@
 - `payment-api` — checkout, ledger, agent gate
 - `stripe` / `stripe-full` — Checkout, webhooks, Google Pay, live blocked on ID verification
 
-## In repo
+## What works without GCP login
 
-- Static site (GitHub Pages / aipharmadevelopments.com)
-- Stripe Checkout + Google Pay (`pay.html`)
-- Cloud Run worker: sessions, signed webhooks, `/intake`, `/agent-order`
-- Dry-run: if `STRIPE_SECRET_KEY` is unset, `/create-checkout-session` returns a fake session and does not charge
-- Agent orders require `confirm=true` and never charge from the agent path
-- Consult form posts to worker when `INTAKE_URL` is real, else mailto
-- Operator status page: `status.html`
-- IAM bootstrap: `cloud/iam/bootstrap.sh`
-- Auth blocker: `docs/OPERATOR_AUTH.md`
+- Static site on GitHub Pages / aipharmadevelopments.com
+- `pay.html` local dry-run when `CREATE_CHECKOUT_SESSION_URL` still contains `YOUR-CLOUD-RUN-URL`
+- Local ledger in `localStorage` key `apd_ledger` (last 50, no card data)
+- Agent order contract: `confirm=true` required, never charges from the agent path
+- Consult form falls back to mailto until `INTAKE_URL` is a real worker URL
 
-## Blocked until operator login
+## After operator auth
 
-No project ID discovered. No IAM bindings applied. Live Stripe keys wait on Dashboard identity verification. Do not commit ID documents.
+1. `bash cloud/iam/bootstrap.sh`
+2. Add Stripe **test** secret versions only
+3. Deploy `cloud/worker` to Cloud Run `australia-southeast1`
+4. Set GitHub Actions variables listed in `docs/OPERATOR_AUTH.md`
+5. Replace placeholders in `pay.html` and `consult.html`
+
+Live Stripe keys wait on Dashboard identity verification. Do not commit ID documents.
+
+## Fulfillment hook (not charged)
+
+Worker logs `payment_completed` JSONL. Next bind after deploy: Pub/Sub topic `apd-fulfillment` published only from the verified webhook handler.

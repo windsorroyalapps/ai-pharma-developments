@@ -1,11 +1,10 @@
 # Operator auth — blocked until Google login
 
-Session check (2026-10-01): gcloud installed in the agent environment. `gcloud auth list` returned **no credentialed accounts**. Project property unset. IAM was not mutated. No secret versions were added.
+Session check (2026-10-01 22:13 AEST): gcloud SDK installed in the agent environment. `gcloud auth list` returned **no credentialed accounts**. Project property unset. IAM was not mutated. No secret versions were added. No project ID was invented.
+
+The agent started `gcloud auth login --no-launch-browser` and stopped at the verification-code prompt. That one-time URL expires. Run the login yourself and paste only the verification code back in chat.
 
 ## What you do next
-
-1. Open a terminal where you can complete Google login (this agent cannot finish the browser step alone).
-2. Run:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -16,9 +15,9 @@ gcloud config set compute/region australia-southeast1
 bash cloud/iam/bootstrap.sh
 ```
 
-3. Paste the verification code back in chat if you want the agent to finish bootstrap. Do not paste ID documents, live Stripe keys, or service-account JSON.
+Do not paste ID documents, live Stripe keys, or service-account JSON.
 
-Bootstrap (already in `cloud/iam/bootstrap.sh`) creates least-privilege identities only:
+Bootstrap (`cloud/iam/bootstrap.sh`) creates least-privilege identities only:
 
 - `apd-payment-sa` — `secretmanager.secretAccessor`, `logging.logWriter`, `run.invoker`
 - `apd-deploy-sa` — `run.admin`, `artifactregistry.writer`, `cloudbuild.builds.editor`, `iam.serviceAccountUser`
@@ -38,4 +37,4 @@ Workflow `.github/workflows/deploy-worker.yml` no-ops until `GCP_PROJECT_ID` is 
 
 ## Stripe
 
-Test keys only until Dashboard identity verification is complete. Live charges stay off. Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. Do not duplicate them.
+Test keys only until Dashboard identity verification is complete. Live charges stay off. Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. Do not store ID documents in git or skills.
