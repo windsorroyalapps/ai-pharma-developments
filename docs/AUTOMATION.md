@@ -3,13 +3,13 @@
 ## Already in repo
 - Static site on GitHub Pages / custom domain aipharmadevelopments.com
 - Stripe Checkout + Google Pay frontend (`pay.html`)
-- Cloud Run worker (`cloud/worker`) — sessions (card + Google Pay), signed webhooks, agent `confirm=true` gate
-- IAM bootstrap: `cloud/iam/bootstrap.sh` + `docs/GCP_ACCESS.md` + `docs/OPERATOR_CHECKLIST.md`
-- Skills: `gcloud`, `stripe`, `stripe-full`, `payment-api`
-- Grok automation: weekly Monday 09:00 Australia/Sydney `apd-weekly-payment-gcp-status`
+- Cloud Run worker (`cloud/worker`) — sessions, signed webhooks, agent `confirm=true` gate
+- IAM bootstrap: `cloud/iam/bootstrap.sh` + `docs/GCP_ACCESS.md`
+- Consult intake: `consult.html` (mailto until worker intake is live)
+- Skills: `gcloud`, `stripe`, `stripe-full`, `payment-api`, `apd-gcp-access`
 
 ## Privileges this session cannot apply alone
-Sandbox has **no gcloud auth**. You must run:
+Sandbox has **no gcloud auth**. Operator must run:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -17,7 +17,7 @@ gcloud config set project YOUR_PROJECT_ID
 bash cloud/iam/bootstrap.sh
 ```
 
-Then set GitHub repo **Actions variables**:
+GitHub Actions variables:
 - `GCP_PROJECT_ID`
 - `GCP_REGION` = `australia-southeast1`
 - `GCP_WIF_PROVIDER` = `projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-apd/providers/github`
