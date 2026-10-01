@@ -11,10 +11,13 @@
 
 - Static site (GitHub Pages / aipharmadevelopments.com)
 - Stripe Checkout + Google Pay (`pay.html`)
-- Cloud Run worker: sessions, signed webhooks, `/intake`, agent `confirm=true`
+- Cloud Run worker: sessions, signed webhooks, `/intake`, `/agent-order`
+- Dry-run: if `STRIPE_SECRET_KEY` is unset, `/create-checkout-session` returns a fake session and does not charge
+- Agent orders require `confirm=true` and never charge from the agent path
 - Consult form posts to worker when `INTAKE_URL` is real, else mailto
 - Operator status page: `status.html`
 - IAM bootstrap: `cloud/iam/bootstrap.sh`
+- Auth blocker: `docs/OPERATOR_AUTH.md`
 
 ## Blocked until operator login
 
