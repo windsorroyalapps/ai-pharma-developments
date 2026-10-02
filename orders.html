@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orders | AI Pharma Developments</title>
+  <meta name="description" content="Local dry-run order ledger for AI Pharma Developments. No card data. Live charges wait on Stripe identity verification." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">AI</span>
+        <span>AI Pharma Developments</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="pay.html">Pay</a>
+        <a class="active" href="orders.html">Orders</a>
+        <a href="support.html">Support</a>
+        <a class="btn btn-primary" href="consult.html">Consult</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Automation</div>
+    <h1>Order ledger</h1>
+    <p class="lead">Browser-side dry-run ledger only. Nothing here is a charge. Agent orders still require <code>confirm=true</code> and never bill until Stripe test keys and Cloud Run are live.</p>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Service catalog (AUD, not charged)</h2>
+      <ul>
+        <li>Discovery consult — 250.00</li>
+        <li>Careflow pilot setup — 1,500.00</li>
+        <li>Research workflow retainer (monthly preview) — 4,000.00</li>
+      </ul>
+      <p><a class="btn btn-primary" href="pay.html">Open checkout</a></p>
+    </section>
+    <section class="card" style="margin-top:1rem">
+      <h2>Local ledger</h2>
+      <p id="orders-empty">No dry-run sessions yet. Use Pay to create one.</p>
+      <div id="orders-list"></div>
+      <button type="button" id="orders-clear" class="btn">Clear local ledger</button>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/orders.js"></script>
+</body>
+</html>
