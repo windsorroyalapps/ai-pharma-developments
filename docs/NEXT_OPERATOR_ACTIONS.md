@@ -1,8 +1,10 @@
 # Next operator actions
 
-IAM was not mutated. Sandbox has gcloud installed and zero credentialed accounts. Project is unset.
+IAM was not mutated on 2026-10-03. Sandbox gcloud is installed. Zero credentialed accounts. Project is unset.
 
 ## 1. Authenticate (required before bootstrap)
+
+Run this on a machine where you can finish the browser step, or paste the verification code back in the same chat while the CLI is still waiting:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -11,7 +13,7 @@ gcloud config set project YOUR_PROJECT_ID
 bash cloud/iam/bootstrap.sh
 ```
 
-Paste the verification code back in chat after the browser step. Do not send ID documents.
+Do not send ID documents. Stripe identity stays in the Stripe Dashboard.
 
 Bootstrap creates (least privilege, no Owner, no JSON keys):
 
