@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Automation | AI Pharma Developments</title>
+  <meta name="description" content="Local operator automation for intake queue and agent-gated orders. No live charges." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="pay.html">Pay</a>
+        <a href="consult.html">Consult</a>
+        <a href="orders.html">Orders</a>
+        <a href="status.html">Status</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0;max-width:46rem">
+    <div class="eyebrow">Operator</div>
+    <h1>Automation console</h1>
+    <p class="lead">Queues consult intake and agent orders in this browser only. Nothing is charged. Live Stripe waits on identity verification and Secret Manager test keys.</p>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Consult intake</h2>
+      <form id="intake-form">
+        <label>Name<input name="name" required /></label>
+        <label>Email<input name="email" type="email" required /></label>
+        <label>Need<textarea name="need" required></textarea></label>
+        <button class="btn btn-primary" type="submit" style="margin-top:1rem">Queue locally</button>
+      </form>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Agent order gate</h2>
+      <p>Outbound agent orders require an explicit confirm. This path never charges.</p>
+      <form id="agent-form">
+        <label>Description<input name="description" value="AI Pharma consult retainer" /></label>
+        <label>Amount cents<input name="amount_cents" type="number" min="100" value="10000" /></label>
+        <label><input name="confirm" type="checkbox" /> confirm=true</label>
+        <button class="btn btn-primary" type="submit" style="margin-top:1rem">Queue agent order</button>
+      </form>
+      <p id="agent-status" role="status"></p>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Local queue</h2>
+      <pre id="queue" style="white-space:pre-wrap"></pre>
+      <button class="btn" id="clear" type="button">Clear local queue</button>
+    </section>
+  </main>
+  <script>
+    var KEY = 'apd_automation_queue';
+    function load() {
+      try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+    }
+    function save(rows) {
+      localStorage.setItem(KEY, JSON.stringify(rows.slice(-50)));
+      document.getElementById('queue').textContent = JSON.stringify(rows.slice(-50), null, 2);
+    }
+    save(load());
+    document.getElementById('intake-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var data = new FormData(event.target);
+      var rows = load();
+      rows.push({
+        type: 'consult_intake',
+        ts: new Date().toISOString(),
+        name: String(data.get('name') || '').slice(0, 120),
+        email: String(data.get('email') || '').slice(0, 200),
+        need: String(data.get('need') || '').slice(0, 4000),
+        charged: false
+      });
+      save(rows);
+      event.target.reset();
+    });
+    document.getElementById('agent-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var data = new FormData(event.target);
+      var status = document.getElementById('agent-status');
+      if (!data.get('confirm')) {
+        status.textContent = 'Refused: agent orders require confirm=true.';
+        return;
+      }
+      var amount = Number(data.get('amount_cents'));
+      if (!Number.isInteger(amount) || amount < 100) {
+        status.textContent = 'Refused: amount_cents must be an integer >= 100.';
+        return;
+      }
+      var rows = load();
+      rows.push({
+        type: 'agent_order_queued',
+        ts: new Date().toISOString(),
+        id: 'ord_local_' + Math.random().toString(16).slice(2, 10),
+        description: String(data.get('description') || ''),
+        amount_cents: amount,
+        confirm: true,
+        charged: false
+      });
+      save(rows);
+      status.textContent = 'Queued. No charge created.';
+    });
+    document.getElementById('clear').addEventListener('click', function () {
+      localStorage.removeItem(KEY);
+      save([]);
+    });
+  </script>
+</body>
+</html>

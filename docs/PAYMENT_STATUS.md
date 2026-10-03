@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-02
+# Payment and GCP status — 2026-10-03
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
 
@@ -8,25 +8,22 @@ Sandbox gcloud is installed. `gcloud auth list` shows no credentialed accounts. 
 
 IAM was not mutated. Do not treat bootstrap as done.
 
-Operator next step:
-
-```bash
-gcloud auth login --no-launch-browser
-```
-
-Paste the verification code in chat. Then:
+Operator next step: complete `gcloud auth login --no-launch-browser` and paste the verification code in chat. Then:
 
 ```bash
 gcloud config set project PROJECT_ID
 bash cloud/iam/bootstrap.sh
+bash cloud/automation/apply-after-auth.sh
 ```
 
 ## Built without live keys
 
 - `pay.html` local dry-run ledger (`apd_ledger`)
 - `orders.html` reads that ledger
+- `automation.html` local intake and confirm-gated agent queue
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - Agent path refuses orders unless `confirm=true` and still does not charge
+- Post-auth script for topic `apd-fulfillment` (not applied)
 
 ## Still waiting
 
