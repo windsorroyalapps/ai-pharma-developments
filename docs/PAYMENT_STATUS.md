@@ -2,15 +2,13 @@
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
 
-No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate. Do not store ID documents in git or skills. Live keys wait for Stripe Dashboard identity verification.
+No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate. Identity documents stay out of git and out of skills.
 
 ## Blocker
 
-Google Cloud SDK 587 is installed in this sandbox. `gcloud auth list` shows no credentialed accounts. Project is unset.
+This sandbox has no credentialed `gcloud` account and no project id. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created.
 
-IAM was not mutated. `cloud/iam/bootstrap.sh` was not run. Do not treat service accounts, WIF, or secret shells as created.
-
-A login URL from this sandbox is not reusable: the OAuth PKCE session ends when the CLI process exits. Authenticate from a terminal you control, or start a fresh login and paste the verification code in the same chat turn before the CLI exits.
+Authenticate from a terminal you control, then paste nothing secret back into chat except the project id:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -20,7 +18,9 @@ bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
 ```
 
-## Least privilege the bootstrap will create (not yet applied)
+A login URL printed by a short-lived agent process is not reusable after that process exits.
+
+## Least privilege bootstrap will create (not yet applied)
 
 - `apd-payment-sa` — secretmanager.secretAccessor, logging.logWriter, run.invoker
 - `apd-deploy-sa` — run.admin, artifactregistry.writer, cloudbuild.builds.editor, iam.serviceAccountUser
@@ -34,11 +34,11 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 - `pay.html` local dry-run ledger (`apd_ledger`)
 - `orders.html` reads that ledger
-- `automation.html` local intake, confirm-gated agent queue, and JSON export
+- `automation.html` local intake, confirm-gated agent queue, local fulfillment mark, JSON export
+- `status.html` privilege checklist plus health probe (idle until worker URL is set)
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - Agent path refuses orders unless `confirm=true` and still does not charge
 - Post-auth script for topic `apd-fulfillment` (not applied)
-- Weekday automation `apd-site-dev` continues non-secret site work
 
 ## Still waiting
 

@@ -14,15 +14,26 @@
       <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
       <nav class="nav-links" aria-label="Primary">
         <a href="pay.html">Pay</a>
+        <a href="automation.html">Automation</a>
         <a href="consult.html">Consult</a>
       </nav>
     </div>
   </header>
-  <main class="container" style="padding:3rem 0">
+  <main class="container" style="padding:3rem 0;max-width:46rem">
     <div class="eyebrow">Operator</div>
     <h1>Payment worker status</h1>
-    <p class="lead">Checks the Cloud Run health endpoint. Stays idle until the worker URL is set.</p>
-    <section class="card" style="margin-top:1.5rem;max-width:40rem">
+    <p class="lead">Privilege checklist is planned, not applied. Health probe stays idle until the Cloud Run URL is set.</p>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>GCP privileges</h2>
+      <ul>
+        <li>apd-payment-sa — secretAccessor, logWriter, run.invoker — not created</li>
+        <li>apd-deploy-sa — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser — not created</li>
+        <li>WIF pool github-apd bound to windsorroyalapps/ai-pharma-developments — not created</li>
+        <li>Secret shells stripe-secret-key, stripe-webhook-secret, stripe-publishable-key — not created</li>
+        <li>Live Stripe — blocked until identity verification; do not upload ID documents to git</li>
+      </ul>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
       <label>Health URL<input id="health-url" value="https://YOUR-CLOUD-RUN-URL/healthz"></label>
       <button class="btn btn-primary" id="check" type="button" style="margin-top:1rem">Check</button>
       <pre id="out" style="margin-top:1rem;white-space:pre-wrap"></pre>
@@ -32,6 +43,10 @@
     document.getElementById('check').addEventListener('click', function () {
       var url = document.getElementById('health-url').value;
       var out = document.getElementById('out');
+      if (url.indexOf('YOUR-CLOUD-RUN-URL') !== -1) {
+        out.textContent = 'Idle. Set the Cloud Run URL after bootstrap and deploy.';
+        return;
+      }
       out.textContent = 'Checking...';
       fetch(url).then(function (r) { return r.text(); }).then(function (t) {
         out.textContent = t;
