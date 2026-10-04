@@ -1,12 +1,12 @@
-# Payment and GCP status — 2026-10-03 (session)
+# Payment and GCP status — 2026-10-04
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
 
-No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate.
+No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate. Do not store ID documents in git or skills. Live keys wait for Stripe Dashboard identity verification.
 
 ## Blocker
 
-This environment has the Google Cloud SDK installed under the agent home directory. `gcloud auth list` shows no credentialed accounts. Project is unset.
+Google Cloud SDK 587 is installed in this sandbox. `gcloud auth list` shows no credentialed accounts. Project is unset.
 
 IAM was not mutated. `cloud/iam/bootstrap.sh` was not run. Do not treat service accounts, WIF, or secret shells as created.
 
@@ -28,16 +28,17 @@ bash cloud/automation/apply-after-auth.sh
 - Secret shells (no versions): `stripe-secret-key`, `stripe-webhook-secret`, `stripe-publishable-key`
 - Region: `australia-southeast1`
 
-Never grant Owner or Editor to the runtime SA. No JSON keys in git. Do not commit ID documents.
+Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 ## Built without live keys
 
 - `pay.html` local dry-run ledger (`apd_ledger`)
 - `orders.html` reads that ledger
-- `automation.html` local intake and confirm-gated agent queue
+- `automation.html` local intake, confirm-gated agent queue, and JSON export
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - Agent path refuses orders unless `confirm=true` and still does not charge
 - Post-auth script for topic `apd-fulfillment` (not applied)
+- Weekday automation `apd-site-dev` continues non-secret site work
 
 ## Still waiting
 

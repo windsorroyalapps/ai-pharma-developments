@@ -30,6 +30,7 @@
       <form id="intake-form">
         <label>Name<input name="name" required /></label>
         <label>Email<input name="email" type="email" required /></label>
+        <label>Organisation<input name="org" /></label>
         <label>Need<textarea name="need" required></textarea></label>
         <button class="btn btn-primary" type="submit" style="margin-top:1rem">Queue locally</button>
       </form>
@@ -46,8 +47,15 @@
       <p id="agent-status" role="status"></p>
     </section>
     <section class="card" style="margin-top:1.5rem">
+      <h2>Fulfillment dry-run</h2>
+      <p>Marks the newest unfulfilled queue item as ready for Pub/Sub topic <code>apd-fulfillment</code>. No publish happens until Cloud Run is deployed.</p>
+      <button class="btn" id="fulfill" type="button">Mark next item fulfilled (local)</button>
+      <p id="fulfill-status" role="status"></p>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
       <h2>Local queue</h2>
       <pre id="queue" style="white-space:pre-wrap"></pre>
+      <button class="btn" id="export" type="button">Export JSON</button>
       <button class="btn" id="clear" type="button">Clear local queue</button>
     </section>
   </main>
@@ -70,8 +78,10 @@
         ts: new Date().toISOString(),
         name: String(data.get('name') || '').slice(0, 120),
         email: String(data.get('email') || '').slice(0, 200),
+        org: String(data.get('org') || '').slice(0, 200),
         need: String(data.get('need') || '').slice(0, 4000),
-        charged: false
+        charged: false,
+        fulfilled: false
       });
       save(rows);
       event.target.reset();
@@ -97,10 +107,33 @@
         description: String(data.get('description') || ''),
         amount_cents: amount,
         confirm: true,
-        charged: false
+        charged: false,
+        fulfilled: false
       });
       save(rows);
       status.textContent = 'Queued. No charge created.';
+    });
+    document.getElementById('fulfill').addEventListener('click', function () {
+      var rows = load();
+      var status = document.getElementById('fulfill-status');
+      var item = rows.find(function (row) { return !row.fulfilled; });
+      if (!item) {
+        status.textContent = 'Queue empty or already marked.';
+        return;
+      }
+      item.fulfilled = true;
+      item.fulfilled_at = new Date().toISOString();
+      item.topic = 'apd-fulfillment';
+      item.published = false;
+      save(rows);
+      status.textContent = 'Marked local only. Pub/Sub publish waits on GCP auth.';
+    });
+    document.getElementById('export').addEventListener('click', function () {
+      var blob = new Blob([JSON.stringify(load(), null, 2)], { type: 'application/json' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'apd-automation-queue.json';
+      a.click();
     });
     document.getElementById('clear').addEventListener('click', function () {
       localStorage.removeItem(KEY);
