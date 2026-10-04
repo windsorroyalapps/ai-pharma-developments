@@ -8,6 +8,7 @@
 const express = require('express');
 const Stripe = require('stripe');
 const crypto = require('crypto');
+const { publishFulfillment } = require('./fulfillment');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -43,6 +44,7 @@ app.get('/healthz', (_req, res) => res.json({
   webhook_configured: Boolean(STRIPE_WEBHOOK_SECRET),
   dry_run: FORCE_DRY,
   intake: true,
+  fulfillment_topic: process.env.FULFILLMENT_TOPIC || null,
   live_charges: false,
 }));
 
@@ -183,14 +185,23 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
     } catch (err) {
       console.error('customer upsert failed', err.message);
     }
-    ledger('payment_completed', {
+    const payload = {
       session_id: session.id,
       customer_id: customerId,
       amount_total: session.amount_total,
       currency: session.currency,
       customer_email: email,
       payment_status: session.payment_status,
-    });
+      source: session.metadata?.source || 'website',
+      dry_run: false,
+    };
+    ledger('payment_completed', payload);
+    try {
+      const published = await publishFulfillment(payload);
+      ledger('fulfillment_publish', published);
+    } catch (err) {
+      console.error('fulfillment publish error', err.message);
+    }
   }
 
   res.json({ received: true });
