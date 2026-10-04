@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-04
+# Payment and GCP status — 2026-10-04 (evening AEDT)
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
 
@@ -6,9 +6,9 @@ No new payment or Stripe skill is required. Those skills already cover Checkout,
 
 ## Blocker
 
-Sandbox Google Cloud SDK 587.0.0 is installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created.
+Google Cloud SDK is installed in the sandbox. `gcloud auth list` shows zero credentialed accounts. Project is unset. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created.
 
-A `gcloud auth login --no-launch-browser` attempt exited before a verification code was entered. That URL is single-use and is not reusable. Authenticate from a terminal you control, then reply with only the project id:
+A `gcloud auth login --no-launch-browser` attempt printed a one-time URL and then exited (EOF) because this session cannot keep the verification prompt open. That URL is not reusable. Authenticate from a terminal you control, then reply with only the project id:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -41,6 +41,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - Agent path refuses orders unless `confirm=true` and still does not charge
 - `cloud/worker/fulfillment.js` publishes only when `FULFILLMENT_TOPIC` is set and the session is not dry-run
+- `tools/dry-run-check.js` asserts the confirm gate and no-charge flag locally (`node tools/dry-run-check.js`)
 
 ## Still waiting
 
