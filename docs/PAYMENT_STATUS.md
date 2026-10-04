@@ -2,13 +2,13 @@
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
 
-No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate. Identity documents stay out of git and out of skills.
+No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate. Identity documents stay out of git and out of skills. Do not send ID documents into chat or the repo; complete Stripe identity in the Stripe Dashboard when ready.
 
 ## Blocker
 
-This sandbox has no credentialed `gcloud` account and no project id. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created.
+This sandbox has Google Cloud SDK 587.0.0 and zero credentialed accounts. Project is unset. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created.
 
-Authenticate from a terminal you control, then paste nothing secret back into chat except the project id:
+A `gcloud auth login --no-launch-browser` attempt exited before a verification code was entered. That URL is not reusable. Authenticate from a terminal you control, then send only the project id:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -18,7 +18,7 @@ bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
 ```
 
-A login URL printed by a short-lived agent process is not reusable after that process exits.
+Privilege matrix: `cloud/iam/PRIVILEGES.md`.
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -43,7 +43,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 ## Still waiting
 
 - Operator GCP login and project id
-- Stripe identity documents (supply later; never commit them)
+- Stripe identity documents (supply later in Stripe Dashboard only)
 - Test key versions in Secret Manager
 - GitHub Actions variables `GCP_PROJECT_ID`, `GCP_REGION`, `GCP_WIF_PROVIDER`, `GCP_DEPLOY_SA`
 - Live mode only after an explicit operator confirmation
