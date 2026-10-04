@@ -2,13 +2,13 @@
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
 
-No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate. Identity documents stay out of git and out of skills. Do not send ID documents into chat or the repo; complete Stripe identity in the Stripe Dashboard when ready.
+No new payment or Stripe skill is required. Those skills already cover Checkout, webhooks, Google Pay, Secret Manager names, and the agent `confirm=true` gate. Identity documents stay out of git and out of skills. Complete Stripe identity in the Stripe Dashboard when ready. Do not paste ID documents into chat or the repo.
 
 ## Blocker
 
-This sandbox has Google Cloud SDK 587.0.0 and zero credentialed accounts. Project is unset. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created.
+Sandbox Google Cloud SDK 587.0.0 is installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created.
 
-A `gcloud auth login --no-launch-browser` attempt exited before a verification code was entered. That URL is not reusable. Authenticate from a terminal you control, then send only the project id:
+A `gcloud auth login --no-launch-browser` attempt exited before a verification code was entered. That URL is single-use and is not reusable. Authenticate from a terminal you control, then reply with only the project id:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -27,23 +27,25 @@ Privilege matrix: `cloud/iam/PRIVILEGES.md`.
 - WIF pool `github-apd` / provider `github`, bound only to `windsorroyalapps/ai-pharma-developments`
 - Secret shells (no versions): `stripe-secret-key`, `stripe-webhook-secret`, `stripe-publishable-key`
 - Region: `australia-southeast1`
+- Pub/Sub topic `apd-fulfillment` via `cloud/automation/apply-after-auth.sh`
 
 Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 ## Built without live keys
 
 - `pay.html` local dry-run ledger (`apd_ledger`)
-- `orders.html` reads that ledger
-- `automation.html` local intake, confirm-gated agent queue, local fulfillment mark, JSON export
-- `status.html` privilege checklist plus health probe (idle until worker URL is set)
+- `js/catalog.js` fixed SKUs for consult, scoping, retainer, support
+- `orders.html` reads the local ledger
+- `automation.html` intake, confirm-gated agent queue, SKU presets, local fulfillment mark, JSON export
+- `status.html` privilege checklist plus health probe
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - Agent path refuses orders unless `confirm=true` and still does not charge
-- Post-auth script for topic `apd-fulfillment` (not applied)
+- `cloud/worker/fulfillment.js` publishes only when `FULFILLMENT_TOPIC` is set and the session is not dry-run
 
 ## Still waiting
 
 - Operator GCP login and project id
-- Stripe identity documents (supply later in Stripe Dashboard only)
+- Stripe identity documents (Dashboard only)
 - Test key versions in Secret Manager
 - GitHub Actions variables `GCP_PROJECT_ID`, `GCP_REGION`, `GCP_WIF_PROVIDER`, `GCP_DEPLOY_SA`
 - Live mode only after an explicit operator confirmation

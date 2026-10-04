@@ -26,6 +26,11 @@
     <h1>Automation console</h1>
     <p class="lead">Queues consult intake and agent orders in this browser only. Nothing is charged. Live Stripe waits on identity verification and Secret Manager test keys.</p>
     <section class="card" style="margin-top:1.5rem">
+      <h2>Service catalog</h2>
+      <p>Presets fill the agent form. Checkout still stays dry-run until the worker URL and test keys exist.</p>
+      <div id="catalog"></div>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
       <h2>Consult intake</h2>
       <form id="intake-form">
         <label>Name<input name="name" required /></label>
@@ -39,12 +44,22 @@
       <h2>Agent order gate</h2>
       <p>Outbound agent orders require an explicit confirm. This path never charges.</p>
       <form id="agent-form">
-        <label>Description<input name="description" value="AI Pharma consult retainer" /></label>
-        <label>Amount cents<input name="amount_cents" type="number" min="100" value="10000" /></label>
+        <label>SKU<input name="sku" id="sku" /></label>
+        <label>Description<input name="description" id="description" value="AI Pharma consult retainer" /></label>
+        <label>Amount cents<input name="amount_cents" id="amount_cents" type="number" min="100" value="10000" /></label>
         <label><input name="confirm" type="checkbox" /> confirm=true</label>
         <button class="btn btn-primary" type="submit" style="margin-top:1rem">Queue agent order</button>
       </form>
       <p id="agent-status" role="status"></p>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Follow-up scheduler (local)</h2>
+      <p>Stores a next-action time. Cloud Scheduler is not created until the worker URL exists.</p>
+      <form id="follow-form">
+        <label>Queue id<input name="id" required placeholder="ord_local_..." /></label>
+        <label>Follow up<input name="when" type="datetime-local" required /></label>
+        <button class="btn" type="submit" style="margin-top:1rem">Schedule local follow-up</button>
+      </form>
     </section>
     <section class="card" style="margin-top:1.5rem">
       <h2>Fulfillment dry-run</h2>
@@ -59,6 +74,7 @@
       <button class="btn" id="clear" type="button">Clear local queue</button>
     </section>
   </main>
+  <script src="js/catalog.js"></script>
   <script>
     var KEY = 'apd_automation_queue';
     function load() {
@@ -68,6 +84,21 @@
       localStorage.setItem(KEY, JSON.stringify(rows.slice(-50)));
       document.getElementById('queue').textContent = JSON.stringify(rows.slice(-50), null, 2);
     }
+    function fillSku(item) {
+      document.getElementById('sku').value = item.sku;
+      document.getElementById('description').value = item.name;
+      document.getElementById('amount_cents').value = item.amount_cents;
+    }
+    var catalog = document.getElementById('catalog');
+    (window.APD_CATALOG || []).forEach(function (item) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn';
+      button.style.margin = '0.25rem';
+      button.textContent = item.name + ' — ' + (item.amount_cents / 100).toFixed(0) + ' AUD';
+      button.addEventListener('click', function () { fillSku(item); });
+      catalog.appendChild(button);
+    });
     save(load());
     document.getElementById('intake-form').addEventListener('submit', function (event) {
       event.preventDefault();
@@ -104,6 +135,7 @@
         type: 'agent_order_queued',
         ts: new Date().toISOString(),
         id: 'ord_local_' + Math.random().toString(16).slice(2, 10),
+        sku: String(data.get('sku') || ''),
         description: String(data.get('description') || ''),
         amount_cents: amount,
         confirm: true,
@@ -112,6 +144,17 @@
       });
       save(rows);
       status.textContent = 'Queued. No charge created.';
+    });
+    document.getElementById('follow-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var data = new FormData(event.target);
+      var rows = load();
+      var id = String(data.get('id') || '');
+      var item = rows.find(function (row) { return row.id === id; });
+      if (!item) return;
+      item.follow_up = String(data.get('when') || '');
+      item.scheduler = 'local';
+      save(rows);
     });
     document.getElementById('fulfill').addEventListener('click', function () {
       var rows = load();
