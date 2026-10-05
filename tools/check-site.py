@@ -125,12 +125,25 @@ def main() -> int:
 
     print(f"pages checked: {len(PAGES)}")
     print(f"local links resolved: {len(all_targets)}")
+
+    # The published contact address must stay canonical. A personal address was
+    # published across 16 pages once; this makes a regression a build failure.
+    import subprocess
+
+    rc = subprocess.run(
+        [sys.executable, str(ROOT / "tools" / "set-contact-email.py"), "--check"],
+        capture_output=True,
+        text=True,
+    ).returncode
+    if rc != 0:
+        problems.append("published contact address is not the canonical address")
+
     if problems:
         print(f"\n{len(problems)} problem(s):")
         for problem in problems:
             print(f"  - {problem}")
         return 1
-    print("\nOK: structure, links, anchors, headings, ids and images all check out.")
+    print("\nOK: structure, links, anchors, headings, ids, images and contact address all check out.")
     return 0
 
 

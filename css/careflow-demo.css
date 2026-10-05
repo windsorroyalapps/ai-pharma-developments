@@ -1,0 +1,840 @@
+/* CareFlow interactive demo.
+
+   A guided, self-contained walkthrough of the real CareFlow screens, rendered from
+   synthetic data only. There is no backend, no network call, and no real CareFlow
+   account behind it: everything here is a static reconstruction used to show a
+   prospective client what the workflow feels like.
+
+   The design language is the host site's (css/styles.css tokens), so the demo reads
+   as part of aipharmadevelopments.com rather than an embedded third-party product.
+
+   Every screen carries a synthetic-data watermark. That is a product requirement of
+   the underlying platform, not decoration: a preview that could be mistaken for a
+   live clinical system would be a clinical-safety problem. */
+
+:root {
+  --cf-panel: #0a1a28;
+  --cf-panel-2: #0f2434;
+  --cf-edge: rgba(164, 210, 231, 0.16);
+  --cf-edge-soft: rgba(164, 210, 231, 0.08);
+  --cf-mint: #66f4d2;
+  --cf-blue: #7aa7ff;
+  --cf-violet: #ae8cff;
+  --cf-lime: #c8f06a;
+  --cf-amber: #ffc46b;
+  --cf-rose: #ff8b9c;
+  --cf-ink: #eaf4fa;
+  --cf-ink-2: #a9c0cf;
+  --cf-ink-3: #6f8b9d;
+  --cf-radius: 14px;
+  --cf-radius-lg: 20px;
+  --cf-chrome-h: 44px;
+}
+
+/* ---------- frame: a believable desktop app inside the page ---------- */
+
+.cf-demo {
+  position: relative;
+  border: 1px solid var(--cf-edge);
+  border-radius: var(--cf-radius-lg);
+  background: linear-gradient(180deg, #081826 0%, #06121d 100%);
+  overflow: hidden;
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.44);
+}
+
+.cf-chrome {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--cf-chrome-h);
+  padding: 0 14px;
+  background: #0a1b29;
+  border-bottom: 1px solid var(--cf-edge-soft);
+}
+
+.cf-dots {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.cf-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(164, 210, 231, 0.2);
+}
+
+.cf-url {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(3, 11, 19, 0.72);
+  border: 1px solid var(--cf-edge-soft);
+  color: var(--cf-ink-3);
+  font-size: 0.74rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cf-lock {
+  color: var(--cf-mint);
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+}
+
+.cf-role {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: rgba(102, 244, 210, 0.1);
+  border: 1px solid rgba(102, 244, 210, 0.28);
+  color: var(--cf-mint);
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- watermark: the boundary is always visible ---------- */
+
+.cf-watermark {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+}
+
+.cf-watermark span {
+  transform: rotate(-22deg);
+  font-size: clamp(2.4rem, 8vw, 5.4rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: rgba(164, 210, 231, 0.055);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* ---------- layout ---------- */
+
+.cf-stage {
+  display: grid;
+  grid-template-columns: 208px 1fr;
+  min-height: 460px;
+}
+
+.cf-sidebar {
+  padding: 16px 12px;
+  border-right: 1px solid var(--cf-edge-soft);
+  background: rgba(6, 18, 29, 0.6);
+}
+
+.cf-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding-left: 4px;
+}
+
+.cf-brand svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.cf-brand strong {
+  display: block;
+  font-size: 0.86rem;
+  letter-spacing: -0.01em;
+  color: var(--cf-ink);
+}
+
+.cf-brand small {
+  display: block;
+  font-size: 0.62rem;
+  color: var(--cf-ink-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.cf-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  margin-bottom: 2px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--cf-ink-2);
+  font: inherit;
+  font-size: 0.8rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cf-nav-item:hover {
+  background: rgba(164, 210, 231, 0.06);
+  color: var(--cf-ink);
+}
+
+.cf-nav-item[aria-current="true"] {
+  background: rgba(102, 244, 210, 0.12);
+  color: var(--cf-mint);
+  font-weight: 600;
+}
+
+.cf-nav-item .cf-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.55;
+  flex: 0 0 auto;
+}
+
+.cf-nav-item[data-locked="true"] {
+  color: var(--cf-ink-3);
+  opacity: 0.62;
+}
+
+.cf-nav-item[data-locked="true"]::after {
+  content: "locked";
+  margin-left: auto;
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cf-rose);
+  opacity: 0.85;
+}
+
+.cf-nav-group {
+  margin: 14px 0 6px;
+  padding-left: 10px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cf-ink-3);
+}
+
+.cf-canvas {
+  padding: 18px 20px 22px;
+  background:
+    radial-gradient(900px 320px at 82% -8%, rgba(122, 167, 255, 0.09), transparent 70%),
+    radial-gradient(700px 300px at 8% 108%, rgba(102, 244, 210, 0.07), transparent 70%);
+}
+
+.cf-screen-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.cf-screen-head h3 {
+  margin: 0 0 3px;
+  font-size: 1.16rem;
+  letter-spacing: -0.02em;
+  color: var(--cf-ink);
+}
+
+.cf-screen-head p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--cf-ink-2);
+  max-width: 52ch;
+}
+
+.cf-eyebrow {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--cf-mint);
+  margin-bottom: 5px;
+}
+
+/* ---------- stats ---------- */
+
+.cf-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.cf-stat {
+  padding: 12px 13px;
+  border: 1px solid var(--cf-edge-soft);
+  border-radius: var(--cf-radius);
+  background: var(--cf-panel);
+}
+
+.cf-stat span {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cf-ink-3);
+  margin-bottom: 6px;
+}
+
+.cf-stat strong {
+  display: block;
+  font-size: 1.5rem;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--cf-ink);
+}
+
+.cf-stat small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.7rem;
+  color: var(--cf-ink-2);
+}
+
+.cf-stat[data-tone="mint"] strong { color: var(--cf-mint); }
+.cf-stat[data-tone="blue"] strong { color: var(--cf-blue); }
+.cf-stat[data-tone="violet"] strong { color: var(--cf-violet); }
+
+/* ---------- panels ---------- */
+
+.cf-panel {
+  border: 1px solid var(--cf-edge-soft);
+  border-radius: var(--cf-radius);
+  background: var(--cf-panel);
+  overflow: hidden;
+}
+
+.cf-panel + .cf-panel {
+  margin-top: 12px;
+}
+
+.cf-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--cf-edge-soft);
+}
+
+.cf-panel-head h4 {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--cf-ink);
+}
+
+.cf-panel-head a {
+  font-size: 0.72rem;
+  color: var(--cf-mint);
+  text-decoration: none;
+}
+
+.cf-grid-2 {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 12px;
+}
+
+.cf-body {
+  padding: 12px 14px 14px;
+}
+
+/* ---------- rows / appointments ---------- */
+
+.cf-row {
+  display: grid;
+  grid-template-columns: 62px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-top: 1px solid var(--cf-edge-soft);
+}
+
+.cf-row:first-child {
+  border-top: 0;
+}
+
+.cf-time {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--cf-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.cf-who strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--cf-ink);
+}
+
+.cf-who span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.74rem;
+  color: var(--cf-ink-2);
+}
+
+/* ---------- chips / status ---------- */
+
+.cf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.cf-chip[data-tone="mint"] { background: rgba(102, 244, 210, 0.12); color: var(--cf-mint); border-color: rgba(102, 244, 210, 0.3); }
+.cf-chip[data-tone="blue"] { background: rgba(122, 167, 255, 0.13); color: var(--cf-blue); border-color: rgba(122, 167, 255, 0.32); }
+.cf-chip[data-tone="violet"] { background: rgba(174, 140, 255, 0.14); color: var(--cf-violet); border-color: rgba(174, 140, 255, 0.33); }
+.cf-chip[data-tone="amber"] { background: rgba(255, 196, 107, 0.13); color: var(--cf-amber); border-color: rgba(255, 196, 107, 0.32); }
+.cf-chip[data-tone="rose"] { background: rgba(255, 139, 156, 0.13); color: var(--cf-rose); border-color: rgba(255, 139, 156, 0.32); }
+
+/* ---------- notices ---------- */
+
+.cf-notice {
+  display: flex;
+  gap: 9px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border-radius: 11px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  border: 1px solid;
+}
+
+.cf-notice strong {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.cf-notice[data-tone="amber"] { background: rgba(255, 196, 107, 0.08); border-color: rgba(255, 196, 107, 0.26); color: #f3d9a8; }
+.cf-notice[data-tone="blue"] { background: rgba(122, 167, 255, 0.08); border-color: rgba(122, 167, 255, 0.26); color: #c3d5f6; }
+.cf-notice[data-tone="mint"] { background: rgba(102, 244, 210, 0.08); border-color: rgba(102, 244, 210, 0.26); color: #b3f2e3; }
+.cf-notice[data-tone="rose"] { background: rgba(255, 139, 156, 0.08); border-color: rgba(255, 139, 156, 0.26); color: #f3c2c9; }
+
+/* ---------- permission matrix (the actual proof point) ---------- */
+
+.cf-matrix-wrap {
+  overflow-x: auto;
+}
+
+.cf-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+
+.cf-matrix th,
+.cf-matrix td {
+  padding: 8px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--cf-edge-soft);
+  white-space: nowrap;
+}
+
+.cf-matrix thead th {
+  font-size: 0.62rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--cf-ink-3);
+  font-weight: 700;
+  background: rgba(3, 11, 19, 0.4);
+}
+
+.cf-matrix tbody th {
+  font-weight: 600;
+  color: var(--cf-ink);
+}
+
+.cf-matrix td {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.cf-yes { color: var(--cf-mint); font-weight: 700; }
+.cf-no { color: var(--cf-ink-3); opacity: 0.5; }
+
+.cf-matrix-note {
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  color: var(--cf-ink-3);
+}
+
+/* ---------- clinical record: draft vs signed ---------- */
+
+.cf-record {
+  border: 1px solid var(--cf-edge-soft);
+  border-radius: var(--cf-radius);
+  background: var(--cf-panel-2);
+  overflow: hidden;
+}
+
+.cf-record-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 13px;
+  border-bottom: 1px solid var(--cf-edge-soft);
+}
+
+.cf-record-bar strong {
+  font-size: 0.84rem;
+  color: var(--cf-ink);
+}
+
+.cf-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--cf-edge-soft);
+}
+
+.cf-field {
+  padding: 11px 13px;
+  background: var(--cf-panel-2);
+}
+
+.cf-field span {
+  display: block;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cf-ink-3);
+  margin-bottom: 4px;
+}
+
+.cf-field strong {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--cf-ink);
+}
+
+.cf-sign {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 13px;
+  border-top: 1px solid var(--cf-edge-soft);
+  background: rgba(3, 11, 19, 0.35);
+  font-size: 0.78rem;
+  color: var(--cf-ink-2);
+}
+
+.cf-sign .cf-chip { flex: 0 0 auto; }
+
+/* ---------- document quarantine ---------- */
+
+.cf-quarantine {
+  display: grid;
+  gap: 8px;
+}
+
+.cf-doc {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 11px 13px;
+  border: 1px solid var(--cf-edge-soft);
+  border-radius: 12px;
+  background: var(--cf-panel);
+}
+
+.cf-doc-icon {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: rgba(122, 167, 255, 0.12);
+  color: var(--cf-blue);
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.cf-doc-icon[data-state="quarantined"] { background: rgba(255, 196, 107, 0.13); color: var(--cf-amber); }
+.cf-doc-icon[data-state="clean"] { background: rgba(102, 244, 210, 0.12); color: var(--cf-mint); }
+
+.cf-doc-body { flex: 1 1 auto; min-width: 0; }
+
+.cf-doc-body strong {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--cf-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cf-doc-body span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.72rem;
+  color: var(--cf-ink-3);
+}
+
+/* ---------- step rail (drives the walkthrough) ---------- */
+
+.cf-rail {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--cf-edge-soft);
+  background: rgba(3, 11, 19, 0.5);
+  flex-wrap: wrap;
+}
+
+.cf-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--cf-edge-soft);
+  background: rgba(10, 26, 40, 0.7);
+  color: var(--cf-ink-2);
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.cf-step:hover:not(:disabled) {
+  border-color: rgba(102, 244, 210, 0.4);
+  color: var(--cf-ink);
+}
+
+.cf-step[aria-current="true"] {
+  background: rgba(102, 244, 210, 0.14);
+  border-color: rgba(102, 244, 210, 0.5);
+  color: var(--cf-mint);
+  font-weight: 600;
+}
+
+.cf-step:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cf-step .n {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(164, 210, 231, 0.16);
+  font-size: 0.62rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cf-step[aria-current="true"] .n {
+  background: var(--cf-mint);
+  color: #06131f;
+}
+
+/* ---------- narration ---------- */
+
+.cf-narration {
+  padding: 13px 15px;
+  border-top: 1px solid var(--cf-edge-soft);
+  background: rgba(6, 18, 29, 0.8);
+}
+
+.cf-narration .cf-eyebrow { margin-bottom: 4px; }
+
+.cf-narration p {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--cf-muted, #b8cddb);
+}
+
+.cf-narration strong { color: var(--cf-ink); }
+
+/* ---------- access request ---------- */
+
+.cf-access {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  border: 1px solid rgba(102, 244, 210, 0.24);
+  border-radius: var(--cf-radius);
+  background: rgba(102, 244, 210, 0.06);
+}
+
+.cf-access h3 {
+  margin: 0 0 4px;
+  font-size: 0.92rem;
+  color: var(--cf-ink);
+}
+
+.cf-access p {
+  margin: 0 0 9px;
+  font-size: 0.79rem;
+  color: var(--cf-ink-2);
+}
+
+.cf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--cf-mint);
+  background: var(--cf-mint);
+  color: #06131f;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.cf-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px rgba(102, 244, 210, 0.24);
+}
+
+.cf-btn-ghost {
+  background: transparent;
+  color: var(--cf-mint);
+  border-color: rgba(102, 244, 210, 0.4);
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 900px) {
+  .cf-stage {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid var(--cf-edge-soft);
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 10px;
+  }
+
+  .cf-brand,
+  .cf-nav-group {
+    display: none;
+  }
+
+  .cf-nav-item {
+    width: auto;
+    white-space: nowrap;
+    margin-bottom: 0;
+  }
+
+  .cf-nav-item[data-locked="true"]::after {
+    margin-left: 4px;
+  }
+
+  .cf-grid-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .cf-access {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cf-demo *,
+  .cf-btn {
+    transition: none !important;
+  }
+
+  .cf-btn:hover {
+    transform: none;
+  }
+}
+
+/* screen-reader-only live region for step changes */
+.cf-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- role switcher ---------- */
+
+.cf-switcher-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--cf-edge-soft);
+  background: rgba(3, 11, 19, 0.4);
+}
+
+.cf-switcher-label {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--cf-ink-3);
+}
+
+.cf-switcher {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+@media (max-width: 720px) {
+  .cf-stage {
+    grid-template-columns: 1fr;
+  }
+}
