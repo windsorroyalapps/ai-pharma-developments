@@ -21,7 +21,7 @@
         '',
         payload.need
       ].join('\n');
-      location.href = 'mailto:troy.windsor1989@gmail.com?subject=' +
+      location.href = 'mailto:hello@aipharmadevelopments.com?subject=' +
         encodeURIComponent('Consult request — AI Pharma Developments') +
         '&body=' + encodeURIComponent(body);
     }
