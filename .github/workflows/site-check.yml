@@ -12,6 +12,6 @@ jobs:
         with:
           node-version: '20'
       - name: Check JS syntax
-        run: node --check js/site.js js/stripe-checkout.js js/google-pay.js js/catalog.js cloud/worker/index.js cloud/worker/fulfillment.js tools/dry-run-check.js
+        run: node --check js/site.js js/stripe-checkout.js js/google-pay.js js/catalog.js js/careflow-demo.js cloud/worker/index.js cloud/worker/fulfillment.js tools/dry-run-check.js
       - name: Payment dry-run contract
         run: node tools/dry-run-check.js
