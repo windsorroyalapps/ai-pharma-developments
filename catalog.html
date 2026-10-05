@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Service catalog | AI Pharma Developments</title>
+  <meta name="description" content="Fixed-price service catalog for AI Pharma Developments. Checkout stays in dry-run until Stripe test keys are connected." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="solutions.html">Solutions</a>
+        <a class="active" href="catalog.html">Catalog</a>
+        <a href="pay.html">Pay</a>
+        <a href="automation.html">Automation</a>
+        <a class="btn btn-primary" href="support.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Fixed SKUs</div>
+    <h1>Service catalog</h1>
+    <p class="lead">Prices are AUD. Subscription rows are previews only. No live charge until Stripe identity verification and an explicit live switch.</p>
+    <div id="catalog" class="grid-2" style="margin-top:1.5rem"></div>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/catalog.js"></script>
+  <script>
+    const root = document.getElementById('catalog');
+    (window.APD_CATALOG || []).forEach(function (item) {
+      const card = document.createElement('section');
+      card.className = 'card';
+      const aud = (item.amount_cents / 100).toFixed(2);
+      const mode = item.mode === 'subscription_preview' ? 'Monthly preview — not billed' : 'One-time — dry-run until keys';
+      card.innerHTML = '<h2>' + item.name + '</h2><p><strong>$' + aud + ' AUD</strong></p><p style="color:var(--muted)">' + mode + '</p><p><code>' + item.sku + '</code></p><p><a class="btn btn-primary" href="pay.html?sku=' + encodeURIComponent(item.sku) + '">Open checkout</a></p>';
+      root.appendChild(card);
+    });
+  </script>
+</body>
+</html>
