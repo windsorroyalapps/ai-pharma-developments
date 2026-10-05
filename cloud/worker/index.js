@@ -4,6 +4,7 @@
  * Agent outbound orders require confirm=true.
  * Secrets via Secret Manager or env (names only in code).
  * Without STRIPE_SECRET_KEY, DRY_RUN sessions are returned (no charge).
+ * subscription mode is a retainer preview until the operator confirms live.
  */
 const express = require('express');
 const Stripe = require('stripe');
@@ -17,12 +18,17 @@ const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://aipharmadevelopments.com,https://windsorroyalapps.github.io').split(',');
 const FORCE_DRY = process.env.STRIPE_DRY_RUN === '1' || !STRIPE_SECRET_KEY;
+const LIVE_OK = process.env.STRIPE_LIVE_OK === '1';
 
 if (!STRIPE_SECRET_KEY) {
   console.warn('STRIPE_SECRET_KEY missing — dry-run sessions only');
 }
+if (STRIPE_SECRET_KEY && STRIPE_SECRET_KEY.startsWith('sk_live_') && !LIVE_OK) {
+  console.warn('Live secret present but STRIPE_LIVE_OK is not 1 — forcing dry-run');
+}
 
-const stripe = STRIPE_SECRET_KEY && !FORCE_DRY
+const liveBlocked = Boolean(STRIPE_SECRET_KEY && STRIPE_SECRET_KEY.startsWith('sk_live_') && !LIVE_OK);
+const stripe = STRIPE_SECRET_KEY && !FORCE_DRY && !liveBlocked
   ? new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' })
   : null;
 
@@ -42,8 +48,9 @@ app.get('/healthz', (_req, res) => res.json({
   service: 'apd-payment-worker',
   stripe_configured: Boolean(STRIPE_SECRET_KEY),
   webhook_configured: Boolean(STRIPE_WEBHOOK_SECRET),
-  dry_run: FORCE_DRY,
+  dry_run: !stripe,
   intake: true,
+  subscription_preview: true,
   fulfillment_topic: process.env.FULFILLMENT_TOPIC || null,
   live_charges: false,
 }));
@@ -60,6 +67,8 @@ function validateOrder(body) {
     customer_email,
     source = 'website',
     confirm,
+    mode = 'payment',
+    sku,
   } = body || {};
 
   if (source === 'agent' && confirm !== true) {
@@ -68,7 +77,8 @@ function validateOrder(body) {
   if (!Number.isInteger(amount_cents) || amount_cents < 100) {
     return { error: 'amount_cents must be integer >= 100', status: 400 };
   }
-  return { amount_cents, currency, description, customer_email, source, confirm };
+  const checkoutMode = mode === 'subscription' || mode === 'subscription_preview' ? 'subscription' : 'payment';
+  return { amount_cents, currency, description, customer_email, source, confirm, mode: checkoutMode, sku };
 }
 
 app.post('/create-checkout-session', express.json(), async (req, res) => {
@@ -86,30 +96,34 @@ app.post('/create-checkout-session', express.json(), async (req, res) => {
       currency: order.currency,
       email: order.customer_email,
       source: order.source,
+      mode: order.mode,
+      sku: order.sku || null,
     });
     return res.json({
       id,
       url: success_url + (success_url.includes('?') ? '&' : '?') + 'dry_run=1&session=' + id,
       dry_run: true,
+      mode: order.mode,
     });
   }
 
   try {
+    const price_data = {
+      currency: order.currency,
+      product_data: { name: order.description },
+      unit_amount: order.amount_cents,
+    };
+    if (order.mode === 'subscription') {
+      price_data.recurring = { interval: 'month' };
+    }
     const session = await stripe.checkout.sessions.create({
-      mode: 'payment',
+      mode: order.mode,
       payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: order.currency,
-          product_data: { name: order.description },
-          unit_amount: order.amount_cents,
-        },
-        quantity: 1,
-      }],
+      line_items: [{ price_data, quantity: 1 }],
       customer_email: order.customer_email || undefined,
       success_url,
       cancel_url,
-      metadata: { source: order.source, description: order.description },
+      metadata: { source: order.source, description: order.description, sku: order.sku || '', mode: order.mode },
     });
 
     ledger('session_created', {
@@ -118,9 +132,10 @@ app.post('/create-checkout-session', express.json(), async (req, res) => {
       currency: order.currency,
       email: order.customer_email,
       source: order.source,
+      mode: order.mode,
     });
 
-    res.json({ id: session.id, url: session.url, dry_run: false });
+    res.json({ id: session.id, url: session.url, dry_run: false, mode: order.mode });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message });
@@ -193,6 +208,7 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
       customer_email: email,
       payment_status: session.payment_status,
       source: session.metadata?.source || 'website',
+      mode: session.mode,
       dry_run: false,
     };
     ledger('payment_completed', payload);
@@ -208,5 +224,5 @@ app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res)
 });
 
 app.listen(PORT, () => {
-  console.log(`apd-payment-worker listening on ${PORT} dry_run=${FORCE_DRY}`);
+  console.log(`apd-payment-worker listening on ${PORT} dry_run=${!stripe}`);
 });

@@ -22,7 +22,14 @@
     else modeEl.textContent = 'TEST (Stripe)';
   }
 
-  function localDryRun(amount, description, email) {
+  function selectedSku() {
+    const sel = document.getElementById('sku');
+    const sku = sel ? sel.value : '';
+    const item = (window.APD_CATALOG || []).find((row) => row.sku === sku);
+    return item || null;
+  }
+
+  function localDryRun(amount, description, email, mode, sku) {
     const id = 'cs_local_' + Math.random().toString(16).slice(2, 10);
     const record = {
       event: 'local_dry_run',
@@ -30,6 +37,8 @@
       amount_aud: amount,
       description,
       email,
+      mode,
+      sku,
       ts: new Date().toISOString(),
       charged: false,
     };
@@ -41,15 +50,17 @@
     } catch (e) {
       console.warn(e);
     }
-    showToast('Dry-run only. No charge. Session ' + id + '. Worker URL not set.');
+    showToast('Dry-run only. No charge. ' + mode + ' session ' + id + '.');
   }
 
   async function createCheckoutSession() {
     if (form && !form.reportValidity()) return;
 
-    const amount = parseFloat(document.getElementById('amount')?.value || '0');
-    const description = document.getElementById('description')?.value || 'AI Pharma Developments services';
+    const skuItem = selectedSku();
+    const amount = skuItem ? skuItem.amount_cents / 100 : parseFloat(document.getElementById('amount')?.value || '0');
+    const description = skuItem ? skuItem.name : (document.getElementById('description')?.value || 'AI Pharma Developments services');
     const email = document.getElementById('email')?.value || '';
+    const mode = skuItem && String(skuItem.mode).indexOf('subscription') === 0 ? 'subscription' : 'payment';
 
     if (amount < 1) {
       showToast('Minimum amount is 1.00 AUD', false);
@@ -57,7 +68,7 @@
     }
 
     if (PLACEHOLDER) {
-      localDryRun(amount, description, email);
+      localDryRun(amount, description, email, mode, skuItem ? skuItem.sku : null);
       return;
     }
 
@@ -72,6 +83,8 @@
           currency: 'aud',
           description,
           customer_email: email,
+          mode,
+          sku: skuItem ? skuItem.sku : undefined,
           success_url: window.location.origin + '/pay.html?success=1',
           cancel_url: window.location.origin + '/pay.html?canceled=1',
         }),
