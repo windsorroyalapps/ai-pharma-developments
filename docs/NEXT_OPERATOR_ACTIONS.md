@@ -1,6 +1,6 @@
 # Next operator actions
 
-IAM was not mutated on 2026-10-05. Sandbox gcloud SDK 587.0.0 is installed. Zero credentialed accounts. Project is unset.
+IAM was not mutated on 2026-10-05 20:15 AEDT. Sandbox gcloud SDK 587.0.0 is installed. Zero credentialed accounts. Project is unset. A browser login started here exited on EOF, so that URL is dead.
 
 ## 1. Authenticate (required before bootstrap)
 
@@ -32,10 +32,13 @@ Bootstrap creates (least privilege, no Owner, no JSON keys):
 ## 3. Test keys only (live waits on Stripe identity)
 
 ```bash
-echo -n 'sk_test_...' | gcloud secrets versions add stripe-secret-key --data-file=-
-echo -n 'whsec_...' | gcloud secrets versions add stripe-webhook-secret --data-file=-
-echo -n 'pk_test_...' | gcloud secrets versions add stripe-publishable-key --data-file=-
+export STRIPE_SECRET_KEY='sk_test_...'
+export STRIPE_WEBHOOK_SECRET='whsec_...'
+export STRIPE_PUBLISHABLE_KEY='pk_test_...'
+bash cloud/iam/add-test-secrets.sh
 ```
+
+The script exits if a value starts with `sk_live_` or `pk_live_`.
 
 Deploy worker, then set in the site:
 
