@@ -1,14 +1,14 @@
-# Payment and GCP status — 2026-10-05 AEDT
+# Payment and GCP status — 2026-10-05 16:15 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
 
-No new payment or Stripe skill is required. Identity documents stay out of git, skills, and chat. Complete Stripe identity in the Stripe Dashboard when ready.
+No extra payment or Stripe skill is required. Identity documents stay out of git, skills, and chat. Complete Stripe identity in the Stripe Dashboard when ready. Test keys can be added before live verification.
 
 ## Blocker
 
-This sandbox cannot install or authenticate `gcloud` (apt setgroups failure; no credentialed account). `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created. Do not treat any IAM bind as done.
+Google Cloud SDK 587.0.0 is installed in the agent environment. `gcloud auth list` shows no credentialed account. Project is unset. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created. Do not treat any IAM bind as done.
 
-Authenticate from a terminal you control, then reply with only the project id:
+A login URL from this sandbox is single-use and dies if the CLI is not still waiting for the verification code. Run login on a machine you control, then reply with only the project id:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -33,12 +33,11 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 ## Built without live keys
 
-- `catalog.html` + expanded `js/catalog.js` (consult, scoping, support, careflow setup, retainer previews)
-- `pay.html` local dry-run ledger
-- `orders.html` reads the local ledger
-- `automation.html` intake and confirm-gated agent queue
+- Catalog, pay dry-run ledger, orders page, automation console
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - Agent path refuses orders unless `confirm=true` and still does not charge
+- `tools/dry-run-check.js` plus site-check workflow syntax gate
+- Subscription mode stays a preview SKU until live Stripe is confirmed
 
 ## Still waiting
 
