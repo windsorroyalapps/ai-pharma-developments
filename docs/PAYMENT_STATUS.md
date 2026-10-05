@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-05 20:15 AEDT
+# Payment and GCP status — 2026-10-05 09:14 UTC
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
@@ -37,6 +37,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent, including monthly retainer preview (`mode=subscription`)
 - `cloud/iam/add-test-secrets.sh` refuses `sk_live_` / `pk_live_`
 - Agent path refuses orders unless `confirm=true` and still does not charge
+- `cloud/automation/local-fulfill.js` appends a local JSONL ledger and refuses items without `confirm=true`
 - `tools/dry-run-check.js` plus site-check workflow syntax gate
 
 ## Still waiting
