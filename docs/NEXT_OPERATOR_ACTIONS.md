@@ -1,8 +1,10 @@
 # Next operator actions
 
-IAM was not mutated on 2026-10-05 20:15 AEDT. Sandbox gcloud SDK 587.0.0 is installed. Zero credentialed accounts. Project is unset. A browser login started here exited on EOF, so that URL is dead.
+IAM was not mutated on 2026-10-06 15:11 AEDT. Sandbox has Google Cloud SDK installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
 
 ## 1. Authenticate (required before bootstrap)
+
+On a machine where you can paste the verification code:
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -13,14 +15,16 @@ bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
 ```
 
-Do not send ID documents. Stripe identity stays in the Stripe Dashboard.
+Reply in chat with the project id after login if you want the agent to run bootstrap in a session that stays open for the code.
+
+Do not send ID documents here. Stripe identity stays in the Stripe Dashboard. Live keys stay blocked until that verification is done.
 
 Bootstrap creates (least privilege, no Owner, no JSON keys):
 
 - `apd-payment-sa` — secretAccessor, logWriter, run.invoker
 - `apd-deploy-sa` — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser
 - WIF pool `github-apd` bound to `windsorroyalapps/ai-pharma-developments`
-- Secret shells: `stripe-secret-key`, `stripe-webhook-secret`, `stripe-publishable-key`
+- Secret shells only: `stripe-secret-key`, `stripe-webhook-secret`, `stripe-publishable-key`
 
 ## 2. GitHub Actions variables
 
@@ -29,7 +33,7 @@ Bootstrap creates (least privilege, no Owner, no JSON keys):
 - `GCP_WIF_PROVIDER` = `projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-apd/providers/github`
 - `GCP_DEPLOY_SA` = `apd-deploy-sa@PROJECT_ID.iam.gserviceaccount.com`
 
-## 3. Test keys only (live waits on Stripe identity)
+## 3. Test keys only
 
 ```bash
 export STRIPE_SECRET_KEY='sk_test_...'
@@ -40,9 +44,9 @@ bash cloud/iam/add-test-secrets.sh
 
 The script exits if a value starts with `sk_live_` or `pk_live_`.
 
-Deploy worker, then set in the site:
+Then deploy `cloud/worker` and set:
 
 - `pay.html` → `window.CREATE_CHECKOUT_SESSION_URL` and `window.STRIPE_PUBLISHABLE_KEY`
 - `consult.html` → `window.INTAKE_URL`
 
-Agent orders stay gated on `confirm=true`.
+Agent orders stay gated on `confirm=true`. No card data is stored in git.
