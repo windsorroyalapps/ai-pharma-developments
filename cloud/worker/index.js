@@ -5,6 +5,7 @@
  * Secrets via Secret Manager or env (names only in code).
  * Without STRIPE_SECRET_KEY, DRY_RUN sessions are returned (no charge).
  * subscription mode is a retainer preview until the operator confirms live.
+ * Currency allowlist is AUD until multi-currency is explicitly enabled.
  */
 const express = require('express');
 const Stripe = require('stripe');
@@ -19,6 +20,7 @@ const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://aipharmadevelopments.com,https://windsorroyalapps.github.io').split(',');
 const FORCE_DRY = process.env.STRIPE_DRY_RUN === '1' || !STRIPE_SECRET_KEY;
 const LIVE_OK = process.env.STRIPE_LIVE_OK === '1';
+const ALLOWED_CURRENCIES = ['aud'];
 
 if (!STRIPE_SECRET_KEY) {
   console.warn('STRIPE_SECRET_KEY missing — dry-run sessions only');
@@ -43,23 +45,54 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/healthz', (_req, res) => res.json({
-  ok: true,
-  service: 'apd-payment-worker',
-  stripe_configured: Boolean(STRIPE_SECRET_KEY),
-  webhook_configured: Boolean(STRIPE_WEBHOOK_SECRET),
-  dry_run: !stripe,
-  intake: true,
-  subscription_preview: true,
-  fulfillment_topic: process.env.FULFILLMENT_TOPIC || null,
-  live_charges: false,
-}));
+function readiness() {
+  const keyMode = !STRIPE_SECRET_KEY
+    ? 'missing'
+    : STRIPE_SECRET_KEY.startsWith('sk_test_')
+      ? 'test'
+      : STRIPE_SECRET_KEY.startsWith('sk_live_')
+        ? 'live'
+        : 'unknown';
+  return {
+    ok: true,
+    service: 'apd-payment-worker',
+    stripe_configured: Boolean(STRIPE_SECRET_KEY),
+    stripe_key_mode: keyMode,
+    webhook_configured: Boolean(STRIPE_WEBHOOK_SECRET),
+    dry_run: !stripe,
+    live_charges: false,
+    confirm_gate: true,
+    currencies: ALLOWED_CURRENCIES,
+    intake: true,
+    subscription_preview: true,
+    fulfillment_topic: process.env.FULFILLMENT_TOPIC || null,
+    blockers: [
+      !STRIPE_SECRET_KEY ? 'stripe_test_key_missing' : null,
+      !STRIPE_WEBHOOK_SECRET ? 'stripe_webhook_secret_missing' : null,
+      liveBlocked ? 'live_key_blocked' : null,
+    ].filter(Boolean),
+  };
+}
+
+app.get('/healthz', (_req, res) => res.json(readiness()));
+app.get('/ready', (_req, res) => res.json(readiness()));
 
 function ledger(event, payload) {
   console.log(JSON.stringify({ event, ts: new Date().toISOString(), ...payload }));
 }
 
+function rejectEmbeddedSecrets(body) {
+  const blob = JSON.stringify(body || {});
+  if (/sk_(live|test)_|pk_live_|whsec_/.test(blob)) {
+    return { error: 'do not send secrets in the request body', status: 400 };
+  }
+  return null;
+}
+
 function validateOrder(body) {
+  const secretErr = rejectEmbeddedSecrets(body);
+  if (secretErr) return secretErr;
+
   const {
     amount_cents = 10000,
     currency = 'aud',
@@ -77,8 +110,12 @@ function validateOrder(body) {
   if (!Number.isInteger(amount_cents) || amount_cents < 100) {
     return { error: 'amount_cents must be integer >= 100', status: 400 };
   }
+  const normalized = String(currency || '').toLowerCase();
+  if (!ALLOWED_CURRENCIES.includes(normalized)) {
+    return { error: 'currency must be aud until multi-currency is enabled', status: 400 };
+  }
   const checkoutMode = mode === 'subscription' || mode === 'subscription_preview' ? 'subscription' : 'payment';
-  return { amount_cents, currency, description, customer_email, source, confirm, mode: checkoutMode, sku };
+  return { amount_cents, currency: normalized, description, customer_email, source, confirm, mode: checkoutMode, sku };
 }
 
 app.post('/create-checkout-session', express.json(), async (req, res) => {
@@ -149,11 +186,13 @@ app.post('/agent-order', express.json(), (req, res) => {
   const order = validateOrder({ ...req.body, source: 'agent', confirm: true });
   if (order.error) return res.status(order.status).json({ error: order.error });
   const id = 'ord_' + crypto.randomBytes(6).toString('hex');
-  ledger('agent_order_queued', { id, ...order, charged: false });
+  ledger('agent_order_queued', { id, amount_cents: order.amount_cents, currency: order.currency, source: order.source, mode: order.mode, charged: false });
   res.json({ ok: true, id, charged: false, note: 'queued only; no live charge' });
 });
 
 app.post('/intake', express.json({ limit: '32kb' }), (req, res) => {
+  const secretErr = rejectEmbeddedSecrets(req.body);
+  if (secretErr) return res.status(secretErr.status).json({ error: secretErr.error });
   const { name, email, org, when, need } = req.body || {};
   if (!name || !email || !need) {
     return res.status(400).json({ error: 'name, email, and need are required' });

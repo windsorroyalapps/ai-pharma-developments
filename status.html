@@ -22,7 +22,15 @@
   <main class="container" style="padding:3rem 0;max-width:46rem">
     <div class="eyebrow">Operator</div>
     <h1>Payment worker status</h1>
-    <p class="lead">Checked 2026-10-07 11:14 AEDT. Google Cloud SDK installed. No credentialed account. Project unset. Privileges are not applied. The login URL from this session is dead.</p>
+    <p class="lead">Checked 2026-10-07 10:15 AEST. gcloud is not installed in the agent session and no credentialed account exists. Project unset. Privileges are not applied. Stripe remains test-mode / dry-run only.</p>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Blockers</h2>
+      <ul>
+        <li>gcloud auth — login on an operator machine, then set the project id</li>
+        <li>GitHub Actions vars — GCP_PROJECT_ID, GCP_REGION, GCP_WIF_PROVIDER, GCP_DEPLOY_SA</li>
+        <li>Stripe test keys in Secret Manager — shells stripe-secret-key, stripe-webhook-secret, stripe-publishable-key have no versions yet</li>
+      </ul>
+    </section>
     <section class="card" style="margin-top:1.5rem">
       <h2>GCP privileges</h2>
       <ul>
@@ -30,7 +38,7 @@
         <li>apd-deploy-sa — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser — not created</li>
         <li>WIF pool github-apd bound to windsorroyalapps/ai-pharma-developments — not created</li>
         <li>Secret shells stripe-secret-key, stripe-webhook-secret, stripe-publishable-key — not created</li>
-        <li>Live Stripe — blocked until identity verification in the Stripe Dashboard. Do not upload ID documents to git or chat.</li>
+        <li>Live Stripe — blocked until identity verification in the Stripe Dashboard. Do not upload ID documents to git.</li>
       </ul>
     </section>
     <section class="card" style="margin-top:1.5rem">
@@ -39,13 +47,13 @@
         <li>Static site and catalog</li>
         <li>Pay page local dry-run ledger and orders JSONL export</li>
         <li>Automation console queue (confirm=true required, no charge)</li>
-        <li>node cloud/automation/process-queue.js — local queue, zero charges</li>
         <li>Worker dry-run sessions if started without STRIPE_SECRET_KEY</li>
-        <li>cloud/iam/auth-status.sh reports unauthenticated without creating resources</li>
+        <li>GET /ready reports key mode without echoing secrets</li>
+        <li>node tools/stripe-test-readiness.js checks the confirm gate and refuses committed keys</li>
       </ul>
     </section>
     <section class="card" style="margin-top:1.5rem">
-      <label>Health URL<input id="health-url" value="https://YOUR-CLOUD-RUN-URL/healthz"></label>
+      <label>Health URL<input id="health-url" value="https://YOUR-CLOUD-RUN-URL/ready"></label>
       <button class="btn btn-primary" id="check" type="button" style="margin-top:1rem">Check</button>
       <pre id="out" style="margin-top:1rem;white-space:pre-wrap"></pre>
     </section>
@@ -55,7 +63,7 @@
       var url = document.getElementById('health-url').value;
       var out = document.getElementById('out');
       if (url.indexOf('YOUR-CLOUD-RUN-URL') !== -1) {
-        out.textContent = 'Idle. Set the Cloud Run URL after bootstrap and deploy.';
+        out.textContent = 'Idle. Set the Cloud Run URL after bootstrap and deploy. Local contract: node tools/stripe-test-readiness.js';
         return;
       }
       out.textContent = 'Checking...';
