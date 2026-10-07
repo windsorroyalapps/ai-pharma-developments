@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Invoice preview | AI Pharma Developments</title>
+  <meta name="description" content="Preview an AUD invoice from the service catalog. No charge." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="catalog.html">Catalog</a>
+        <a href="pay.html">Pay</a>
+        <a class="active" href="invoices.html">Invoices</a>
+        <a href="automation.html">Automation</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0;max-width:48rem">
+    <div class="eyebrow">Dry-run billing</div>
+    <h1>Invoice preview</h1>
+    <p class="lead">Builds an AUD invoice from the catalog. Nothing is charged. Live Stripe invoices stay blocked until identity verification and an explicit live confirmation.</p>
+    <form id="invoice-form" class="card" style="margin-top:1.5rem">
+      <fieldset>
+        <legend>Services</legend>
+        <div id="skus"></div>
+      </fieldset>
+      <label>Bill-to email
+        <input id="email" type="email" placeholder="you@company.com" required />
+      </label>
+      <label>Reference
+        <input id="reference" value="APD services" required />
+      </label>
+      <button class="btn btn-primary" type="submit" style="margin-top:1rem">Build preview</button>
+    </form>
+    <pre id="out" class="card" style="margin-top:1.5rem;white-space:pre-wrap"></pre>
+    <p><a href="pay.html">Open checkout</a> after the worker URL is set. Agent orders still require confirm=true and do not charge.</p>
+  </main>
+  <script src="js/catalog.js"></script>
+  <script>
+    var box = document.getElementById('skus');
+    (window.APD_CATALOG || []).forEach(function (item) {
+      var id = 'sku-' + item.sku;
+      var label = document.createElement('label');
+      label.innerHTML = '<input type="checkbox" name="sku" value="' + item.sku + '" id="' + id + '"> ' +
+        item.name + ' — $' + (item.amount_cents / 100).toFixed(2) + ' AUD (' + item.mode + ')';
+      box.appendChild(label);
+    });
+    document.getElementById('invoice-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var selected = Array.prototype.slice.call(document.querySelectorAll('input[name="sku"]:checked')).map(function (el) { return el.value; });
+      var lines = selected.map(function (sku) {
+        return (window.APD_CATALOG || []).filter(function (row) { return row.sku === sku; })[0];
+      }).filter(Boolean);
+      var total = lines.reduce(function (sum, line) { return sum + line.amount_cents; }, 0);
+      var invoice = {
+        id: 'inv_preview_' + Date.now().toString(36),
+        email: document.getElementById('email').value,
+        reference: document.getElementById('reference').value,
+        currency: 'aud',
+        lines: lines.map(function (line) {
+          return { sku: line.sku, name: line.name, mode: line.mode, amount_cents: line.amount_cents, billed: false };
+        }),
+        total_cents: total,
+        charged: false,
+        note: 'preview only; live invoices wait for Stripe identity and explicit live confirmation'
+      };
+      document.getElementById('out').textContent = JSON.stringify(invoice, null, 2);
+    });
+  </script>
+</body>
+</html>
