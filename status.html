@@ -22,7 +22,7 @@
   <main class="container" style="padding:3rem 0;max-width:46rem">
     <div class="eyebrow">Operator</div>
     <h1>Payment worker status</h1>
-    <p class="lead">Checked 2026-10-07 17:15 AEDT. Google Cloud SDK is installed. No credentialed account. Project unset. A browser login was started and died on EOF, so that code is dead. Privileges are not applied. Stripe remains test-mode / dry-run only.</p>
+    <p class="lead">Checked 2026-10-07 21:14 AEDT. Google Cloud SDK 588.0.0 is installed. No credentialed account. Project unset. A browser login died on EOF, so that code is dead. Privileges are not applied. Stripe remains test-mode / dry-run only.</p>
     <section class="card" style="margin-top:1.5rem">
       <h2>Blockers</h2>
       <ul>
@@ -32,12 +32,12 @@
       </ul>
     </section>
     <section class="card" style="margin-top:1.5rem">
-      <h2>GCP privileges</h2>
+      <h2>GCP privileges (planned, not created)</h2>
       <ul>
-        <li>apd-payment-sa — secretAccessor, logWriter, run.invoker — not created</li>
-        <li>apd-deploy-sa — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser — not created</li>
-        <li>WIF pool github-apd bound to windsorroyalapps/ai-pharma-developments — not created</li>
-        <li>Secret shells stripe-secret-key, stripe-webhook-secret, stripe-publishable-key — not created</li>
+        <li>apd-payment-sa — secretAccessor, logWriter, run.invoker</li>
+        <li>apd-deploy-sa — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser</li>
+        <li>WIF pool github-apd bound to windsorroyalapps/ai-pharma-developments</li>
+        <li>Secret shells stripe-secret-key, stripe-webhook-secret, stripe-publishable-key</li>
         <li>Live Stripe — blocked until identity verification in the Stripe Dashboard. Do not upload ID documents to git.</li>
       </ul>
     </section>
@@ -48,9 +48,8 @@
         <li>Pay page local dry-run ledger and orders JSONL export</li>
         <li>Automation console queue (confirm=true required, no charge)</li>
         <li>Worker dry-run sessions if started without STRIPE_SECRET_KEY</li>
-        <li>GET /ready reports key mode without echoing secrets</li>
-        <li>node tools/stripe-test-readiness.js checks the confirm gate and refuses committed keys</li>
-        <li>node tools/invoice-preview.js prints a local AUD invoice and does not charge</li>
+        <li>bash cloud/iam/privilege-plan.sh prints the bind plan and does not call gcloud</li>
+        <li>node tools/stripe-test-readiness.js and node tools/invoice-preview.js</li>
       </ul>
     </section>
     <section class="card" style="margin-top:1.5rem">

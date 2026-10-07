@@ -1,12 +1,10 @@
 # Next operator actions
 
-Rechecked 2026-10-07 19:11 AEDT. IAM was not mutated. This session had no credentialed `gcloud` account and no project set. Google Cloud SDK is not persistent in the agent sandbox (install does not survive the next shell). Do not reuse any previous `--no-launch-browser` URL.
+Rechecked 2026-10-07 21:14 AEDT. IAM was not mutated. Google Cloud SDK 588.0.0 is on the agent PATH. `gcloud auth list` shows no credentialed account. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
 
-Skills already on the agent and sufficient until live Stripe: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required for test-mode site work. Live keys stay blocked until you finish Stripe Dashboard identity verification. Do not send ID documents into git or chat.
+Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git or chat.
 
-## 1. Authenticate (required before bootstrap)
-
-On a machine where you can paste the verification code:
+## 1. Authenticate on a machine you control
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -18,7 +16,9 @@ bash cloud/automation/apply-after-auth.sh
 bash cloud/iam/print-github-vars.sh
 ```
 
-Reply in chat with the project id after login if you want the agent to run bootstrap in a session that stays open for the code.
+Reply with the project id only if you want bootstrap run in a session that can accept the verification code.
+
+Preview without binding: `bash cloud/iam/privilege-plan.sh`
 
 Bootstrap creates (least privilege, no Owner, no JSON keys):
 
@@ -34,8 +34,6 @@ Bootstrap creates (least privilege, no Owner, no JSON keys):
 - `GCP_WIF_PROVIDER` = `projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-apd/providers/github`
 - `GCP_DEPLOY_SA` = `apd-deploy-sa@PROJECT_ID.iam.gserviceaccount.com`
 
-`cloud/iam/print-github-vars.sh` prints these after the project is set. It does not create resources.
-
 ## 3. Test keys only
 
 ```bash
@@ -47,18 +45,12 @@ bash cloud/iam/add-test-secrets.sh
 
 The script exits if a value starts with `sk_live_` or `pk_live_`.
 
-Then deploy `cloud/worker` and set:
-
-- `pay.html` → `window.CREATE_CHECKOUT_SESSION_URL` and `window.STRIPE_PUBLISHABLE_KEY`
-- `consult.html` → `window.INTAKE_URL`
-
-## 4. Automation that already runs locally
+## 4. Local automation (no charge)
 
 ```bash
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
 node tools/invoice-preview.js consult-30 careflow-setup
+node tools/stripe-test-readiness.js
 ```
 
-Agent rows without `confirm=true` are refused. Nothing is charged.
-
-Weekday site-dev automations are already active (`apd-site-dev-weekday`, `apd-test-mode-dev`). No extra schedule was added this pass.
+Agent rows without `confirm=true` are refused.
