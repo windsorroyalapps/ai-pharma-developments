@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-07 10:15 AEST
+# Payment and GCP status — 2026-10-07 16:11 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Stripe and payment skills already exist.
 
@@ -6,15 +6,9 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-This session has no `gcloud` binary and no credentialed account. Project is unset. `cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created. Do not treat any IAM bind as done.
+Google Cloud SDK is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
 
-Probe (no mutations), after the SDK is installed:
-
-```bash
-bash cloud/iam/auth-status.sh
-```
-
-Expected until login: `status=unauthenticated` exit 1.
+`cloud/iam/bootstrap.sh` was not run. Service accounts, WIF, and secret shells are not created. Do not treat any IAM bind as done.
 
 Run login on a machine you control, then reply with only the project id:
 
