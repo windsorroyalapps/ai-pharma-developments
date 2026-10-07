@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Research pipeline | AI Pharma Developments</title>
+  <meta name="description" content="Local research automation board. Stages stay in the browser until Cloud Run and Stripe test keys exist." />
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="automation.html">Automation</a>
+        <a class="active" href="pipeline.html">Pipeline</a>
+        <a href="catalog.html">Catalog</a>
+        <a href="status.html">Status</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0;max-width:52rem">
+    <div class="eyebrow">No charge</div>
+    <h1>Research pipeline</h1>
+    <p class="lead">Stages a brief from intake to billing hold. Storage is this browser. Pub/Sub topic <code>apd-fulfillment</code> is named only. Nothing is published and nothing is charged.</p>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>New brief</h2>
+      <form id="brief-form">
+        <label>Title<input name="title" required maxlength="160" /></label>
+        <label>Question<textarea name="question" required maxlength="2000"></textarea></label>
+        <label>Owner email<input name="email" type="email" required /></label>
+        <button class="btn btn-primary" type="submit" style="margin-top:1rem">Create brief</button>
+      </form>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Board</h2>
+      <div id="board"></div>
+    </section>
+  </main>
+  <script src="js/pipeline.js"></script>
+</body>
+</html>
