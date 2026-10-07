@@ -1,6 +1,8 @@
 # Next operator actions
 
-IAM was not mutated on 2026-10-07 18:15 AEDT. Google Cloud SDK 588.0.0 is installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
+Rechecked 2026-10-07 19:11 AEDT. IAM was not mutated. This session had no credentialed `gcloud` account and no project set. Google Cloud SDK is not persistent in the agent sandbox (install does not survive the next shell). Do not reuse any previous `--no-launch-browser` URL.
+
+Skills already on the agent and sufficient until live Stripe: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required for test-mode site work. Live keys stay blocked until you finish Stripe Dashboard identity verification. Do not send ID documents into git or chat.
 
 ## 1. Authenticate (required before bootstrap)
 
@@ -17,8 +19,6 @@ bash cloud/iam/print-github-vars.sh
 ```
 
 Reply in chat with the project id after login if you want the agent to run bootstrap in a session that stays open for the code.
-
-Do not send ID documents here. Stripe identity stays in the Stripe Dashboard. Live keys stay blocked until that verification is done.
 
 Bootstrap creates (least privilege, no Owner, no JSON keys):
 
@@ -60,3 +60,5 @@ node tools/invoice-preview.js consult-30 careflow-setup
 ```
 
 Agent rows without `confirm=true` are refused. Nothing is charged.
+
+Weekday site-dev automations are already active (`apd-site-dev-weekday`, `apd-test-mode-dev`). No extra schedule was added this pass.
