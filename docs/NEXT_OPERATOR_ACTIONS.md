@@ -1,6 +1,6 @@
 # Next operator actions
 
-IAM was not mutated on 2026-10-07 17:15 AEDT. Google Cloud SDK is installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
+IAM was not mutated on 2026-10-07 18:15 AEDT. Google Cloud SDK 588.0.0 is installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
 
 ## 1. Authenticate (required before bootstrap)
 
