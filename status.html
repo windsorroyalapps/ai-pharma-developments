@@ -22,7 +22,7 @@
   <main class="container" style="padding:3rem 0;max-width:46rem">
     <div class="eyebrow">Operator</div>
     <h1>Payment worker status</h1>
-    <p class="lead">Checked 2026-10-07 16:11 AEDT. Google Cloud SDK is installed. No credentialed account. Project unset. A browser login was started and died on EOF, so that code is dead. Privileges are not applied. Stripe remains test-mode / dry-run only.</p>
+    <p class="lead">Checked 2026-10-07 17:15 AEDT. Google Cloud SDK is installed. No credentialed account. Project unset. A browser login was started and died on EOF, so that code is dead. Privileges are not applied. Stripe remains test-mode / dry-run only.</p>
     <section class="card" style="margin-top:1.5rem">
       <h2>Blockers</h2>
       <ul>
@@ -50,6 +50,7 @@
         <li>Worker dry-run sessions if started without STRIPE_SECRET_KEY</li>
         <li>GET /ready reports key mode without echoing secrets</li>
         <li>node tools/stripe-test-readiness.js checks the confirm gate and refuses committed keys</li>
+        <li>node tools/invoice-preview.js prints a local AUD invoice and does not charge</li>
       </ul>
     </section>
     <section class="card" style="margin-top:1.5rem">
