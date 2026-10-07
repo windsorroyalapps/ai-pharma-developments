@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-07 21:14 AEDT. IAM was not mutated. Google Cloud SDK 588.0.0 is on the agent PATH. `gcloud auth list` shows no credentialed account. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
+Rechecked 2026-10-08 09:11 AEDT. IAM was not mutated. Google Cloud SDK is on the agent PATH. `gcloud auth list` shows no credentialed account. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
 
 Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git or chat.
 

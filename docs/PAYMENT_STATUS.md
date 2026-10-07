@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-07 23:20 AEDT
+# Payment and GCP status — 2026-10-08 09:11 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Payment and Stripe skills already cover Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
 
@@ -6,7 +6,7 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-Google Cloud SDK  is installed in this session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
+Google Cloud SDK was installed in this session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
 
 Run login on a machine you control, then reply with only the project id:
 
