@@ -22,7 +22,7 @@
   <main class="container" style="padding:3rem 0;max-width:46rem">
     <div class="eyebrow">Operator</div>
     <h1>Payment worker status</h1>
-    <p class="lead">Checked 2026-10-06 19:11 AEDT. Google Cloud SDK 587.0.0 installed. No credentialed account. Project unset. Privileges are not applied.</p>
+    <p class="lead">Checked 2026-10-07 11:14 AEDT. Google Cloud SDK installed. No credentialed account. Project unset. Privileges are not applied. The login URL from this session is dead.</p>
     <section class="card" style="margin-top:1.5rem">
       <h2>GCP privileges</h2>
       <ul>
@@ -30,7 +30,7 @@
         <li>apd-deploy-sa — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser — not created</li>
         <li>WIF pool github-apd bound to windsorroyalapps/ai-pharma-developments — not created</li>
         <li>Secret shells stripe-secret-key, stripe-webhook-secret, stripe-publishable-key — not created</li>
-        <li>Live Stripe — blocked until identity verification in the Stripe Dashboard. Do not upload ID documents to git.</li>
+        <li>Live Stripe — blocked until identity verification in the Stripe Dashboard. Do not upload ID documents to git or chat.</li>
       </ul>
     </section>
     <section class="card" style="margin-top:1.5rem">
@@ -39,6 +39,7 @@
         <li>Static site and catalog</li>
         <li>Pay page local dry-run ledger and orders JSONL export</li>
         <li>Automation console queue (confirm=true required, no charge)</li>
+        <li>node cloud/automation/process-queue.js — local queue, zero charges</li>
         <li>Worker dry-run sessions if started without STRIPE_SECRET_KEY</li>
         <li>cloud/iam/auth-status.sh reports unauthenticated without creating resources</li>
       </ul>
