@@ -1,6 +1,6 @@
 # Next operator actions
 
-IAM was not mutated on 2026-10-07 16:11 AEDT. Google Cloud SDK is installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
+IAM was not mutated on 2026-10-07 17:15 AEDT. Google Cloud SDK is installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
 
 ## 1. Authenticate (required before bootstrap)
 
@@ -13,6 +13,7 @@ gcloud config set project YOUR_PROJECT_ID
 gcloud config set compute/region australia-southeast1
 bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
+bash cloud/iam/print-github-vars.sh
 ```
 
 Reply in chat with the project id after login if you want the agent to run bootstrap in a session that stays open for the code.
@@ -32,6 +33,8 @@ Bootstrap creates (least privilege, no Owner, no JSON keys):
 - `GCP_REGION` = `australia-southeast1`
 - `GCP_WIF_PROVIDER` = `projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-apd/providers/github`
 - `GCP_DEPLOY_SA` = `apd-deploy-sa@PROJECT_ID.iam.gserviceaccount.com`
+
+`cloud/iam/print-github-vars.sh` prints these after the project is set. It does not create resources.
 
 ## 3. Test keys only
 
@@ -53,6 +56,7 @@ Then deploy `cloud/worker` and set:
 
 ```bash
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
+node tools/invoice-preview.js consult-30 careflow-setup
 ```
 
 Agent rows without `confirm=true` are refused. Nothing is charged.

@@ -1,6 +1,6 @@
-# Payment and GCP status — 2026-10-07 16:11 AEDT
+# Payment and GCP status — 2026-10-07 17:15 AEDT
 
-Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Stripe and payment skills already exist.
+Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Stripe and payment skills already exist on the operator machine.
 
 Identity documents stay out of git, skills, and chat. Complete Stripe identity in the Stripe Dashboard when ready. Test keys can be added before live verification.
 
@@ -19,6 +19,7 @@ gcloud config set project PROJECT_ID
 gcloud config set compute/region australia-southeast1
 bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
+bash cloud/iam/print-github-vars.sh
 ```
 
 Privilege matrix: `cloud/iam/PRIVILEGES.md`.
@@ -41,7 +42,9 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - `GET /healthz` and `GET /ready` report key mode without echoing secrets; `live_charges` stays false
 - Checkout rejects non-AUD currency and request bodies that contain `sk_`, `pk_live_`, or `whsec_`
 - `tools/stripe-test-readiness.js` fails CI if live key material is committed or the confirm gate is missing
+- `tools/invoice-preview.js` prints a local AUD invoice from catalog SKUs and never charges
 - `cloud/iam/add-test-secrets.sh` refuses `sk_live_` / `pk_live_`
+- `cloud/iam/print-github-vars.sh` prints the four Actions variables after a project is set
 - `cloud/automation/local-fulfill.js` appends a local JSONL ledger and refuses items without `confirm=true`
 - `cloud/iam/auth-status.sh` reports auth without creating resources
 
