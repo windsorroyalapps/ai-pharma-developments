@@ -1,0 +1,24 @@
+[
+  {
+    "sku": "consult-intro",
+    "amount_cents": 15000,
+    "currency": "aud",
+    "email": "ops@example.com",
+    "source": "website",
+    "confirm": true
+  },
+  {
+    "sku": "agent-retainer",
+    "amount_cents": 50000,
+    "currency": "aud",
+    "source": "agent",
+    "confirm": false
+  },
+  {
+    "sku": "agent-retainer",
+    "amount_cents": 50000,
+    "currency": "aud",
+    "source": "agent",
+    "confirm": true
+  }
+]

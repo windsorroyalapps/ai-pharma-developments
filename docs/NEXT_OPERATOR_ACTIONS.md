@@ -1,6 +1,6 @@
 # Next operator actions
 
-IAM was not mutated on 2026-10-06 15:11 AEDT. Sandbox has Google Cloud SDK installed. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
+IAM was not mutated on 2026-10-07 11:14 AEDT. `gcloud auth list` shows zero credentialed accounts. Project is unset. A `--no-launch-browser` login was started here and killed on EOF, so that URL and PKCE challenge are dead. Do not reuse it.
 
 ## 1. Authenticate (required before bootstrap)
 
@@ -48,5 +48,13 @@ Then deploy `cloud/worker` and set:
 
 - `pay.html` → `window.CREATE_CHECKOUT_SESSION_URL` and `window.STRIPE_PUBLISHABLE_KEY`
 - `consult.html` → `window.INTAKE_URL`
+
+## 4. Automation that already runs locally
+
+```bash
+node cloud/automation/process-queue.js cloud/automation/sample-queue.json
+```
+
+Agent rows without `confirm=true` are refused. Nothing is charged.
 
 Agent orders stay gated on `confirm=true`. No card data is stored in git.
