@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fulfillment desk | AI Pharma Developments</title>
+  <meta name="description" content="Local fulfillment queue for AI Pharma Developments. Agent orders require confirm=true. No Stripe charge." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="catalog.html">Catalog</a>
+        <a href="automation.html">Automation</a>
+        <a class="active" href="fulfillment.html">Fulfillment</a>
+        <a href="pay.html">Pay</a>
+        <a class="btn btn-primary" href="support.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Dry-run only</div>
+    <h1>Fulfillment desk</h1>
+    <p class="lead">Queues work items for later Cloud Run fulfillment. Nothing here calls Stripe. Agent-sourced rows are refused unless confirm is true.</p>
+    <form id="fulfill-form" class="card" style="margin-top:1.5rem">
+      <label>SKU
+        <select name="sku" id="sku"></select>
+      </label>
+      <label>Email
+        <input name="email" type="email" required placeholder="ops@example.com" />
+      </label>
+      <label>Source
+        <select name="source">
+          <option value="website">website</option>
+          <option value="agent">agent</option>
+        </select>
+      </label>
+      <label><input name="confirm" type="checkbox" /> confirm=true (required for agent source)</label>
+      <label>Note
+        <input name="note" type="text" maxlength="240" placeholder="Scope or study id" />
+      </label>
+      <button class="btn btn-primary" type="submit">Queue item</button>
+      <p data-form-status role="status"></p>
+    </form>
+    <section style="margin-top:2rem">
+      <h2>Local queue</h2>
+      <p><button class="btn" type="button" id="export">Download JSONL</button> <button class="btn" type="button" id="clear">Clear local queue</button></p>
+      <pre id="ledger" style="white-space:pre-wrap"></pre>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span data-year></span> AI Pharma Developments</div>
+      <div><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/fulfillment.js"></script>
+</body>
+</html>
