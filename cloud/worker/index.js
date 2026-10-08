@@ -218,7 +218,10 @@ app.post('/credit-note', express.json({ limit: '16kb' }), (req, res) => {
 app.post('/intake', express.json({ limit: '32kb' }), (req, res) => {
   const secretErr = rejectEmbeddedSecrets(req.body);
   if (secretErr) return res.status(secretErr.status).json({ error: secretErr.error });
-  const { name, email, org, when, need } = req.body || {};
+  const { name, email, org, when, need, source, confirm } = req.body || {};
+  if (source === 'agent' && confirm !== true) {
+    return res.status(403).json({ error: 'agent orders require confirm=true' });
+  }
   if (!name || !email || !need) {
     return res.status(400).json({ error: 'name, email, and need are required' });
   }
@@ -233,6 +236,33 @@ app.post('/intake', express.json({ limit: '32kb' }), (req, res) => {
     need: String(need).slice(0, 4000),
   });
   res.json({ ok: true, queued: true });
+});
+
+
+app.post('/invoice-preview', express.json({ limit: '16kb' }), (req, res) => {
+  const order = validateOrder(req.body || {});
+  if (order.error) return res.status(order.status).json({ error: order.error });
+  const id = 'inv_dry_' + crypto.randomBytes(6).toString('hex');
+  const row = ledger('invoice_preview', {
+    id,
+    amount_cents: order.amount_cents,
+    currency: order.currency,
+    email: order.customer_email || null,
+    source: order.source,
+    sku: order.sku || null,
+    mode: order.mode,
+    charged: false,
+  });
+  res.json({
+    ok: true,
+    id,
+    dry_run: true,
+    charged: false,
+    currency: order.currency,
+    amount_cents: order.amount_cents,
+    note: 'preview only; no Stripe invoice created',
+    row,
+  });
 });
 
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {

@@ -34,7 +34,10 @@
         <label>Decision / workflow<textarea name="need" required placeholder="What should get better, who reviews it, what evidence exists."></textarea></label>
         <p class="form-note">No PHI, credentials, or export-controlled data.</p>
         <button class="btn btn-primary" type="submit">Submit request</button>
+        <button class="btn" type="button" id="consult-export">Export local intake</button>
+        <button class="btn" type="button" id="consult-clear">Clear local intake</button>
         <div class="toast" id="consult-toast" role="status"></div>
+        <pre id="consult-local" class="form-note" style="white-space:pre-wrap"></pre>
       </form>
     </section>
   </main>

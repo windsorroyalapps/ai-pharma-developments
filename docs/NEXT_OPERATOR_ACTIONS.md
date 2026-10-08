@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-09 09:42 AEDT. IAM was not mutated. `gcloud` is not on PATH (apt install blocked; `/root/google-cloud-sdk` absent). No account, no project, no ADC. Bootstrap and apply-after-auth were not run. Service-account emails and the WIF provider are unset. Do not reuse a `--no-launch-browser` URL from this sandbox.
+Rechecked 2026-10-09 09:44 AEDT. IAM was not mutated. Google Cloud CLI is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. Bootstrap and apply-after-auth were not run. Do not reuse a `--no-launch-browser` URL from this sandbox: the process exits before it can accept the verification code.
 
 Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
@@ -62,6 +62,7 @@ node tools/retainer-preview.js ops-retainer 3
 node tools/retainer-preview.js retainer 1 --agent
 node tools/checkout-gate-check.js
 node tools/stripe-test-readiness.js
+node tools/consult-intake-check.js
 ```
 
 Agent rows without `confirm=true` are refused, including consult intake, invoice preview, and credit notes. `node tools/credit-note-preview.js consult-30 --agent` exits 2 until `--confirm` is added. Credit notes set `refunded: false` and do not call Stripe.

@@ -19,3 +19,9 @@ If `source` is `agent` and `confirm` is not exactly `true`, the worker returns 4
 
 Do not create live charges until Secret Manager holds live keys and the operator says live.
 Do not store identity documents in this repo.
+
+`POST {CLOUD_RUN}/invoice-preview` uses the same gate and returns `charged: false`. It does not create a Stripe invoice.
+
+`POST {CLOUD_RUN}/intake` with `source: "agent"` also requires `confirm: true`.
+
+Local check: `node tools/consult-intake-check.js`

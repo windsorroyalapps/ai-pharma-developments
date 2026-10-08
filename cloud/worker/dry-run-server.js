@@ -74,6 +74,7 @@ const server = http.createServer((req, res) => {
       stripe_configured: false,
       intake: true,
       credit_notes: true,
+      invoice_preview: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });
@@ -104,7 +105,17 @@ const server = http.createServer((req, res) => {
       const row = append('credit_note_preview', Object.assign({ id }, note));
       return send(res, 200, { ok: true, id, charged: false, refunded: false, stripe_refund: false, row });
     }
+    if (req.url === '/invoice-preview') {
+      const order = validate(body);
+      if (order.error) return send(res, order.status, { error: order.error });
+      const id = 'inv_dry_' + crypto.randomBytes(6).toString('hex');
+      const row = append('invoice_preview', Object.assign({ id, charged: false }, order));
+      return send(res, 200, { ok: true, id, dry_run: true, charged: false, amount_cents: order.amount_cents, row });
+    }
     if (req.url === '/intake') {
+      if (body.source === 'agent' && body.confirm !== true) {
+        return send(res, 403, { error: 'agent orders require confirm=true' });
+      }
       if (!body.name || !body.email || !body.need) return send(res, 400, { error: 'name, email, and need required' });
       const row = append('consult_intake_fallback', {
         name: String(body.name).slice(0, 120),

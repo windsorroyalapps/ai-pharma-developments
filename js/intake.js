@@ -62,4 +62,41 @@
       mailto(payload);
     });
   });
+
+  var exportBtn = document.getElementById('consult-export');
+  var clearBtn = document.getElementById('consult-clear');
+  var localView = document.getElementById('consult-local');
+
+  function readRows() {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
+  }
+
+  function renderLocal() {
+    if (!localView) return;
+    var rows = readRows();
+    localView.textContent = rows.length ? JSON.stringify(rows, null, 2) : 'No local intake saved.';
+  }
+
+  if (exportBtn) {
+    exportBtn.addEventListener('click', function () {
+      var rows = readRows();
+      var blob = new Blob([rows.map(function (row) { return JSON.stringify(row); }).join('\n') + (rows.length ? '\n' : '')], { type: 'application/x-ndjson' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'apd-consult-intake.jsonl';
+      a.click();
+      URL.revokeObjectURL(url);
+      show('Exported ' + rows.length + ' local row(s). No charge.');
+    });
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function () {
+      localStorage.removeItem(KEY);
+      renderLocal();
+      show('Local intake cleared. Nothing was charged.');
+    });
+  }
+  renderLocal();
+
 })();
