@@ -22,7 +22,7 @@
   <main class="container" style="padding:3rem 0;max-width:46rem">
     <div class="eyebrow">Operator</div>
     <h1>Payment worker status</h1>
-    <p class="lead">Checked 2026-10-08 10:12 AEDT. Google Cloud SDK is installed. No credentialed account. Project unset. A browser login died on EOF, so that code is dead. Privileges are not applied. Stripe remains test-mode / dry-run only.</p>
+    <p class="lead">Checked 2026-10-08 19:13 AEDT. Google Cloud SDK 588.0.0 is installed. No credentialed account. Project unset. Sandbox login cannot accept a verification code, so privileges are not applied. Stripe remains test-mode / dry-run only.</p>
     <section class="card" style="margin-top:1.5rem">
       <h2>Blockers</h2>
       <ul>
@@ -49,6 +49,7 @@
         <li>Automation console queue (confirm=true required, no charge)</li>
         <li>Worker dry-run sessions if started without STRIPE_SECRET_KEY</li>
         <li>bash cloud/iam/privilege-plan.sh prints the bind plan and does not call gcloud</li>
+        <li>bash cloud/iam/auth-status.sh exits 1 until an account exists</li>
         <li>WORKER_URL=... bash cloud/automation/create-scheduler.sh after deploy</li>
       </ul>
     </section>
