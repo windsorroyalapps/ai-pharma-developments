@@ -12,13 +12,15 @@ jobs:
         with:
           node-version: '20'
       - name: Check JS syntax
-        run: node --check js/site.js js/stripe-checkout.js js/pay-ledger.js js/checkout-gate.js js/intake.js js/google-pay.js js/catalog.js js/orders.js js/credit-notes.js cloud/worker/index.js cloud/worker/fulfillment.js cloud/worker/ledger.js cloud/worker/dry-run-server.js cloud/worker/credit-note.js cloud/automation/process-queue.js tools/dry-run-check.js tools/checkout-gate-check.js tools/invoice-preview.js tools/credit-note-preview.js tools/adjustment-queue.js tools/stripe-test-readiness.js tools/ledger-summary.js tools/consult-intake-check.js
+        run: node --check js/site.js js/stripe-checkout.js js/pay-ledger.js js/checkout-gate.js js/intake.js js/google-pay.js js/catalog.js js/orders.js js/credit-notes.js js/readiness.js cloud/worker/index.js cloud/worker/fulfillment.js cloud/worker/ledger.js cloud/worker/dry-run-server.js cloud/worker/credit-note.js cloud/automation/process-queue.js tools/dry-run-check.js tools/checkout-gate-check.js tools/invoice-preview.js tools/credit-note-preview.js tools/adjustment-queue.js tools/stripe-test-readiness.js tools/ledger-summary.js tools/consult-intake-check.js tools/readiness-board-check.js
       - name: Checkout confirm gate
         run: node tools/checkout-gate-check.js
       - name: Payment dry-run contract
         run: node tools/dry-run-check.js
       - name: Stripe test-mode readiness
         run: node tools/stripe-test-readiness.js
+      - name: Readiness board
+        run: node tools/readiness-board-check.js | grep -q '"live_charges": false'
       - name: Consult intake agent gate
         run: node tools/consult-intake-check.js | grep -q '"charged": false'
       - name: Queue and invoice agent gate
