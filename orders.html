@@ -38,10 +38,12 @@
     </section>
     <section class="card" style="margin-top:1rem">
       <h2>Local ledger</h2>
+      <p id="orders-summary">0 rows · charged: 0</p>
       <p id="orders-empty">No dry-run sessions yet. Use Pay to create one.</p>
       <div id="orders-list"></div>
       <p>
         <button type="button" id="orders-export" class="btn">Export JSONL</button>
+        <label class="btn" for="orders-import">Import JSONL<input id="orders-import" type="file" accept=".jsonl,.ndjson,application/x-ndjson" hidden /></label>
         <button type="button" id="orders-clear" class="btn">Clear local ledger</button>
       </p>
     </section>

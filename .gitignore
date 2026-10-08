@@ -2,3 +2,9 @@
 # Python bytecode from the site tooling
 __pycache__/
 *.pyc
+
+# Local dry-run ledgers — never commit
+.apd-ledger/
+*.jsonl
+.env
+*-credentials.json

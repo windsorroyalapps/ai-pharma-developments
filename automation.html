@@ -69,8 +69,12 @@
     </section>
     <section class="card" style="margin-top:1.5rem">
       <h2>Local queue</h2>
+      <p id="queue-summary" role="status">No rows yet.</p>
       <pre id="queue" style="white-space:pre-wrap"></pre>
       <button class="btn" id="export" type="button">Export JSON</button>
+      <button class="btn" id="export-jsonl" type="button">Export JSONL</button>
+      <label class="btn" for="import-jsonl">Import JSONL<input id="import-jsonl" type="file" accept=".jsonl,.ndjson,application/x-ndjson" hidden /></label>
+      <button class="btn" id="settle" type="button">Settle newest dry-run (no charge)</button>
       <button class="btn" id="clear" type="button">Clear local queue</button>
     </section>
   </main>
@@ -81,8 +85,14 @@
       try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { return []; }
     }
     function save(rows) {
-      localStorage.setItem(KEY, JSON.stringify(rows.slice(-50)));
-      document.getElementById('queue').textContent = JSON.stringify(rows.slice(-50), null, 2);
+      var kept = rows.slice(-50).map(function (row) {
+        return Object.assign({}, row, { charged: false });
+      });
+      localStorage.setItem(KEY, JSON.stringify(kept));
+      document.getElementById('queue').textContent = JSON.stringify(kept, null, 2);
+      var queued = kept.filter(function (row) { return row.confirm === true || row.type === 'consult_intake'; }).length;
+      document.getElementById('queue-summary').textContent =
+        kept.length + ' rows · ' + queued + ' queued · charged: 0 · live charges blocked';
     }
     function fillSku(item) {
       document.getElementById('sku').value = item.sku;
@@ -177,6 +187,48 @@
       a.href = URL.createObjectURL(blob);
       a.download = 'apd-automation-queue.json';
       a.click();
+    });
+    document.getElementById('export-jsonl').addEventListener('click', function () {
+      var lines = load().map(function (row) { return JSON.stringify(Object.assign({}, row, { charged: false })); }).join('\n');
+      var blob = new Blob([lines + (lines ? '\n' : '')], { type: 'application/x-ndjson' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'apd-automation-queue.jsonl';
+      a.click();
+    });
+    document.getElementById('import-jsonl').addEventListener('change', function (event) {
+      var file = event.target.files && event.target.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function () {
+        var rows = load();
+        String(reader.result || '').split(/\r?\n/).filter(Boolean).forEach(function (line) {
+          try {
+            var row = JSON.parse(line);
+            if (/sk_(live|test)_|whsec_/.test(JSON.stringify(row))) return;
+            row.charged = false;
+            row.imported = true;
+            rows.push(row);
+          } catch (err) { /* skip bad line */ }
+        });
+        save(rows);
+      };
+      reader.readAsText(file);
+    });
+    document.getElementById('settle').addEventListener('click', function () {
+      var rows = load();
+      var item = rows.slice().reverse().find(function (row) { return row.id && !row.settled; });
+      var status = document.getElementById('fulfill-status');
+      if (!item) {
+        status.textContent = 'Nothing to settle.';
+        return;
+      }
+      item.settled = true;
+      item.settled_at = new Date().toISOString();
+      item.charged = false;
+      item.event = 'dry_run_settled';
+      save(rows);
+      status.textContent = 'Settled ' + item.id + ' locally. No charge.';
     });
     document.getElementById('clear').addEventListener('click', function () {
       localStorage.removeItem(KEY);

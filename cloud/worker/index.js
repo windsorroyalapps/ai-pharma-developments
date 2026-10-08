@@ -11,6 +11,7 @@ const express = require('express');
 const Stripe = require('stripe');
 const crypto = require('crypto');
 const { publishFulfillment } = require('./fulfillment');
+const { append: appendLedger, summarizeDir } = require('./ledger');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -78,8 +79,20 @@ app.get('/healthz', (_req, res) => res.json(readiness()));
 app.get('/ready', (_req, res) => res.json(readiness()));
 
 function ledger(event, payload) {
-  console.log(JSON.stringify({ event, ts: new Date().toISOString(), ...payload }));
+  return appendLedger(event, payload);
 }
+
+app.get('/ledger/summary', (_req, res) => {
+  res.json(summarizeDir());
+});
+
+app.post('/dry-run/settle', express.json(), (req, res) => {
+  if (stripe) return res.status(409).json({ error: 'settle endpoint is dry-run only' });
+  const sessionId = String(req.body?.session_id || '').slice(0, 80);
+  if (!sessionId) return res.status(400).json({ error: 'session_id required' });
+  const row = ledger('dry_run_settled', { session_id: sessionId, note: 'local settle only' });
+  res.json({ ok: true, charged: false, row });
+});
 
 function rejectEmbeddedSecrets(body) {
   const blob = JSON.stringify(body || {});

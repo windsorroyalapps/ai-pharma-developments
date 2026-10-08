@@ -1,12 +1,12 @@
 # Next operator actions
 
-Rechecked 2026-10-08 23:21 AEDT. IAM was not mutated. This session has no gcloud binary on PATH and no credentialed account. Project is unset. Do not reuse a dead `--no-launch-browser` URL from a sandbox that cannot paste the verification code. Run login on a machine you control.
+Rechecked 2026-10-09 09:08 AEDT. IAM was not mutated. This session has no gcloud binary on PATH and no credentialed account. Project is unset. Do not reuse a dead `--no-launch-browser` URL from a sandbox that cannot paste the verification code. Run login on a machine you control.
 
 Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
 Weekday automation `apd-site-continue` is already active. Do not add another copy.
 
-Shipped this pass: `retainers.html`, `js/retainers.js`, `tools/retainer-preview.js`. Preview only. No charge.
+Shipped this pass: keyless dry-run worker, JSONL ledger summary, automation console import/export and local settle. No charge.
 
 ## 1. Authenticate on a machine you control
 
@@ -54,6 +54,8 @@ The script exits if a value starts with `sk_live_` or `pk_live_`.
 
 ```bash
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
+node tools/ledger-summary.js
+node cloud/worker/dry-run-server.js
 node tools/invoice-preview.js consult-30 careflow-setup
 node tools/retainer-preview.js ops-retainer 3
 node tools/retainer-preview.js retainer 1 --agent
