@@ -1,12 +1,12 @@
-# Payment and GCP status — 2026-10-08 11:14 AEDT
+# Payment and GCP status — 2026-10-08 14:11 AEDT
 
-Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Payment and Stripe skills already cover Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
+Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Those skills already cover least-privilege IAM, Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
 
 Identity documents stay out of git, skills, and chat. Complete Stripe identity in the Stripe Dashboard when ready. Test keys can be added before live verification. Live charges stay blocked until you say live and keys are confirmed.
 
 ## Blocker
 
-Google Cloud SDK is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A fresh `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
+Google Cloud SDK 588.0.0 is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
 
 Run login on a machine you control, paste the verification code into that same process, then reply with only the project id:
 
@@ -45,7 +45,8 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Automation console queue (confirm=true required, no charge)
 - Research pipeline board at `pipeline.html`
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
-- `cloud/automation/create-scheduler.sh` creates the health ping only after `WORKER_URL` is set
+- `node tools/stripe-test-readiness.js` checks site and worker paths without calling Stripe
+- Daily agent automation `apd-site-dev` continues this path until GCP login exists
 
 ## Still waiting
 

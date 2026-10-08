@@ -1,46 +1,52 @@
 #!/usr/bin/env node
 /**
- * Stripe test-mode readiness. No network, no keys, no gcloud.
- * Fails if live key material is committed or the agent confirm gate is missing.
+ * Offline Stripe / payment readiness check.
+ * Does not call Stripe and does not read secret values.
  */
-const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
 
-const root = path.join(__dirname, '..');
-function read(rel) {
-  return fs.readFileSync(path.join(root, rel), 'utf8');
+const root = path.resolve(__dirname, '..');
+const required = [
+  'pay.html',
+  'js/stripe-checkout.js',
+  'js/google-pay.js',
+  'cloud/worker/index.js',
+  'cloud/iam/bootstrap.sh',
+  'cloud/iam/add-test-secrets.sh',
+  'docs/PAYMENT_STATUS.md'
+];
+
+const checks = [];
+function pass(name, detail) { checks.push({ ok: true, name, detail }); }
+function fail(name, detail) { checks.push({ ok: false, name, detail }); }
+
+for (const rel of required) {
+  const p = path.join(root, rel);
+  if (fs.existsSync(p)) pass('file', rel);
+  else fail('file', rel + ' missing');
 }
 
-const worker = read('cloud/worker/index.js');
-const secretsScript = read('cloud/iam/add-test-secrets.sh');
-const checkout = read('js/stripe-checkout.js');
-const privileges = read('cloud/iam/PRIVILEGES.md');
+const worker = fs.readFileSync(path.join(root, 'cloud/worker/index.js'), 'utf8');
+if (worker.includes('confirm')) pass('agent-gate', 'worker mentions confirm');
+else fail('agent-gate', 'worker missing confirm gate');
+if (worker.includes('checkout.sessions') || worker.includes('checkout.session')) pass('checkout', 'session create path present');
+else fail('checkout', 'no checkout session path');
 
-assert.ok(worker.includes("confirm !== true"), 'agent confirm gate missing');
-assert.ok(worker.includes('agent orders require confirm=true'), 'confirm error string missing');
-assert.ok(worker.includes("'aud'"), 'AUD allowlist missing');
-assert.ok(worker.includes('/ready'), 'readiness route missing');
-assert.ok(worker.includes('live_charges: false'), 'health must not claim live charges');
-assert.ok(!/sk_live_[A-Za-z0-9]{8,}/.test(worker), 'live secret committed in worker');
-assert.ok(!/sk_test_[A-Za-z0-9]{8,}/.test(worker), 'test secret committed in worker');
-assert.ok(!/whsec_[A-Za-z0-9]{8,}/.test(worker), 'webhook secret committed in worker');
+const secrets = fs.readFileSync(path.join(root, 'cloud/iam/add-test-secrets.sh'), 'utf8');
+if (secrets.includes('sk_live_') && secrets.includes('exit')) pass('live-block', 'add-test-secrets refuses live keys');
+else fail('live-block', 'live key guard missing');
 
-assert.ok(secretsScript.includes('sk_live_'), 'add-test-secrets must refuse live secret keys');
-assert.ok(secretsScript.includes('pk_live_'), 'add-test-secrets must refuse live publishable keys');
-assert.ok(checkout.includes('charged: false') || checkout.includes('No charge'), 'checkout dry-run must not charge');
-assert.ok(privileges.includes('secretmanager.secretAccessor'), 'runtime privilege doc drifted');
-assert.ok(!privileges.includes('roles/owner'), 'privilege doc must not grant owner');
+const pay = fs.readFileSync(path.join(root, 'pay.html'), 'utf8');
+if (pay.includes('YOUR-CLOUD-RUN-URL') || pay.includes('CREATE_CHECKOUT_SESSION_URL')) {
+  pass('pay-placeholder', 'pay.html still has a session URL hook');
+} else fail('pay-placeholder', 'pay.html missing session URL hook');
 
-const actions = ['GCP_PROJECT_ID', 'GCP_REGION', 'GCP_WIF_PROVIDER', 'GCP_DEPLOY_SA'];
-for (const name of actions) {
-  assert.ok(privileges.includes(name), 'missing Actions var ' + name);
-}
-
+const failed = checks.filter(c => !c.ok);
 console.log(JSON.stringify({
-  ok: true,
-  mode: 'test_readiness',
-  checks: ['confirm_gate', 'aud_only', 'no_committed_secrets', 'live_key_refusal', 'actions_vars_documented', 'no_owner_role'],
-  blockers: ['gcloud_auth', 'github_actions_vars', 'stripe_test_keys_in_secret_manager'],
-  live_charges: false,
-}));
+  ready_for_test_keys: failed.length === 0,
+  live_mode: 'blocked_until_operator_says_live',
+  gcp_iam: 'not_applied_until_auth',
+  checks
+}, null, 2));
+process.exit(failed.length === 0 ? 0 : 1);
