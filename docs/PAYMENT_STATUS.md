@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-08 15:11 AEDT
+# Payment and GCP status — 2026-10-08 16:12 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Those skills already cover least-privilege IAM, Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
 
@@ -6,7 +6,7 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-Google Cloud SDK is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF because this session cannot accept the verification code. That URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
+Google Cloud SDK 588.0.0 is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF because this session cannot accept the verification code. That URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
 
 Run login on a machine you control, paste the verification code into that same process, then reply with only the project id:
 
@@ -26,7 +26,7 @@ After the worker is deployed:
 WORKER_URL=https://apd-payment-worker-xxxx.a.run.app bash cloud/automation/create-scheduler.sh
 ```
 
-Privilege matrix: `cloud/iam/PRIVILEGES.md`.
+Privilege matrix: `cloud/iam/PRIVILEGES.md`. Bootstrap script: `cloud/iam/bootstrap.sh`.
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -35,8 +35,16 @@ Privilege matrix: `cloud/iam/PRIVILEGES.md`.
 - WIF pool `github-apd` / provider `github`, bound only to `windsorroyalapps/ai-pharma-developments`
 - Secret shells (no versions): `stripe-secret-key`, `stripe-webhook-secret`, `stripe-publishable-key`
 - Region: `australia-southeast1`
+- Artifact Registry repo: `apd-repo`
 
 Never grant Owner or Editor to the runtime SA. No JSON keys in git.
+
+## GitHub Actions variables still unset until bootstrap prints them
+
+- `GCP_PROJECT_ID`
+- `GCP_REGION` = `australia-southeast1`
+- `GCP_WIF_PROVIDER`
+- `GCP_DEPLOY_SA`
 
 ## Built without live keys
 
@@ -47,12 +55,11 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - `node tools/stripe-test-readiness.js` checks site and worker paths without calling Stripe
 - Consult intake posts to the worker `/intake` when `window.INTAKE_URL` is set, otherwise mailto
-- Daily agent automation `apd-site-dev` continues this path until GCP login exists
+- Weekday agent automations continue dry-run site work until GCP login exists
 
 ## Still waiting
 
 - Operator GCP login and project id
-- Stripe identity in Dashboard only
-- Test key versions in Secret Manager
-- GitHub Actions variables `GCP_PROJECT_ID`, `GCP_REGION`, `GCP_WIF_PROVIDER`, `GCP_DEPLOY_SA`
+- Stripe identity in Dashboard only (do not send ID documents here)
+- Test key versions in Secret Manager via `cloud/iam/add-test-secrets.sh`
 - Live mode only after an explicit operator confirmation
