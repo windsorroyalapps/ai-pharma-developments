@@ -3,71 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Worker status | AI Pharma Developments</title>
-  <meta name="robots" content="noindex" />
+  <title>Readiness | AI Pharma Developments</title>
+  <meta name="description" content="Operator readiness for aipharmadevelopments.com. Test mode only. Live charges blocked." />
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 </head>
 <body>
   <header class="site-header">
     <div class="container nav">
-      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <a class="brand" href="index.html">
+        <span class="brand-mark">AI</span>
+        <span>AI Pharma Developments</span>
+      </a>
       <nav class="nav-links" aria-label="Primary">
+        <a href="index.html#solutions">Solutions</a>
         <a href="pay.html">Pay</a>
-        <a href="automation.html">Automation</a>
-        <a href="consult.html">Consult</a>
+        <a class="active" href="status.html">Readiness</a>
+        <a class="btn btn-primary" href="support.html#contact">Contact</a>
       </nav>
     </div>
   </header>
-  <main class="container" style="padding:3rem 0;max-width:46rem">
-    <div class="eyebrow">Operator</div>
-    <h1>Payment worker status</h1>
-    <p class="lead">Checked 2026-10-09 09:15 AEDT. Google Cloud SDK 588.0.0 is installed at /root/google-cloud-sdk. `gcloud auth list` shows no credentialed account. Project is unset. ADC is missing. IAM was not mutated. Stripe stays dry-run. Agent checkout and agent invoice preview refuse unless confirm=true. Do not send identity documents here.</p>
-    <section class="card" style="margin-top:1.5rem">
-      <h2>Local privilege checklist</h2>
-      <p>Stored only in this browser. Does not create cloud resources.</p>
-      <div data-privilege-checklist></div>
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Operator board</div>
+    <h1>Test-mode readiness</h1>
+    <p class="lead">No live charges. Agent checkout requires confirm=true. Secret values and identity documents are not stored here.</p>
+    <section class="card" id="readiness-board" aria-live="polite">
+      <h2>Blockers</h2>
+      <ul id="blocker-list"></ul>
+      <p id="live-line"></p>
     </section>
     <section class="card" style="margin-top:1.5rem">
-      <h2>Planned privileges (not created)</h2>
+      <h2>Least privilege (not applied)</h2>
       <ul>
-        <li>apd-payment-sa — secretAccessor, logWriter, run.invoker</li>
-        <li>apd-deploy-sa — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser</li>
-        <li>WIF pool github-apd bound to windsorroyalapps/ai-pharma-developments</li>
-        <li>Secret shells stripe-secret-key, stripe-webhook-secret, stripe-publishable-key</li>
+        <li>apd-payment-sa: secretmanager.secretAccessor, logging.logWriter, run.invoker</li>
+        <li>apd-deploy-sa: run.admin, artifactregistry.writer, cloudbuild.builds.editor, iam.serviceAccountUser</li>
+        <li>WIF pool github-apd bound only to windsorroyalapps/ai-pharma-developments</li>
+        <li>Never grant Owner or Editor. No JSON keys in git.</li>
       </ul>
-      <p>Matrix: <code>cloud/iam/privilege-matrix.json</code>. Apply with <code>bash cloud/iam/bootstrap.sh</code> after login.</p>
-    </section>
-    <section class="card" style="margin-top:1.5rem">
-      <h2>What runs without auth</h2>
-      <ul>
-        <li>Catalog, quotes, orders JSONL export, automation queue (consult intake and invoice preview, confirm=true for agent, no charge)</li>
-        <li>Worker dry-run sessions when STRIPE_SECRET_KEY is absent</li>
-        <li>Skills already present: apd-gcp-access, gcloud, payment-api, stripe, stripe-full</li>
-      </ul>
-    </section>
-    <section class="card" style="margin-top:1.5rem">
-      <label>Health URL<input id="health-url" value="https://YOUR-CLOUD-RUN-URL/ready"></label>
-      <button class="btn btn-primary" id="check" type="button" style="margin-top:1rem">Check</button>
-      <pre id="out" style="margin-top:1rem;white-space:pre-wrap"></pre>
+      <p><a href="pay.html">Checkout</a> stays in dry-run until test keys exist in Secret Manager.</p>
     </section>
   </main>
-  <script src="js/privilege-checklist.js"></script>
-  <script>
-    document.getElementById('check').addEventListener('click', function () {
-      var url = document.getElementById('health-url').value;
-      var out = document.getElementById('out');
-      if (url.indexOf('YOUR-CLOUD-RUN-URL') !== -1) {
-        out.textContent = 'Idle. Set the Cloud Run URL after bootstrap and deploy.';
-        return;
-      }
-      out.textContent = 'Checking...';
-      fetch(url).then(function (r) { return r.text(); }).then(function (t) {
-        out.textContent = t;
-      }).catch(function (err) {
-        out.textContent = String(err);
-      });
-    });
-  </script>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/readiness.js"></script>
 </body>
 </html>

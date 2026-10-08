@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-09 09:45 AEDT
+# Payment and GCP status — 2026-10-09 10:16 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
@@ -6,7 +6,7 @@ Identity documents stay out of git, skills, and chat. Live charges stay blocked 
 
 ## Blocker
 
-Google Cloud SDK 588.0.0 is installed this session at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. Project is unset. ADC is missing. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
+`gcloud` is not on PATH in this session and `/root/google-cloud-sdk/bin/gcloud` is absent. No credentialed account. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -40,21 +40,11 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 - Catalog, pay dry-run ledger, orders page with JSONL export and import
 - Quote builder at `quotes.html`
-- Credit-note preview at `adjustments.html` and `tools/credit-note-preview.js` (no Stripe refund)
-- Batch adjustment queue: `node tools/adjustment-queue.js cloud/automation/sample-adjustments.json` (agent rows without confirm=true refused, charged=0, refunded=0)
+- Credit-note preview at `adjustments.html` (no Stripe refund)
+- Batch adjustment queue refuses agent rows without confirm=true; charged=0, refunded=0
 - `js/checkout-gate.js` shared confirm gate. Agent source without `confirm=true` is refused. `charged` stays false.
-- `pay.html` source select and confirm checkbox. Stripe and Google Pay both call the gate before a local ledger row.
-- Local ledger summary counts confirmed and refused rows. Export still forces `charged: false`.
-- `tools/checkout-gate-check.js` wired into site-check.
-- Automation console queue with JSONL import/export and local settle (confirm=true required, no charge)
-- Fulfillment desk at `fulfillment.html` (local queue, charged=false)
-- Research pipeline board at `pipeline.html`
-- Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
-- Keyless server `cloud/worker/dry-run-server.js`
-- Local ledger summary `tools/ledger-summary.js` (refuses files that contain secret patterns)
-- Consult page local JSONL export (`consult.html`, no PHI expected, no charge)
-- Worker `POST /invoice-preview` and keyless dry-run route (charged=false; agent requires confirm=true)
-- Agent consult intake refuses `source=agent` unless `confirm=true`
+- Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent; live keys force dry-run unless `STRIPE_LIVE_OK=1`
+- Public operator board at `status.html` (secret names only; `tools/readiness-board-check.js`)
 
 ## Still waiting
 
