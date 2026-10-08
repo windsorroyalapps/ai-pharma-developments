@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Payment worker routes without npm packages or Stripe keys.
- * Same confirm=true gate as index.js. Never charges.
+ * Same confirm=true gate as index.js. Never charges. Never refunds.
  *
  * Usage: node cloud/worker/dry-run-server.js
  * PORT defaults to 8080. APD_LEDGER_DIR writes worker.jsonl.
@@ -9,6 +9,7 @@
 const http = require('http');
 const crypto = require('crypto');
 const { append, summarizeDir } = require('./ledger');
+const { buildCreditNote, CATALOG } = require('./credit-note');
 
 const PORT = Number(process.env.PORT || 8080);
 const ALLOWED = ['aud'];
@@ -72,6 +73,7 @@ const server = http.createServer((req, res) => {
       confirm_gate: true,
       stripe_configured: false,
       intake: true,
+      credit_notes: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });
@@ -94,6 +96,13 @@ const server = http.createServer((req, res) => {
       const id = (req.url === '/agent-order' ? 'ord_' : 'cs_dry_') + crypto.randomBytes(6).toString('hex');
       append(req.url === '/agent-order' ? 'agent_order_queued' : 'dry_run_session', Object.assign({ id }, order));
       return send(res, 200, { id, dry_run: true, charged: false, mode: order.mode, url: null });
+    }
+    if (req.url === '/credit-note') {
+      const note = buildCreditNote(body, CATALOG);
+      if (note.error) return send(res, note.status, { error: note.error });
+      const id = 'cn_dry_' + crypto.randomBytes(6).toString('hex');
+      const row = append('credit_note_preview', Object.assign({ id }, note));
+      return send(res, 200, { ok: true, id, charged: false, refunded: false, stripe_refund: false, row });
     }
     if (req.url === '/intake') {
       if (!body.name || !body.email || !body.need) return send(res, 400, { error: 'name, email, and need required' });
