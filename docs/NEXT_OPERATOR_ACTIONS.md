@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-09 09:44 AEDT. IAM was not mutated. Google Cloud CLI is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. Bootstrap and apply-after-auth were not run. Do not reuse a `--no-launch-browser` URL from this sandbox: the process exits before it can accept the verification code.
+Rechecked 2026-10-09 09:45 AEDT. IAM was not mutated. Google Cloud SDK 588.0.0 is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. Bootstrap and apply-after-auth were not run. Do not reuse a `--no-launch-browser` URL from this sandbox: the process exits before it can accept the verification code.
 
 Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
@@ -52,6 +52,7 @@ The script exits if a value starts with `sk_live_` or `pk_live_`.
 
 ```bash
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
+node tools/adjustment-queue.js cloud/automation/sample-adjustments.json
 node tools/ledger-summary.js
 node cloud/worker/dry-run-server.js
 node tools/invoice-preview.js consult-30 careflow-setup
@@ -65,4 +66,4 @@ node tools/stripe-test-readiness.js
 node tools/consult-intake-check.js
 ```
 
-Agent rows without `confirm=true` are refused, including consult intake, invoice preview, and credit notes. `node tools/credit-note-preview.js consult-30 --agent` exits 2 until `--confirm` is added. Credit notes set `refunded: false` and do not call Stripe.
+Agent rows without `confirm=true` are refused, including consult intake, invoice preview, credit notes, and the adjustment queue. An agent-only adjustment file exits 2 until `confirm=true` is set. Credit notes and adjustments set `refunded: false` and do not call Stripe.
