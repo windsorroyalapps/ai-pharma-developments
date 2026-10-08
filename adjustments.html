@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Credit note preview | AI Pharma Developments</title>
+  <meta name="description" content="Preview an AUD credit note. No Stripe refund and no charge." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href="https://aipharmadevelopments.com/adjustments.html" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="invoices.html">Invoices</a>
+        <a class="active" href="adjustments.html">Adjustments</a>
+        <a href="pay.html">Pay</a>
+        <a href="automation.html">Automation</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0;max-width:48rem">
+    <div class="eyebrow">Dry-run billing</div>
+    <h1>Credit note preview</h1>
+    <p class="lead">Records a local AUD adjustment against a catalog SKU. Nothing is refunded. Stripe refund APIs are not called. Agent drafts require confirm.</p>
+    <form id="cn-form" class="card" style="margin-top:1.5rem">
+      <label>SKU
+        <select id="sku" required></select>
+      </label>
+      <label>Amount cents
+        <input id="cents" type="number" min="100" step="1" value="15000" required />
+      </label>
+      <label>Related invoice id
+        <input id="invoice" placeholder="inv_preview_ optional" />
+      </label>
+      <label>Reason
+        <input id="reason" required maxlength="240" value="preview adjustment" />
+      </label>
+      <label><input id="agent" type="checkbox" /> Agent source</label>
+      <label><input id="confirm" type="checkbox" /> confirm=true</label>
+      <button class="btn btn-primary" type="submit" style="margin-top:1rem">Save local preview</button>
+    </form>
+    <pre id="out" class="card" style="margin-top:1.5rem;white-space:pre-wrap"></pre>
+    <p>CLI: <code>node tools/credit-note-preview.js consult-30 --agent</code> exits 2 until <code>--confirm</code>. Worker route <code>POST /credit-note</code> is dry-run only.</p>
+  </main>
+  <script src="js/catalog.js"></script>
+  <script src="js/credit-notes.js"></script>
+  <script>
+    var sku = document.getElementById('sku');
+    (window.APD_CATALOG || []).forEach(function (item) {
+      var option = document.createElement('option');
+      option.value = item.sku;
+      option.textContent = item.sku + ' — ' + item.name + ' (max ' + item.amount_cents + ')';
+      option.dataset.max = String(item.amount_cents);
+      sku.appendChild(option);
+    });
+    sku.addEventListener('change', function () {
+      var selected = sku.options[sku.selectedIndex];
+      document.getElementById('cents').max = selected.dataset.max;
+      document.getElementById('cents').value = selected.dataset.max;
+    });
+    document.getElementById('cn-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var note = window.APDCreditNotes.draft({
+        sku: sku.value,
+        amount_cents: Number(document.getElementById('cents').value),
+        related_invoice: document.getElementById('invoice').value,
+        reason: document.getElementById('reason').value,
+        source: document.getElementById('agent').checked ? 'agent' : 'website',
+        confirm: document.getElementById('confirm').checked
+      });
+      document.getElementById('out').textContent = JSON.stringify(note.error ? { error: note.error, charged: false, refunded: false } : note, null, 2);
+    });
+  </script>
+</body>
+</html>
