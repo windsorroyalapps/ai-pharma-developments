@@ -32,9 +32,9 @@ Project roles:
 - roles/cloudbuild.builds.editor
 - roles/iam.serviceAccountUser
 
-Workload Identity User on the deploy SA, member:
+Workload Identity User on the deploy SA, member (numeric project number, not project id):
 
-`principalSet://iam.googleapis.com/projects/PROJECT_ID/locations/global/workloadIdentityPools/github-apd/attribute.repository/windsorroyalapps/ai-pharma-developments`
+`principalSet://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/github-apd/attribute.repository/windsorroyalapps/ai-pharma-developments`
 
 ## GitHub Actions variables
 

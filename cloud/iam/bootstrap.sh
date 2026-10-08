@@ -11,10 +11,16 @@ if [[ -z "${PROJECT_ID}" || "${PROJECT_ID}" == "(unset)" ]]; then
   exit 1
 fi
 
+PROJECT_NUMBER="$(gcloud projects describe "${PROJECT_ID}" --format='value(projectNumber)')"
+if [[ -z "${PROJECT_NUMBER}" ]]; then
+  echo "Could not resolve project number for ${PROJECT_ID}" >&2
+  exit 1
+fi
+
 PAYMENT_SA="apd-payment-sa@${PROJECT_ID}.iam.gserviceaccount.com"
 DEPLOY_SA="apd-deploy-sa@${PROJECT_ID}.iam.gserviceaccount.com"
 
-echo "Project: ${PROJECT_ID}"
+echo "Project: ${PROJECT_ID} (${PROJECT_NUMBER})"
 
 APIS=(
   run.googleapis.com
@@ -55,11 +61,12 @@ for SECRET in stripe-secret-key stripe-webhook-secret stripe-publishable-key; do
     --role="roles/secretmanager.secretAccessor" || true
 done
 
-# Workload Identity Federation for GitHub Actions (no JSON keys)
+# Workload Identity Federation for GitHub Actions (no JSON keys).
+# principalSet must use the numeric project number, not the project id.
 gcloud iam workload-identity-pools create github-apd \
   --location=global --display-name="GitHub APD" || true
 
-POOL="projects/${PROJECT_ID}/locations/global/workloadIdentityPools/github-apd"
+POOL="projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github-apd"
 
 gcloud iam workload-identity-pools providers create-oidc github \
   --location=global \
@@ -77,3 +84,4 @@ echo "Done. Add secret VALUES only after Stripe test keys exist."
 echo "  echo -n sk_test_... | gcloud secrets versions add stripe-secret-key --data-file=-"
 echo "Deploy SA: ${DEPLOY_SA}"
 echo "Runtime SA: ${PAYMENT_SA}"
+echo "WIF pool: ${POOL}"
