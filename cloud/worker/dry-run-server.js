@@ -63,7 +63,7 @@ const server = http.createServer((req, res) => {
     });
     return res.end();
   }
-  if (req.method === 'GET' && (req.url === '/healthz' || req.url === '/ready')) {
+  if (req.method === 'GET' && (req.url === '/healthz' || req.url === '/health' || req.url === '/ready')) {
     return send(res, 200, {
       ok: true,
       service: 'apd-payment-worker-dry-run',
@@ -71,6 +71,8 @@ const server = http.createServer((req, res) => {
       live_charges: false,
       confirm_gate: true,
       stripe_configured: false,
+      intake: true,
+      blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });
   }
@@ -92,6 +94,15 @@ const server = http.createServer((req, res) => {
       const id = (req.url === '/agent-order' ? 'ord_' : 'cs_dry_') + crypto.randomBytes(6).toString('hex');
       append(req.url === '/agent-order' ? 'agent_order_queued' : 'dry_run_session', Object.assign({ id }, order));
       return send(res, 200, { id, dry_run: true, charged: false, mode: order.mode, url: null });
+    }
+    if (req.url === '/intake') {
+      if (!body.name || !body.email || !body.need) return send(res, 400, { error: 'name, email, and need required' });
+      const row = append('consult_intake_fallback', {
+        name: String(body.name).slice(0, 120),
+        email: String(body.email).slice(0, 200),
+        charged: false,
+      });
+      return send(res, 200, { ok: true, charged: false, queued: true, row });
     }
     if (req.url === '/dry-run/settle') {
       if (!body.session_id) return send(res, 400, { error: 'session_id required' });

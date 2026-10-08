@@ -42,14 +42,18 @@
       ts: new Date().toISOString(),
       charged: false,
     };
-    try {
-      const key = 'apd_ledger';
-      const prev = JSON.parse(localStorage.getItem(key) || '[]');
-      prev.push(record);
-      localStorage.setItem(key, JSON.stringify(prev.slice(-50)));
-    } catch (e) {
-      console.warn(e);
+    if (window.apdRecordLedger) window.apdRecordLedger(record);
+    else {
+      try {
+        const key = 'apd_ledger';
+        const prev = JSON.parse(localStorage.getItem(key) || '[]');
+        prev.push(record);
+        localStorage.setItem(key, JSON.stringify(prev.slice(-50)));
+      } catch (e) {
+        console.warn(e);
+      }
     }
+    document.dispatchEvent(new Event('apd-ledger-updated'));
     showToast('Dry-run only. No charge. ' + mode + ' session ' + id + '.');
   }
 
@@ -97,6 +101,9 @@
 
       const data = await res.json();
       if (data.dry_run) {
+        const record = { event: 'worker_dry_run', id: data.id, amount_aud: amount, description, email, mode, sku: skuItem ? skuItem.sku : null, charged: false };
+        if (window.apdRecordLedger) window.apdRecordLedger(record);
+        document.dispatchEvent(new Event('apd-ledger-updated'));
         showToast('Worker dry-run. No charge. Session ' + data.id);
         return;
       }

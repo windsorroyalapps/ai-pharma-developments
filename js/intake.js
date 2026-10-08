@@ -2,6 +2,36 @@
   var form = document.getElementById('consult-form');
   if (!form) return;
   var toast = document.getElementById('consult-toast');
+  var KEY = 'apd_intake_fallback';
+
+  function show(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+  }
+
+  function saveLocal(payload) {
+    var rows = [];
+    try { rows = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { rows = []; }
+    rows.push(Object.assign({ ts: new Date().toISOString(), charged: false, channel: 'local_fallback' }, payload));
+    localStorage.setItem(KEY, JSON.stringify(rows.slice(-30)));
+    return rows.length;
+  }
+
+  function mailto(payload) {
+    var body = [
+      'Name: ' + payload.name,
+      'Email: ' + payload.email,
+      'Org: ' + payload.org,
+      'Window: ' + payload.when,
+      '',
+      payload.need
+    ].join('\n');
+    location.href = 'mailto:troy.windsor1989@gmail.com?subject=' +
+      encodeURIComponent('Consult request — AI Pharma Developments') +
+      '&body=' + encodeURIComponent(body);
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var payload = {
@@ -11,22 +41,12 @@
       when: form.when.value,
       need: form.need.value
     };
+    var saved = saveLocal(payload);
     var endpoint = window.INTAKE_URL || '';
-    function mailto() {
-      var body = [
-        'Name: ' + payload.name,
-        'Email: ' + payload.email,
-        'Org: ' + payload.org,
-        'Window: ' + payload.when,
-        '',
-        payload.need
-      ].join('\n');
-      location.href = 'mailto:troy.windsor1989@gmail.com?subject=' +
-        encodeURIComponent('Consult request — AI Pharma Developments') +
-        '&body=' + encodeURIComponent(body);
-    }
-    if (!endpoint || endpoint.indexOf('YOUR-CLOUD-RUN-URL') !== -1) {
-      mailto();
+    var placeholder = !endpoint || endpoint.indexOf('YOUR-CLOUD-RUN-URL') !== -1;
+    if (placeholder) {
+      show('Saved locally (' + saved + '). Worker not deployed. Opening email draft.');
+      mailto(payload);
       return;
     }
     fetch(endpoint, {
@@ -35,11 +55,11 @@
       body: JSON.stringify(payload)
     }).then(function (res) {
       if (!res.ok) throw new Error('intake failed');
-      if (toast) toast.textContent = 'Request queued. A copy email draft is opening.';
-      mailto();
+      show('Request queued on worker. Local copy kept. Opening email draft.');
+      mailto(payload);
     }).catch(function () {
-      if (toast) toast.textContent = 'Worker unreachable. Opening email draft.';
-      mailto();
+      show('Worker unreachable. Local fallback kept (' + saved + '). Opening email draft.');
+      mailto(payload);
     });
   });
 })();

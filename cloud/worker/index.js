@@ -76,6 +76,7 @@ function readiness() {
 }
 
 app.get('/healthz', (_req, res) => res.json(readiness()));
+app.get('/health', (_req, res) => res.json(readiness()));
 app.get('/ready', (_req, res) => res.json(readiness()));
 
 function ledger(event, payload) {

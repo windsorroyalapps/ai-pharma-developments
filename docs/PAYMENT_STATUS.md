@@ -6,9 +6,9 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-This session has no `gcloud` binary on PATH and no Application Default Credentials. `gcloud auth list` cannot run. Project is unset. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
+Checked 2026-10-09 09:10 AEDT. Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. `gcloud config get-value project` is unset. Application Default Credentials are missing. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Service account emails and the WIF provider do not exist from this session. Do not invent a project id.
 
-Previous notes that the SDK lived at `/root/google-cloud-sdk` do not apply to this session. Login must happen on a machine you control. A URL printed here is not reusable because the verification code never returns to this sandbox.
+Login must happen on a machine you control. This sandbox cannot complete the browser verification code.
 
 ```bash
 gcloud auth login --no-launch-browser

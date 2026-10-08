@@ -47,7 +47,7 @@
         <label>SKU<input name="sku" id="sku" /></label>
         <label>Description<input name="description" id="description" value="AI Pharma consult retainer" /></label>
         <label>Amount cents<input name="amount_cents" id="amount_cents" type="number" min="100" value="10000" /></label>
-        <label><input name="confirm" type="checkbox" /> confirm=true</label>
+        <label><input name="confirm" type="checkbox" value="true" /> confirm=true (must be checked; unchecked is refused)</label>
         <button class="btn btn-primary" type="submit" style="margin-top:1rem">Queue agent order</button>
       </form>
       <p id="agent-status" role="status"></p>
@@ -66,6 +66,13 @@
       <p>Marks the newest unfulfilled queue item as ready for Pub/Sub topic <code>apd-fulfillment</code>. No publish happens until Cloud Run is deployed.</p>
       <button class="btn" id="fulfill" type="button">Mark next item fulfilled (local)</button>
       <p id="fulfill-status" role="status"></p>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Worker health</h2>
+      <p>Probes <code>/ready</code>. Placeholder URL stays idle and does not call Stripe.</p>
+      <label>Health URL<input id="health-url" value="https://YOUR-CLOUD-RUN-URL/ready"></label>
+      <button class="btn" id="health-check" type="button" style="margin-top:1rem">Check worker health</button>
+      <pre id="health-out" style="white-space:pre-wrap">Idle. Deploy the dry-run worker before probing.</pre>
     </section>
     <section class="card" style="margin-top:1.5rem">
       <h2>Local queue</h2>
@@ -110,6 +117,19 @@
       catalog.appendChild(button);
     });
     save(load());
+
+    document.getElementById('health-check').addEventListener('click', function () {
+      var url = document.getElementById('health-url').value;
+      var out = document.getElementById('health-out');
+      if (!url || url.indexOf('YOUR-CLOUD-RUN-URL') !== -1) {
+        out.textContent = JSON.stringify({ ok: false, idle: true, dry_run: true, live_charges: false, confirm_gate: true, note: 'Cloud Run URL not set' }, null, 2);
+        return;
+      }
+      out.textContent = 'Checking...';
+      fetch(url).then(function (r) { return r.text(); }).then(function (t) { out.textContent = t; }).catch(function (err) {
+        out.textContent = 'Worker unreachable. Local confirm gate still enforced. ' + err;
+      });
+    });
     document.getElementById('intake-form').addEventListener('submit', function (event) {
       event.preventDefault();
       var data = new FormData(event.target);
@@ -131,8 +151,8 @@
       event.preventDefault();
       var data = new FormData(event.target);
       var status = document.getElementById('agent-status');
-      if (!data.get('confirm')) {
-        status.textContent = 'Refused: agent orders require confirm=true.';
+      if (data.get('confirm') !== 'true') {
+        status.textContent = 'Refused: agent orders require confirm=true. No row queued.';
         return;
       }
       var amount = Number(data.get('amount_cents'));

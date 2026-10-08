@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: '20'
       - name: Check JS syntax
-        run: node --check js/site.js js/stripe-checkout.js js/google-pay.js js/catalog.js js/orders.js cloud/worker/index.js cloud/worker/fulfillment.js cloud/worker/ledger.js cloud/worker/dry-run-server.js tools/dry-run-check.js tools/stripe-test-readiness.js tools/ledger-summary.js
+        run: node --check js/site.js js/stripe-checkout.js js/pay-ledger.js js/intake.js js/google-pay.js js/catalog.js js/orders.js cloud/worker/index.js cloud/worker/fulfillment.js cloud/worker/ledger.js cloud/worker/dry-run-server.js tools/dry-run-check.js tools/stripe-test-readiness.js tools/ledger-summary.js
       - name: Payment dry-run contract
         run: node tools/dry-run-check.js
       - name: Stripe test-mode readiness

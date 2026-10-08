@@ -79,6 +79,14 @@
         </p>
       </section>
     </div>
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Local payment ledger</h2>
+      <p>Browser-only dry-run rows. Nothing is charged. Secret-looking values are not stored.</p>
+      <p id="pay-ledger-summary" role="status">No local ledger rows yet.</p>
+      <pre id="pay-ledger" style="white-space:pre-wrap"></pre>
+      <button class="btn" id="pay-ledger-export" type="button">Export JSONL</button>
+      <button class="btn" id="pay-ledger-clear" type="button">Clear local ledger</button>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -94,6 +102,7 @@
     window.CREATE_CHECKOUT_SESSION_URL = 'https://YOUR-CLOUD-RUN-URL/create-checkout-session';
   </script>
   <script src="js/stripe-checkout.js"></script>
+  <script src="js/pay-ledger.js"></script>
   <script src="js/google-pay.js"></script>
 </body>
 </html>
