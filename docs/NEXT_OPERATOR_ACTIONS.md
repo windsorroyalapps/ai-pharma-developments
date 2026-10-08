@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-09 09:15 AEDT. IAM was not mutated. Google Cloud CLI 588.0.0 is installed in this session. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. Do not reuse a `--no-launch-browser` URL from this sandbox: the process exits before it can accept the verification code.
+Rechecked 2026-10-09 09:42 AEDT. IAM was not mutated. `gcloud` is not on PATH in this session and `/root/google-cloud-sdk` is absent, so `gcloud auth list` has no account. Project is unset. Do not reuse a `--no-launch-browser` URL from this sandbox.
 
 Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
@@ -56,9 +56,11 @@ node tools/ledger-summary.js
 node cloud/worker/dry-run-server.js
 node tools/invoice-preview.js consult-30 careflow-setup
 node tools/invoice-preview.js consult-30 --agent
+node tools/credit-note-preview.js consult-30 --agent
+node tools/credit-note-preview.js consult-30 --cents 5000 --agent --confirm
 node tools/retainer-preview.js ops-retainer 3
 node tools/retainer-preview.js retainer 1 --agent
 node tools/stripe-test-readiness.js
 ```
 
-Agent rows without `confirm=true` are refused, including consult intake and invoice preview. `node tools/invoice-preview.js consult-30 --agent` exits 2 until `--confirm` is added. The sample queue records two refused agent rows and charges nothing.
+Agent rows without `confirm=true` are refused, including consult intake, invoice preview, and credit notes. `node tools/credit-note-preview.js consult-30 --agent` exits 2 until `--confirm` is added. Credit notes set `refunded: false` and do not call Stripe.

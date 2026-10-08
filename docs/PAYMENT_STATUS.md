@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-09 09:14 AEDT
+# Payment and GCP status — 2026-10-09 09:42 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Those skills already cover least-privilege IAM, Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
 
@@ -6,9 +6,9 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-Google Cloud CLI 588.0.0 is installed in this session at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. Project is unset. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
+This session does not have `gcloud` on PATH (`/root/google-cloud-sdk` is also absent). `gcloud auth list` cannot show an account. Project is unset. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
 
-`gcloud auth login --no-launch-browser` printed a one-shot URL, then exited on EOF because this sandbox cannot read the verification code you paste in a browser. That URL is dead. Run login on a machine you control, then re-run bootstrap in a session that already has an active account.
+Run login on a machine you control, then re-run bootstrap in a session that already has an active account.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -44,6 +44,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 - Catalog, pay dry-run ledger, orders page with JSONL export and import
 - Quote builder at `quotes.html`
+- Credit-note preview at `adjustments.html` and `tools/credit-note-preview.js` (no Stripe refund)
 - Automation console queue with JSONL import/export and local settle (confirm=true required, no charge)
 - Fulfillment desk at `fulfillment.html` (local queue, charged=false)
 - Research pipeline board at `pipeline.html`
