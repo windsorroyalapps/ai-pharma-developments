@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quote builder | AI Pharma Developments</title>
+  <meta name="description" content="Build a dry-run service quote. No card data. Agent rows stay blocked unless confirm is explicit." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="catalog.html">Catalog</a>
+        <a class="active" href="quotes.html">Quotes</a>
+        <a href="pay.html">Pay</a>
+        <a href="automation.html">Automation</a>
+        <a class="btn btn-primary" href="support.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Dry-run</div>
+    <h1>Quote builder</h1>
+    <p class="lead">Compose a catalog quote in AUD. Export writes a local JSONL row only. Stripe Checkout stays closed until test keys exist. Agent source rows are refused unless confirm is checked.</p>
+    <form id="quote-form" class="card" style="margin-top:1.5rem;display:grid;gap:0.75rem">
+      <label>SKU
+        <select id="sku" name="sku" required></select>
+      </label>
+      <label>Email
+        <input id="email" name="email" type="email" required placeholder="ops@example.com" />
+      </label>
+      <label>Source
+        <select id="source" name="source">
+          <option value="website">website</option>
+          <option value="agent">agent</option>
+        </select>
+      </label>
+      <label>Note
+        <input id="note" name="note" type="text" maxlength="180" placeholder="Scope note, no card data" />
+      </label>
+      <label><input id="confirm" type="checkbox" /> confirm=true (required for agent source; still no charge)</label>
+      <button class="btn btn-primary" type="submit">Add quote row</button>
+    </form>
+    <p id="status" role="status" style="margin-top:1rem"></p>
+    <pre id="preview" style="white-space:pre-wrap"></pre>
+    <p><button class="btn" id="download" type="button">Download JSONL</button></p>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/quotes.js"></script>
+</body>
+</html>

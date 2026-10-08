@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-08 10:12 AEDT
+# Payment and GCP status — 2026-10-08 11:14 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Payment and Stripe skills already cover Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
 
@@ -6,7 +6,7 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-Google Cloud SDK is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
+Google Cloud SDK is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A fresh `--no-launch-browser` login printed a URL and died on EOF, so that URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
 
 Run login on a machine you control, paste the verification code into that same process, then reply with only the project id:
 
@@ -41,11 +41,11 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 ## Built without live keys
 
 - Catalog, pay dry-run ledger, orders page with JSONL export
+- Quote builder at `quotes.html` and `node cloud/automation/build-quote.js`
 - Automation console queue (confirm=true required, no charge)
 - Research pipeline board at `pipeline.html`
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - `cloud/automation/create-scheduler.sh` creates the health ping only after `WORKER_URL` is set
-- Weekday automation `apd-site-automation` continues site work and will not bind IAM until an account exists
 
 ## Still waiting
 
