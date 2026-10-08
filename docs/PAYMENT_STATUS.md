@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-08 16:12 AEDT
+# Payment and GCP status — 2026-10-08 17:16 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Those skills already cover least-privilege IAM, Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
 
@@ -6,7 +6,7 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-Google Cloud SDK 588.0.0 is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. A `--no-launch-browser` login printed a URL and died on EOF because this session cannot accept the verification code. That URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
+Google Cloud SDK is installed in the agent session. `gcloud auth list` has zero credentialed accounts. Project is unset. Application Default Credentials are missing. A `--no-launch-browser` login printed a URL and died on EOF because this session cannot accept the verification code. That URL and PKCE challenge are dead. Do not reuse it. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created.
 
 Run login on a machine you control, paste the verification code into that same process, then reply with only the project id:
 
@@ -55,7 +55,6 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
 - `node tools/stripe-test-readiness.js` checks site and worker paths without calling Stripe
 - Consult intake posts to the worker `/intake` when `window.INTAKE_URL` is set, otherwise mailto
-- Weekday agent automations continue dry-run site work until GCP login exists
 
 ## Still waiting
 
