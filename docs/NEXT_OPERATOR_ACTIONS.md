@@ -1,10 +1,12 @@
 # Next operator actions
 
-Rechecked 2026-10-08 22:16 AEDT. IAM was not mutated. Google Cloud SDK 588.0.0 is installed in the agent home directory. `gcloud auth list` shows no credentialed account. Project is `(unset)`. Apt install of `google-cloud-cli` failed in this sandbox (`setgroups` not permitted); the tarball SDK under `$HOME/google-cloud-sdk` is the working binary. A `--no-launch-browser` login cannot accept a verification code here, so any URL it prints is dead. Do not reuse it. Run login on a machine that can paste the verification code.
+Rechecked 2026-10-08 23:21 AEDT. IAM was not mutated. This session has no gcloud binary on PATH and no credentialed account. Project is unset. Do not reuse a dead `--no-launch-browser` URL from a sandbox that cannot paste the verification code. Run login on a machine you control.
 
 Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
-Scheduled automation `apd-site-continue` already runs Mon/Wed/Fri 09:00 Australia/Sydney and only builds non-live site features until auth exists.
+Weekday automation `apd-site-continue` is already active. Do not add another copy.
+
+Shipped this pass: `retainers.html`, `js/retainers.js`, `tools/retainer-preview.js`. Preview only. No charge.
 
 ## 1. Authenticate on a machine you control
 
@@ -53,7 +55,9 @@ The script exits if a value starts with `sk_live_` or `pk_live_`.
 ```bash
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
 node tools/invoice-preview.js consult-30 careflow-setup
+node tools/retainer-preview.js ops-retainer 3
+node tools/retainer-preview.js retainer 1 --agent
 node tools/stripe-test-readiness.js
 ```
 
-Agent rows without `confirm=true` are refused.
+Agent rows without `confirm=true` are refused. The `--agent` example above exits 2 until `--confirm` is added.

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retainer preview | AI Pharma Developments</title>
+  <meta name="description" content="Preview a monthly AUD retainer. No card data and no live Stripe charge." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html"><span class="brand-mark">AI</span><span>AI Pharma Developments</span></a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="catalog.html">Catalog</a>
+        <a href="quotes.html">Quotes</a>
+        <a class="active" href="retainers.html">Retainers</a>
+        <a href="pay.html">Pay</a>
+        <a href="automation.html">Automation</a>
+        <a class="btn btn-primary" href="support.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Subscription preview</div>
+    <h1>Monthly retainer, dry-run only</h1>
+    <p class="lead">Build a monthly AUD retainer quote. Checkout stays in dry-run until Stripe test keys are in Secret Manager. Live charges stay off until identity verification is finished in the Stripe Dashboard. Agent rows require confirm=true and still do not charge.</p>
+    <form id="retainer-form" class="card" style="margin-top:1.5rem;display:grid;gap:0.75rem">
+      <label>Retainer
+        <select id="sku" name="sku" required></select>
+      </label>
+      <label>Months to preview
+        <input id="months" name="months" type="number" min="1" max="12" value="3" required />
+      </label>
+      <label>Email
+        <input id="email" name="email" type="email" required placeholder="ops@example.com" />
+      </label>
+      <label>Source
+        <select id="source" name="source">
+          <option value="website">website</option>
+          <option value="agent">agent</option>
+        </select>
+      </label>
+      <label><input id="confirm" type="checkbox" /> confirm=true (required for agent source; still no charge)</label>
+      <button class="btn btn-primary" type="submit">Preview retainer</button>
+    </form>
+    <p id="status" role="status" style="margin-top:1rem"></p>
+    <pre id="preview" style="white-space:pre-wrap"></pre>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div><a href="mailto:troy.windsor1989@gmail.com">troy.windsor1989@gmail.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+  <script src="js/catalog.js"></script>
+  <script src="js/retainers.js"></script>
+</body>
+</html>
