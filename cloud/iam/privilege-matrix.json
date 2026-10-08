@@ -1,0 +1,44 @@
+{
+  "project_region": "australia-southeast1",
+  "applied": false,
+  "reason": "No credentialed gcloud account in the agent session. Do not treat these as created.",
+  "runtime_sa": {
+    "name": "apd-payment-sa",
+    "roles": [
+      "roles/secretmanager.secretAccessor",
+      "roles/logging.logWriter",
+      "roles/run.invoker"
+    ]
+  },
+  "deploy_sa": {
+    "name": "apd-deploy-sa",
+    "roles": [
+      "roles/run.admin",
+      "roles/artifactregistry.writer",
+      "roles/cloudbuild.builds.editor",
+      "roles/iam.serviceAccountUser"
+    ]
+  },
+  "wif": {
+    "pool": "github-apd",
+    "provider": "github",
+    "repository": "windsorroyalapps/ai-pharma-developments"
+  },
+  "secrets": [
+    "stripe-secret-key",
+    "stripe-webhook-secret",
+    "stripe-publishable-key"
+  ],
+  "github_actions_vars": [
+    "GCP_PROJECT_ID",
+    "GCP_REGION",
+    "GCP_WIF_PROVIDER",
+    "GCP_DEPLOY_SA"
+  ],
+  "forbidden": [
+    "roles/owner",
+    "roles/editor",
+    "service-account JSON keys in git",
+    "identity documents in git or skills"
+  ]
+}
