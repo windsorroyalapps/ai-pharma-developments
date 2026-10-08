@@ -1,12 +1,10 @@
 # Next operator actions
 
-Rechecked 2026-10-09 09:08 AEDT. IAM was not mutated. This session has no gcloud binary on PATH and no credentialed account. Project is unset. Do not reuse a dead `--no-launch-browser` URL from a sandbox that cannot paste the verification code. Run login on a machine you control.
+Rechecked 2026-10-09 09:14 AEDT. IAM was not mutated. Google Cloud CLI 588.0.0 is installed in this session. `gcloud auth list` shows no credentialed accounts. Project is unset. Do not reuse a `--no-launch-browser` URL from this sandbox: the process exits before it can accept the verification code.
 
 Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
-Weekday automation `apd-site-continue` is already active. Do not add another copy.
-
-Shipped this pass: keyless dry-run worker, JSONL ledger summary, automation console import/export and local settle. No charge.
+Weekday automations for site continuation are already active (`apd-site-continue` and related). Do not add another copy.
 
 ## 1. Authenticate on a machine you control
 
@@ -21,7 +19,7 @@ bash cloud/automation/apply-after-auth.sh
 bash cloud/iam/print-github-vars.sh
 ```
 
-Reply with the project id only if you want bootstrap run in a session that can accept the verification code.
+Reply with the project id only if you want bootstrap run in a session that already has an active account.
 
 Preview without binding: `bash cloud/iam/privilege-plan.sh`
 

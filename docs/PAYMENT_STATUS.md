@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-09 09:08 AEDT
+# Payment and GCP status — 2026-10-09 09:14 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Those skills already cover least-privilege IAM, Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
 
@@ -6,9 +6,9 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity i
 
 ## Blocker
 
-Checked 2026-10-09 09:10 AEDT. Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. `gcloud config get-value project` is unset. Application Default Credentials are missing. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Service account emails and the WIF provider do not exist from this session. Do not invent a project id.
+Google Cloud CLI 588.0.0 is installed in this session at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. Project is unset. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
 
-Login must happen on a machine you control. This sandbox cannot complete the browser verification code.
+`gcloud auth login --no-launch-browser` printed a one-shot URL, then exited on EOF because this sandbox cannot read the verification code you paste in a browser. That URL is dead. Run login on a machine you control, then re-run bootstrap in a session that already has an active account.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -33,7 +33,7 @@ Privilege matrix: `cloud/iam/PRIVILEGES.md`. Bootstrap script: `cloud/iam/bootst
 
 Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
-## GitHub Actions variables still unset until bootstrap prints them
+## GitHub Actions variables the operator must set after bootstrap
 
 - `GCP_PROJECT_ID`
 - `GCP_REGION` = `australia-southeast1`
@@ -48,7 +48,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Fulfillment desk at `fulfillment.html` (local queue, charged=false)
 - Research pipeline board at `pipeline.html`
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent
-- Keyless server `cloud/worker/dry-run-server.js` (no npm install, no Stripe package)
+- Keyless server `cloud/worker/dry-run-server.js`
 - Local ledger summary `tools/ledger-summary.js` (refuses files that contain secret patterns)
 
 ## Still waiting
