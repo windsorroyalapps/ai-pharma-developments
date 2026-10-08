@@ -2,6 +2,7 @@
 /**
  * Process a local automation queue without charging.
  * Agent items are dropped unless confirm === true.
+ * Consult intake rows do not require an amount and never charge.
  * Writes an append-only JSONL ledger. No Stripe calls.
  *
  * Usage: node cloud/automation/process-queue.js [queue.json]
@@ -26,14 +27,51 @@ function append(row) {
   fs.appendFileSync(ledgerPath, JSON.stringify(row) + '\n');
 }
 
+function refuse(reason) {
+  return { ok: false, status: 'refused', reason, charged: false };
+}
+
 function processItem(item) {
   const source = item.source || 'website';
+  const type = item.type || 'order';
   if (source === 'agent' && item.confirm !== true) {
+    return refuse('agent orders require confirm=true');
+  }
+  if (type === 'consult_intake') {
+    if (!item.email || !item.need) {
+      return { ok: false, status: 'invalid', reason: 'consult_intake requires email and need', charged: false };
+    }
     return {
-      ok: false,
-      status: 'refused',
-      reason: 'agent orders require confirm=true',
+      ok: true,
+      status: 'queued',
+      type: 'consult_intake',
+      id: 'int_' + crypto.randomBytes(6).toString('hex'),
+      email: String(item.email).slice(0, 200),
+      name: item.name ? String(item.name).slice(0, 120) : null,
+      need: String(item.need).slice(0, 500),
+      source,
+      confirm: item.confirm === true,
       charged: false,
+      mode: 'dry_run',
+    };
+  }
+  if (type === 'invoice_preview') {
+    const skus = Array.isArray(item.skus) ? item.skus.map(String) : [];
+    if (!skus.length) {
+      return { ok: false, status: 'invalid', reason: 'invoice_preview requires skus', charged: false };
+    }
+    return {
+      ok: true,
+      status: 'preview',
+      type: 'invoice_preview',
+      id: 'inv_preview_' + crypto.randomBytes(4).toString('hex'),
+      skus,
+      email: item.email || null,
+      source,
+      confirm: item.confirm === true,
+      charged: false,
+      billed: false,
+      mode: 'dry_run',
     };
   }
   const amount = Number(item.amount_cents);
@@ -43,6 +81,7 @@ function processItem(item) {
   return {
     ok: true,
     status: 'queued',
+    type: 'order',
     id: 'ord_' + crypto.randomBytes(6).toString('hex'),
     sku: item.sku || null,
     amount_cents: amount,
@@ -66,8 +105,10 @@ const summary = {
   input,
   ledger: ledgerPath,
   total: results.length,
-  queued: results.filter((r) => r.ok).length,
+  queued: results.filter((r) => r.ok && r.status === 'queued').length,
+  previews: results.filter((r) => r.ok && r.status === 'preview').length,
   refused: results.filter((r) => !r.ok).length,
   charged: 0,
 };
 console.log(JSON.stringify({ summary, results }, null, 2));
+if (results.some((r) => r.source === 'agent' && r.ok && r.confirm !== true)) process.exit(2);

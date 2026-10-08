@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
  * Local invoice preview from the service catalog. No Stripe call. No charge.
+ * Agent previews refuse unless --confirm is present.
  * Usage: node tools/invoice-preview.js consult-30 scoping
+ *        node tools/invoice-preview.js consult-30 --agent --confirm
  */
 const fs = require('fs');
 const path = require('path');
@@ -12,10 +14,17 @@ if (!match) {
   console.error('catalog parse failed');
   process.exit(1);
 }
-const catalog = JSON.parse(match[1]);
-const skus = process.argv.slice(2);
+const catalog = Function('"use strict"; return (' + match[1] + ');')();
+const args = process.argv.slice(2);
+const agent = args.includes('--agent');
+const confirm = args.includes('--confirm');
+const skus = args.filter((arg) => !arg.startsWith('--'));
+if (agent && !confirm) {
+  console.error('agent invoice preview requires --confirm');
+  process.exit(2);
+}
 if (!skus.length) {
-  console.error('usage: node tools/invoice-preview.js <sku> [sku...]');
+  console.error('usage: node tools/invoice-preview.js <sku> [sku...] [--agent --confirm]');
   process.exit(1);
 }
 
@@ -42,6 +51,8 @@ const invoice = {
   lines,
   total_cents: total,
   charged: false,
+  source: agent ? 'agent' : 'website',
+  confirm: confirm,
   note: 'preview only; live invoices wait for Stripe identity and explicit live confirmation',
 };
 console.log(JSON.stringify(invoice, null, 2));

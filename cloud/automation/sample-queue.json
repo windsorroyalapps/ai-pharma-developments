@@ -8,6 +8,27 @@
     "confirm": true
   },
   {
+    "type": "consult_intake",
+    "name": "Sample clinic",
+    "email": "clinic@example.com",
+    "need": "Careflow scoping call",
+    "source": "website"
+  },
+  {
+    "type": "consult_intake",
+    "name": "Agent",
+    "email": "agent@example.com",
+    "need": "Queue a consult without confirmation",
+    "source": "agent",
+    "confirm": false
+  },
+  {
+    "type": "invoice_preview",
+    "skus": ["consult-intro"],
+    "email": "ops@example.com",
+    "source": "website"
+  },
+  {
     "sku": "agent-retainer",
     "amount_cents": 50000,
     "currency": "aud",

@@ -12,10 +12,19 @@ jobs:
         with:
           node-version: '20'
       - name: Check JS syntax
-        run: node --check js/site.js js/stripe-checkout.js js/pay-ledger.js js/intake.js js/google-pay.js js/catalog.js js/orders.js cloud/worker/index.js cloud/worker/fulfillment.js cloud/worker/ledger.js cloud/worker/dry-run-server.js tools/dry-run-check.js tools/stripe-test-readiness.js tools/ledger-summary.js
+        run: node --check js/site.js js/stripe-checkout.js js/pay-ledger.js js/intake.js js/google-pay.js js/catalog.js js/orders.js cloud/worker/index.js cloud/worker/fulfillment.js cloud/worker/ledger.js cloud/worker/dry-run-server.js cloud/automation/process-queue.js tools/dry-run-check.js tools/invoice-preview.js tools/stripe-test-readiness.js tools/ledger-summary.js
       - name: Payment dry-run contract
         run: node tools/dry-run-check.js
       - name: Stripe test-mode readiness
         run: node tools/stripe-test-readiness.js
+      - name: Queue and invoice agent gate
+        run: |
+          set +e
+          node tools/invoice-preview.js consult-30 --agent
+          code=$?
+          set -e
+          test "$code" -eq 2
+          node tools/invoice-preview.js consult-30 --agent --confirm | grep -q '"charged": false'
+          APD_LEDGER_DIR="$RUNNER_TEMP/apd-ledger" node cloud/automation/process-queue.js cloud/automation/sample-queue.json | grep -q '"charged": 0'
       - name: Keyless worker session
         run: node -e "const http=require('http'); const {server}=require('./cloud/worker/dry-run-server'); const s=server.listen(0,async()=>{ const port=s.address().port; const refused=await fetch('http://127.0.0.1:'+port+'/agent-order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({confirm:false,amount_cents:10000})}); if(refused.status!==403) process.exit(2); const ok=await fetch('http://127.0.0.1:'+port+'/agent-order',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({confirm:true,amount_cents:10000})}); const body=await ok.json(); if(!body.dry_run||body.charged!==false) process.exit(3); s.close(); });"

@@ -1,5 +1,7 @@
 # Google Cloud access privileges — AI Pharma Developments
 
+Status 2026-10-09 09:15 AEDT: CLI 588.0.0 present, no credentialed account, project unset, ADC missing. IAM was not mutated. Do not invent a project id.
+
 Operator must authenticate before any IAM mutation:
 
 ```bash

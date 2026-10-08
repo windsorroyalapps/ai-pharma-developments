@@ -22,7 +22,7 @@
   <main class="container" style="padding:3rem 0;max-width:46rem">
     <div class="eyebrow">Operator</div>
     <h1>Payment worker status</h1>
-    <p class="lead">Checked 2026-10-09 09:10 AEDT. Google Cloud SDK is installed at /root/google-cloud-sdk. `gcloud auth list` shows no credentialed account. Project is unset. ADC is missing. IAM was not mutated. Stripe stays dry-run. Do not send identity documents here.</p>
+    <p class="lead">Checked 2026-10-09 09:15 AEDT. Google Cloud SDK 588.0.0 is installed at /root/google-cloud-sdk. `gcloud auth list` shows no credentialed account. Project is unset. ADC is missing. IAM was not mutated. Stripe stays dry-run. Agent checkout and agent invoice preview refuse unless confirm=true. Do not send identity documents here.</p>
     <section class="card" style="margin-top:1.5rem">
       <h2>Local privilege checklist</h2>
       <p>Stored only in this browser. Does not create cloud resources.</p>
@@ -41,7 +41,7 @@
     <section class="card" style="margin-top:1.5rem">
       <h2>What runs without auth</h2>
       <ul>
-        <li>Catalog, quotes, orders JSONL export, automation queue (confirm=true, no charge)</li>
+        <li>Catalog, quotes, orders JSONL export, automation queue (consult intake and invoice preview, confirm=true for agent, no charge)</li>
         <li>Worker dry-run sessions when STRIPE_SECRET_KEY is absent</li>
         <li>Skills already present: apd-gcp-access, gcloud, payment-api, stripe, stripe-full</li>
       </ul>
