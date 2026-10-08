@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-09 09:42 AEDT
+# Payment and GCP status — 2026-10-09 09:45 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
@@ -6,9 +6,7 @@ Identity documents stay out of git, skills, and chat. Live charges stay blocked 
 
 ## Blocker
 
-Google Cloud CLI is installed this session at `/root/google-cloud-sdk` (apt install was blocked). `gcloud auth list` reports no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
-
-No service-account emails and no WIF provider were created. Do not invent a project id.
+Google Cloud SDK 588.0.0 is installed this session at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. Project is unset. ADC is missing. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -19,8 +17,6 @@ bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
 bash cloud/iam/print-github-vars.sh
 ```
-
-## Built this pass (dry-run only)
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -45,6 +41,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Catalog, pay dry-run ledger, orders page with JSONL export and import
 - Quote builder at `quotes.html`
 - Credit-note preview at `adjustments.html` and `tools/credit-note-preview.js` (no Stripe refund)
+- Batch adjustment queue: `node tools/adjustment-queue.js cloud/automation/sample-adjustments.json` (agent rows without confirm=true refused, charged=0, refunded=0)
 - `js/checkout-gate.js` shared confirm gate. Agent source without `confirm=true` is refused. `charged` stays false.
 - `pay.html` source select and confirm checkbox. Stripe and Google Pay both call the gate before a local ledger row.
 - Local ledger summary counts confirmed and refused rows. Export still forces `charged: false`.
