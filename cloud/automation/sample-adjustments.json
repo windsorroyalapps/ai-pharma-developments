@@ -1,0 +1,24 @@
+{
+  "adjustments": [
+    {
+      "sku": "consult-30",
+      "amount_cents": 15000,
+      "reason": "scoping overlap",
+      "source": "website",
+      "confirm": false
+    },
+    {
+      "sku": "careflow-setup",
+      "source": "agent",
+      "confirm": false,
+      "reason": "agent row without confirmation"
+    },
+    {
+      "sku": "careflow-setup",
+      "amount_cents": 25000,
+      "source": "agent",
+      "confirm": true,
+      "reason": "confirmed preview only"
+    }
+  ]
+}
