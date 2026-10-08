@@ -47,6 +47,17 @@
             Your email (receipt)
             <input id="email" name="email" type="email" placeholder="you@company.com" required />
           </label>
+          <label>
+            Order source
+            <select id="pay-source" name="source">
+              <option value="website">Website checkout</option>
+              <option value="agent">Agent order (confirm=true required)</option>
+            </select>
+          </label>
+          <label>
+            <input id="pay-confirm" name="confirm" type="checkbox" value="true" />
+            confirm=true — required for agent orders. Unchecked agent orders are refused and never charged.
+          </label>
           <p class="form-note">
             Mode: <strong id="pay-mode">TEST</strong>.
             Live keys + Cloud Run worker required for production charges.
@@ -101,6 +112,7 @@
     window.STRIPE_PUBLISHABLE_KEY = 'pk_test_placeholder';
     window.CREATE_CHECKOUT_SESSION_URL = 'https://YOUR-CLOUD-RUN-URL/create-checkout-session';
   </script>
+  <script src="js/checkout-gate.js"></script>
   <script src="js/stripe-checkout.js"></script>
   <script src="js/pay-ledger.js"></script>
   <script src="js/google-pay.js"></script>

@@ -1,14 +1,14 @@
 # Payment and GCP status — 2026-10-09 09:42 AEDT
 
-Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Those skills already cover least-privilege IAM, Checkout, webhooks, Google Pay, ledger, and the `confirm=true` agent gate.
+Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
-Identity documents stay out of git, skills, and chat. Complete Stripe identity in the Stripe Dashboard when ready. Do not send ID images to the agent. Test keys can be added before live verification. Live charges stay blocked until you say live and keys are confirmed.
+Identity documents stay out of git, skills, and chat. Live charges stay blocked until the operator says live and keys are confirmed.
 
 ## Blocker
 
-This session does not have `gcloud` on PATH (`/root/google-cloud-sdk` is also absent). `gcloud auth list` cannot show an account. Project is unset. IAM was not mutated. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
+This session does not have `gcloud` on PATH. Apt install of `google-cloud-cli` failed (`setgroups` / `setegid` not permitted). `/root/google-cloud-sdk` is absent. `gcloud auth list` cannot run, so there is no credentialed account and no project. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run.
 
-Run login on a machine you control, then re-run bootstrap in a session that already has an active account.
+No service-account emails and no WIF provider were created. Do not invent a project id.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -20,7 +20,7 @@ bash cloud/automation/apply-after-auth.sh
 bash cloud/iam/print-github-vars.sh
 ```
 
-Privilege matrix: `cloud/iam/PRIVILEGES.md`. Bootstrap script: `cloud/iam/bootstrap.sh`.
+## Built this pass (dry-run only)
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -45,6 +45,10 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Catalog, pay dry-run ledger, orders page with JSONL export and import
 - Quote builder at `quotes.html`
 - Credit-note preview at `adjustments.html` and `tools/credit-note-preview.js` (no Stripe refund)
+- `js/checkout-gate.js` shared confirm gate. Agent source without `confirm=true` is refused. `charged` stays false.
+- `pay.html` source select and confirm checkbox. Stripe and Google Pay both call the gate before a local ledger row.
+- Local ledger summary counts confirmed and refused rows. Export still forces `charged: false`.
+- `tools/checkout-gate-check.js` wired into site-check.
 - Automation console queue with JSONL import/export and local settle (confirm=true required, no charge)
 - Fulfillment desk at `fulfillment.html` (local queue, charged=false)
 - Research pipeline board at `pipeline.html`

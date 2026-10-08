@@ -29,18 +29,45 @@
     return item || null;
   }
 
+  function gateDecision(amount, source, confirm) {
+    const evaluate = window.apdCheckoutGate && window.apdCheckoutGate.evaluateCheckout;
+    if (!evaluate) return { ok: true, charged: false, confirm, source };
+    return evaluate({
+      source,
+      confirm,
+      amount_cents: Math.round(Number(amount) * 100),
+      currency: 'aud',
+    });
+  }
+
+  function checkoutContext() {
+    const sourceEl = document.getElementById('pay-source');
+    const confirmEl = document.getElementById('pay-confirm');
+    return {
+      source: sourceEl && sourceEl.value === 'agent' ? 'agent' : 'website',
+      confirm: Boolean(confirmEl && confirmEl.checked),
+    };
+  }
+
   function localDryRun(amount, description, email, mode, sku) {
-    const id = 'cs_local_' + Math.random().toString(16).slice(2, 10);
+    const ctx = checkoutContext();
+    const decision = gateDecision(amount, ctx.source, ctx.confirm);
+    const id = decision.ok
+      ? 'cs_local_' + Math.random().toString(16).slice(2, 10)
+      : 'refused_local_' + Math.random().toString(16).slice(2, 10);
     const record = {
-      event: 'local_dry_run',
+      event: decision.ok ? 'local_dry_run' : 'local_dry_run_refused',
       id,
       amount_aud: amount,
       description,
       email,
       mode,
       sku,
+      source: ctx.source,
+      confirm: ctx.confirm,
       ts: new Date().toISOString(),
       charged: false,
+      error: decision.ok ? undefined : decision.error,
     };
     if (window.apdRecordLedger) window.apdRecordLedger(record);
     else {
@@ -54,6 +81,10 @@
       }
     }
     document.dispatchEvent(new Event('apd-ledger-updated'));
+    if (!decision.ok) {
+      showToast(decision.error + '. No charge.', false);
+      return;
+    }
     showToast('Dry-run only. No charge. ' + mode + ' session ' + id + '.');
   }
 
@@ -65,6 +96,12 @@
     const description = skuItem ? skuItem.name : (document.getElementById('description')?.value || 'AI Pharma Developments services');
     const email = document.getElementById('email')?.value || '';
     const mode = skuItem && String(skuItem.mode).indexOf('subscription') === 0 ? 'subscription' : 'payment';
+    const ctx = checkoutContext();
+    const decision = gateDecision(amount, ctx.source, ctx.confirm);
+    if (!decision.ok) {
+      localDryRun(amount, description, email, mode, skuItem ? skuItem.sku : null);
+      return;
+    }
 
     if (amount < 1) {
       showToast('Minimum amount is 1.00 AUD', false);
@@ -89,6 +126,8 @@
           customer_email: email,
           mode,
           sku: skuItem ? skuItem.sku : undefined,
+          source: ctx.source,
+          confirm: ctx.confirm,
           success_url: window.location.origin + '/pay.html?success=1',
           cancel_url: window.location.origin + '/pay.html?canceled=1',
         }),
@@ -101,7 +140,7 @@
 
       const data = await res.json();
       if (data.dry_run) {
-        const record = { event: 'worker_dry_run', id: data.id, amount_aud: amount, description, email, mode, sku: skuItem ? skuItem.sku : null, charged: false };
+        const record = { event: 'worker_dry_run', id: data.id, amount_aud: amount, description, email, mode, sku: skuItem ? skuItem.sku : null, source: ctx.source, confirm: ctx.confirm, charged: false };
         if (window.apdRecordLedger) window.apdRecordLedger(record);
         document.dispatchEvent(new Event('apd-ledger-updated'));
         showToast('Worker dry-run. No charge. Session ' + data.id);

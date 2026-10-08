@@ -7,7 +7,7 @@
   const modeEl = document.getElementById("pay-mode");
   const toast = document.getElementById("pay-toast");
   const buttonRoot = document.getElementById("google-pay-button");
-  if (modeEl) modeEl.textContent = ENV;
+  if (modeEl && !modeEl.textContent) modeEl.textContent = ENV;
 
   function showToast(msg, ok = true) {
     if (!toast) return;
@@ -88,6 +88,26 @@
   function onGooglePaymentButtonClicked() {
     const form = document.getElementById("pay-form");
     if (form && !form.reportValidity()) return;
+    const source = document.getElementById("pay-source")?.value === "agent" ? "agent" : "website";
+    const confirm = Boolean(document.getElementById("pay-confirm")?.checked);
+    const evaluate = window.apdCheckoutGate && window.apdCheckoutGate.evaluateCheckout;
+    if (evaluate) {
+      const amount = parseFloat(document.getElementById("amount")?.value || "0");
+      const decision = evaluate({ source, confirm, amount_cents: Math.round(amount * 100), currency: "aud" });
+      if (!decision.ok) {
+        showToast(decision.error + ". No charge.", false);
+        if (window.apdRecordLedger) {
+          window.apdRecordLedger({
+            event: "gpay_dry_run_refused",
+            source,
+            confirm,
+            charged: false,
+            error: decision.error,
+          });
+        }
+        return;
+      }
+    }
 
     paymentsClient
       .loadPaymentData(getGooglePaymentDataRequest())

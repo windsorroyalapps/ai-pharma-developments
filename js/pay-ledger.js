@@ -13,7 +13,11 @@
       return !/sk_(live|test)_|whsec_/.test(JSON.stringify(row || {}));
     });
     var charged = rows.filter(function (row) { return row.charged === true; }).length;
-    summary.textContent = rows.length + ' local rows · charged ' + charged + ' · dry-run only';
+    var refused = rows.filter(function (row) {
+      return row.event === 'local_dry_run_refused' || row.event === 'gpay_dry_run_refused' || (row.confirm === false && row.source === 'agent');
+    }).length;
+    var confirmed = rows.filter(function (row) { return row.confirm === true; }).length;
+    summary.textContent = rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · dry-run only';
     list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet.';
   }
 
