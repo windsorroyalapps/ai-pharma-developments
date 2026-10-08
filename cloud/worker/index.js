@@ -6,12 +6,14 @@
  * Without STRIPE_SECRET_KEY, DRY_RUN sessions are returned (no charge).
  * subscription mode is a retainer preview until the operator confirms live.
  * Currency allowlist is AUD until multi-currency is explicitly enabled.
+ * POST /credit-note never calls stripe.refunds.
  */
 const express = require('express');
 const Stripe = require('stripe');
 const crypto = require('crypto');
 const { publishFulfillment } = require('./fulfillment');
 const { append: appendLedger, summarizeDir } = require('./ledger');
+const { buildCreditNote, CATALOG } = require('./credit-note');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -65,6 +67,7 @@ function readiness() {
     confirm_gate: true,
     currencies: ALLOWED_CURRENCIES,
     intake: true,
+    credit_notes: true,
     subscription_preview: true,
     fulfillment_topic: process.env.FULFILLMENT_TOPIC || null,
     blockers: [
@@ -202,6 +205,14 @@ app.post('/agent-order', express.json(), (req, res) => {
   const id = 'ord_' + crypto.randomBytes(6).toString('hex');
   ledger('agent_order_queued', { id, amount_cents: order.amount_cents, currency: order.currency, source: order.source, mode: order.mode, charged: false });
   res.json({ ok: true, id, charged: false, note: 'queued only; no live charge' });
+});
+
+app.post('/credit-note', express.json({ limit: '16kb' }), (req, res) => {
+  const note = buildCreditNote(req.body, CATALOG);
+  if (note.error) return res.status(note.status).json({ error: note.error });
+  const id = 'cn_dry_' + crypto.randomBytes(6).toString('hex');
+  const row = ledger('credit_note_preview', Object.assign({ id }, note));
+  res.json({ ok: true, id, charged: false, refunded: false, stripe_refund: false, row });
 });
 
 app.post('/intake', express.json({ limit: '32kb' }), (req, res) => {
