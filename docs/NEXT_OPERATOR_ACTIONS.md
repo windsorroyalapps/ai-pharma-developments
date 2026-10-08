@@ -1,10 +1,10 @@
 # Next operator actions
 
-Rechecked 2026-10-08 19:13 AEDT. IAM was not mutated. Google Cloud SDK 588.0.0 is installed in the agent home directory. `gcloud auth list` has no account. Project is unset. A `--no-launch-browser` login cannot accept a verification code in this sandbox, so any URL it prints is dead. Do not reuse it. Run login on a machine that can paste the verification code.
+Rechecked 2026-10-08 22:16 AEDT. IAM was not mutated. Google Cloud SDK 588.0.0 is installed in the agent home directory. `gcloud auth list` shows no credentialed account. Project is `(unset)`. Apt install of `google-cloud-cli` failed in this sandbox (`setgroups` not permitted); the tarball SDK under `$HOME/google-cloud-sdk` is the working binary. A `--no-launch-browser` login cannot accept a verification code here, so any URL it prints is dead. Do not reuse it. Run login on a machine that can paste the verification code.
 
-Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git or chat.
+Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
-Scheduled automation `apd-site-continue` runs Mon/Wed/Fri 09:00 Australia/Sydney and only builds non-live site features until auth exists.
+Scheduled automation `apd-site-continue` already runs Mon/Wed/Fri 09:00 Australia/Sydney and only builds non-live site features until auth exists.
 
 ## 1. Authenticate on a machine you control
 
