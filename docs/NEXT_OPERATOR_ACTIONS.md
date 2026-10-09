@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-09 12:16 AEDT. IAM was not mutated. No credentialed gcloud account. Project unset. Bootstrap was not run.
+Rechecked 2026-10-09 13:11 AEDT. IAM was not mutated. No credentialed gcloud account. Project unset. Bootstrap was not run.
 
 Do not paste a verification code into this chat. The sandbox login exits with EOF. Authenticate on a machine you control.
 
@@ -44,4 +44,4 @@ node tools/webhook-event-dry-run.js
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
 ```
 
-Agent rows without `confirm=true` are refused. Charged stays 0.
+Agent rows without `confirm=true` are refused. Charged stays 0. Readiness board: `readiness.html`.

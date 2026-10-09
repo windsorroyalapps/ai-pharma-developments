@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Operator readiness | AI Pharma Developments</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html">AI Pharma Developments</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="pay.html">Pay</a>
+        <a href="automation.html">Automation</a>
+        <a href="orders.html">Orders</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="section">
+    <div class="container">
+      <div class="eyebrow">Test mode only</div>
+      <h1>Operator readiness</h1>
+      <p>No secret values are rendered. Live charges stay off until Stripe identity verification is finished in the Dashboard and the operator says live.</p>
+      <p id="live-line"></p>
+      <h2>Blockers</h2>
+      <ul id="blocker-list"></ul>
+      <h2>After you authenticate on your machine</h2>
+      <pre><code>gcloud auth login --no-launch-browser
+gcloud auth application-default login --no-launch-browser
+gcloud config set project PROJECT_ID
+gcloud config set compute/region australia-southeast1
+bash cloud/iam/bootstrap.sh
+bash cloud/automation/apply-after-auth.sh
+bash cloud/iam/print-github-vars.sh</code></pre>
+      <p>Bootstrap creates <code>apd-payment-sa</code> and <code>apd-deploy-sa</code> only. Runtime SA is never Owner or Editor. No JSON keys.</p>
+    </div>
+  </main>
+  <script src="js/readiness.js"></script>
+</body>
+</html>

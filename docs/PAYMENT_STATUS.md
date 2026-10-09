@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-09 12:16 AEDT
+# Payment and GCP status — 2026-10-09 13:11 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
@@ -6,9 +6,9 @@ Identity documents stay out of git, skills, and chat. Live charges stay blocked 
 
 ## Blocker
 
-Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run. Do not treat any service account, WIF pool, or secret as created.
+Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
 
-A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. Authenticate on a machine you control, then reply with the project id only.
+A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code into chat.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -43,8 +43,8 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Catalog, pay dry-run ledger, orders, quotes, credit-note preview, retainers
 - `js/checkout-gate.js` refuses agent checkout without `confirm=true`
 - Worker dry-run when `STRIPE_SECRET_KEY` is absent
-- Local evidence queue: `node tools/evidence-queue.js` (agent rows without confirm are refused; charged stays 0)
-- Weekday automation `apd-site-automation` continues dry-run site work
+- Operator board: `readiness.html` (names only)
+- Weekday automations already scheduled for dry-run site work
 
 ## Still waiting
 

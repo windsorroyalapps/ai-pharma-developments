@@ -1,6 +1,6 @@
 # Google Cloud access privileges — AI Pharma Developments
 
-Status 2026-10-09 10:12 AEDT: CLI present at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. IAM was not mutated. Do not invent a project id.
+Status 2026-10-09 13:11 AEDT: CLI present at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. IAM was not mutated. Do not invent a project id.
 
 A `--no-launch-browser` URL printed in this sandbox dies with EOF before a verification code can be accepted. Authenticate on a machine you control, then reply with the project id only.
 
@@ -37,3 +37,5 @@ Live key versions wait for Stripe Dashboard identity verification. Do not send I
 - `GCP_REGION` = `australia-southeast1`
 - `GCP_WIF_PROVIDER`
 - `GCP_DEPLOY_SA`
+
+Operator board: `readiness.html`.
