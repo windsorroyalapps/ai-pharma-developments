@@ -1,24 +1,14 @@
-# Payment and GCP status — 2026-10-09 16:12 AEDT
+# Payment and GCP status — 2026-10-09 20:11 AEDT
 
-Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Payment and Stripe skills already cover Checkout, webhooks, Google Pay, the ledger, and the agent `confirm=true` gate.
+Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
 Identity documents stay out of git, skills, and chat. Complete Stripe identity verification in the Stripe Dashboard only. Live charges stay blocked until the operator says live and keys are confirmed.
 
 ## Blocker
 
-Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
+Google Cloud SDK 588.0.0 is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
 
-A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. That URL is bound to the dead sandbox process and must not be reused. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code into chat.
-
-```bash
-gcloud auth login --no-launch-browser
-gcloud auth application-default login --no-launch-browser
-gcloud config set project PROJECT_ID
-gcloud config set compute/region australia-southeast1
-bash cloud/iam/bootstrap.sh
-bash cloud/automation/apply-after-auth.sh
-bash cloud/iam/print-github-vars.sh
-```
+Sandbox login cannot accept the verification code (EOF). Authenticate on a machine you control, then reply with the project id only.
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -31,20 +21,13 @@ bash cloud/iam/print-github-vars.sh
 
 Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
-## GitHub Actions variables after bootstrap
-
-- `GCP_PROJECT_ID`
-- `GCP_REGION` = `australia-southeast1`
-- `GCP_WIF_PROVIDER`
-- `GCP_DEPLOY_SA`
-
 ## Built without live keys
 
 - Catalog, pay dry-run ledger, orders, quotes, credit-note preview, retainers
 - `js/checkout-gate.js` refuses agent checkout without `confirm=true`
 - Worker dry-run when `STRIPE_SECRET_KEY` is absent
-- Operator board: `readiness.html` (names only)
-- Weekday automations already scheduled for dry-run site work
+- Operator pages: `readiness.html`, `gcp-access.html`
+- Weekday automation scheduled for dry-run site work
 
 ## Still waiting
 

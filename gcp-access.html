@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GCP access — AI Pharma Developments</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="assets/favicon.svg">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">AI Pharma Developments</a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Menu">Menu</button>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="pay.html">Pay</a>
+      <a href="readiness.html">Readiness</a>
+      <a href="support.html">Support</a>
+    </nav>
+  </header>
+  <main class="page">
+    <h1>GCP access privileges</h1>
+    <p>Least-privilege plan only. Nothing in this page creates IAM bindings. Bootstrap runs after an authenticated <code>gcloud</code> session and a real project id.</p>
+    <section>
+      <h2>Not applied yet</h2>
+      <ul>
+        <li><code>apd-payment-sa</code> — secretAccessor, logWriter, run.invoker</li>
+        <li><code>apd-deploy-sa</code> — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser</li>
+        <li>WIF pool <code>github-apd</code> bound only to <code>windsorroyalapps/ai-pharma-developments</code></li>
+        <li>Secret shells, no versions: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key</li>
+        <li>Region <code>australia-southeast1</code>, Artifact Registry <code>apd-repo</code></li>
+      </ul>
+      <p>Runtime SA never gets Owner or Editor. No JSON keys in git. ID documents stay out of git, skills, and chat.</p>
+    </section>
+    <section>
+      <h2>Operator commands</h2>
+      <pre>gcloud auth login --no-launch-browser
+gcloud auth application-default login --no-launch-browser
+gcloud config set project PROJECT_ID
+gcloud config set compute/region australia-southeast1
+bash cloud/iam/bootstrap.sh
+bash cloud/automation/apply-after-auth.sh
+bash cloud/iam/print-github-vars.sh</pre>
+    </section>
+    <section>
+      <h2>GitHub Actions variables after bootstrap</h2>
+      <ul>
+        <li>GCP_PROJECT_ID</li>
+        <li>GCP_REGION = australia-southeast1</li>
+        <li>GCP_WIF_PROVIDER</li>
+        <li>GCP_DEPLOY_SA</li>
+      </ul>
+    </section>
+  </main>
+  <script src="js/site.js"></script>
+</body>
+</html>

@@ -1,10 +1,10 @@
 # Next operator actions
 
-Rechecked 2026-10-09 16:12 AEDT. IAM was not mutated. gcloud is installed in this sandbox. `gcloud auth list` reports no credentialed accounts. Project unset. Bootstrap was not run.
+Rechecked 2026-10-09 20:11 AEDT. IAM was not mutated. gcloud 588.0.0 is installed at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. Project unset. `cloud/iam/bootstrap.sh` was not run.
 
-Do not paste a verification code or ID documents into this chat. Authenticate on a machine you control. Complete Stripe identity verification in the Stripe Dashboard. Do not store ID images in git or skills.
+A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. That URL is bound to the dead sandbox process and must not be reused. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code or ID documents into chat.
 
-Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No additional payment skill is required. Live Stripe stays blocked until identity verification is finished and you explicitly say live.
+Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No additional payment skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard and you explicitly say live.
 
 ## 1. Authenticate, then bootstrap
 
@@ -18,8 +18,6 @@ bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
 bash cloud/iam/print-github-vars.sh
 ```
-
-Reply with the project id only if you want bootstrap run in a session that already has an active account.
 
 Bootstrap creates (least privilege, no Owner, no JSON keys):
 
@@ -45,4 +43,4 @@ node tools/support-queue.js
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
 ```
 
-Agent rows without `confirm=true` are refused. Charged stays 0. Readiness board: `readiness.html`. Support preview: `support.html`.
+Operator page: `gcp-access.html`. Readiness board: `readiness.html`. Agent rows without `confirm=true` are refused. Charged stays 0.
