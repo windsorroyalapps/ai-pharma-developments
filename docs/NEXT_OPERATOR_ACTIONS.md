@@ -1,10 +1,10 @@
 # Next operator actions
 
-Rechecked 2026-10-09 13:11 AEDT. IAM was not mutated. No credentialed gcloud account. Project unset. Bootstrap was not run.
+Rechecked 2026-10-09 14:12 AEDT. IAM was not mutated. gcloud is installed in this sandbox. `gcloud auth list` reports no credentialed accounts. Project unset. Bootstrap was not run.
 
-Do not paste a verification code into this chat. The sandbox login exits with EOF. Authenticate on a machine you control.
+Do not paste a verification code or ID documents into this chat. Authenticate on a machine you control. Complete Stripe identity verification in the Stripe Dashboard. Do not store ID images in git or skills.
 
-Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
+Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. Live Stripe stays blocked until identity verification is finished and you explicitly say live.
 
 ## 1. Authenticate, then bootstrap
 
@@ -41,7 +41,8 @@ Bootstrap creates (least privilege, no Owner, no JSON keys):
 node tools/run-local-automation.js
 node tools/evidence-queue.js
 node tools/webhook-event-dry-run.js
+node tools/support-queue.js
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
 ```
 
-Agent rows without `confirm=true` are refused. Charged stays 0. Readiness board: `readiness.html`.
+Agent rows without `confirm=true` are refused. Charged stays 0. Readiness board: `readiness.html`. Support preview: `support.html`.
