@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-09 10:12 AEDT. IAM was not mutated. Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. Bootstrap and apply-after-auth were not run.
+Rechecked 2026-10-09 11:17 AEDT. IAM was not mutated. Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. Bootstrap and apply-after-auth were not run.
 
 A login URL from this sandbox exits with EOF before it can accept a verification code. Do not paste a code here. Authenticate on a machine you control.
 
@@ -38,6 +38,7 @@ Bootstrap creates (least privilege, no Owner, no JSON keys):
 ## 3. Local automation (no charge)
 
 ```bash
+node tools/run-local-automation.js
 node tools/webhook-event-dry-run.js
 node tools/webhook-event-dry-run.js cloud/automation/webhook-dry-run.jsonl --agent
 node tools/webhook-event-dry-run.js cloud/automation/webhook-dry-run.jsonl --agent --confirm

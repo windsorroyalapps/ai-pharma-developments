@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-09 10:16 AEDT
+# Payment and GCP status — 2026-10-09 11:17 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
@@ -6,7 +6,9 @@ Identity documents stay out of git, skills, and chat. Live charges stay blocked 
 
 ## Blocker
 
-`gcloud` is not on PATH in this session and `/root/google-cloud-sdk/bin/gcloud` is absent. No credentialed account. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
+Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
+
+A `--no-launch-browser` login in this sandbox exits with EOF before a verification code can be entered. Authenticate on a machine you control, then reply with the project id only.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -45,6 +47,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - `js/checkout-gate.js` shared confirm gate. Agent source without `confirm=true` is refused. `charged` stays false.
 - Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent; live keys force dry-run unless `STRIPE_LIVE_OK=1`
 - Public operator board at `status.html` (secret names only; `tools/readiness-board-check.js`)
+- Local chain: `node tools/run-local-automation.js` (no Stripe call, no GCP mutation)
 
 ## Still waiting
 
