@@ -1,14 +1,14 @@
-# Payment and GCP status — 2026-10-09 13:11 AEDT
+# Payment and GCP status — 2026-10-09 16:12 AEDT
 
-Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
+Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Payment and Stripe skills already cover Checkout, webhooks, Google Pay, the ledger, and the agent `confirm=true` gate.
 
-Identity documents stay out of git, skills, and chat. Live charges stay blocked until the operator says live and keys are confirmed.
+Identity documents stay out of git, skills, and chat. Complete Stripe identity verification in the Stripe Dashboard only. Live charges stay blocked until the operator says live and keys are confirmed.
 
 ## Blocker
 
 Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
 
-A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code into chat.
+A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. That URL is bound to the dead sandbox process and must not be reused. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code into chat.
 
 ```bash
 gcloud auth login --no-launch-browser

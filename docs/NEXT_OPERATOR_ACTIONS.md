@@ -1,10 +1,10 @@
 # Next operator actions
 
-Rechecked 2026-10-09 14:12 AEDT. IAM was not mutated. gcloud is installed in this sandbox. `gcloud auth list` reports no credentialed accounts. Project unset. Bootstrap was not run.
+Rechecked 2026-10-09 16:12 AEDT. IAM was not mutated. gcloud is installed in this sandbox. `gcloud auth list` reports no credentialed accounts. Project unset. Bootstrap was not run.
 
 Do not paste a verification code or ID documents into this chat. Authenticate on a machine you control. Complete Stripe identity verification in the Stripe Dashboard. Do not store ID images in git or skills.
 
-Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. Live Stripe stays blocked until identity verification is finished and you explicitly say live.
+Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No additional payment skill is required. Live Stripe stays blocked until identity verification is finished and you explicitly say live.
 
 ## 1. Authenticate, then bootstrap
 
