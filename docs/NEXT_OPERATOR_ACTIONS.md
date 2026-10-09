@@ -1,10 +1,10 @@
 # Next operator actions
 
-Rechecked 2026-10-09 11:17 AEDT. IAM was not mutated. Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. Bootstrap and apply-after-auth were not run.
+Rechecked 2026-10-09 12:16 AEDT. IAM was not mutated. No credentialed gcloud account. Project unset. Bootstrap was not run.
 
-A login URL from this sandbox exits with EOF before it can accept a verification code. Do not paste a code here. Authenticate on a machine you control.
+Do not paste a verification code into this chat. The sandbox login exits with EOF. Authenticate on a machine you control.
 
-Skills already on the agent: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
+Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard. Do not send ID documents into git, skills, or chat.
 
 ## 1. Authenticate, then bootstrap
 
@@ -39,13 +39,9 @@ Bootstrap creates (least privilege, no Owner, no JSON keys):
 
 ```bash
 node tools/run-local-automation.js
+node tools/evidence-queue.js
 node tools/webhook-event-dry-run.js
-node tools/webhook-event-dry-run.js cloud/automation/webhook-dry-run.jsonl --agent
-node tools/webhook-event-dry-run.js cloud/automation/webhook-dry-run.jsonl --agent --confirm
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
-node tools/adjustment-queue.js cloud/automation/sample-adjustments.json
-node tools/ledger-summary.js
-node cloud/worker/dry-run-server.js
 ```
 
-Agent rows without `confirm=true` are refused. Credit notes and adjustments set `refunded: false` and do not call Stripe.
+Agent rows without `confirm=true` are refused. Charged stays 0.

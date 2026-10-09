@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ev_001",
+    "question": "Which approved sources support this target?",
+    "sources": ["internal-protocol", "published-literature"],
+    "reviewer": "unassigned",
+    "confirm": true
+  },
+  {
+    "id": "ev_002",
+    "question": "Agent-proposed literature pull",
+    "sources": ["published-literature"],
+    "reviewer": "agent",
+    "confirm": false
+  }
+]

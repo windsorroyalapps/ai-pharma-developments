@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-09 11:17 AEDT
+# Payment and GCP status — 2026-10-09 12:16 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
@@ -6,9 +6,9 @@ Identity documents stay out of git, skills, and chat. Live charges stay blocked 
 
 ## Blocker
 
-Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. ADC is missing. IAM was not mutated. `cloud/iam/bootstrap.sh` and `cloud/automation/apply-after-auth.sh` were not run. Do not treat any service account, WIF pool, or secret as created. Do not invent a project id.
+Google Cloud SDK is installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run. Do not treat any service account, WIF pool, or secret as created.
 
-A `--no-launch-browser` login in this sandbox exits with EOF before a verification code can be entered. Authenticate on a machine you control, then reply with the project id only.
+A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. Authenticate on a machine you control, then reply with the project id only.
 
 ```bash
 gcloud auth login --no-launch-browser
@@ -31,7 +31,7 @@ bash cloud/iam/print-github-vars.sh
 
 Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
-## GitHub Actions variables the operator must set after bootstrap
+## GitHub Actions variables after bootstrap
 
 - `GCP_PROJECT_ID`
 - `GCP_REGION` = `australia-southeast1`
@@ -40,18 +40,15 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 ## Built without live keys
 
-- Catalog, pay dry-run ledger, orders page with JSONL export and import
-- Quote builder at `quotes.html`
-- Credit-note preview at `adjustments.html` (no Stripe refund)
-- Batch adjustment queue refuses agent rows without confirm=true; charged=0, refunded=0
-- `js/checkout-gate.js` shared confirm gate. Agent source without `confirm=true` is refused. `charged` stays false.
-- Worker dry-run sessions when `STRIPE_SECRET_KEY` is absent; live keys force dry-run unless `STRIPE_LIVE_OK=1`
-- Public operator board at `status.html` (secret names only; `tools/readiness-board-check.js`)
-- Local chain: `node tools/run-local-automation.js` (no Stripe call, no GCP mutation)
+- Catalog, pay dry-run ledger, orders, quotes, credit-note preview, retainers
+- `js/checkout-gate.js` refuses agent checkout without `confirm=true`
+- Worker dry-run when `STRIPE_SECRET_KEY` is absent
+- Local evidence queue: `node tools/evidence-queue.js` (agent rows without confirm are refused; charged stays 0)
+- Weekday automation `apd-site-automation` continues dry-run site work
 
 ## Still waiting
 
 - Operator GCP login and a real project id
 - Stripe identity in Dashboard only
-- Test key versions in Secret Manager via `cloud/iam/add-test-secrets.sh`
+- Test key versions via `cloud/iam/add-test-secrets.sh`
 - Live mode only after an explicit operator confirmation
