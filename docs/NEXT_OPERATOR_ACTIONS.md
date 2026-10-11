@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-12 09:00 AEDT. IAM was not mutated. gcloud is installed at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. Project unset. `cloud/iam/bootstrap.sh` was not run.
+Rechecked 2026-10-12 ~09:00 AEDT. IAM was not mutated. gcloud is installed at `/root/google-cloud-sdk`. `gcloud auth list` reports no credentialed accounts. Project unset. `cloud/iam/bootstrap.sh` was not run.
 
 A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. That URL is bound to the dead sandbox process and must not be reused. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code or ID documents into chat.
 
@@ -46,3 +46,5 @@ node tools/checkout-gate-check.js
 ```
 
 Operator page: `gcp-access.html`. Readiness board: `readiness.html`. Agent rows without `confirm=true` are refused. Charged stays 0.
+
+See also `docs/PAYMENT_FLOW.md` for the gated checkout path and dry-run guarantees.
