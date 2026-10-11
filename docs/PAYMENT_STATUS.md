@@ -29,6 +29,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Operator pages: `readiness.html`, `gcp-access.html`
 - Local automation dry-runs ready (`tools/`, `cloud/automation/`)
 - Agent orders, invoice-preview, intake, and credit-note all refuse without `confirm=true` when source=agent and force `charged: false`
+- Detailed gated flow: `docs/PAYMENT_FLOW.md`
 
 ## Still waiting
 
