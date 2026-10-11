@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-10 22:15 AEDT
+# Payment and GCP status — 2026-10-12 09:00 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
 
@@ -8,9 +8,7 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity v
 
 Google Cloud SDK installed at `/root/google-cloud-sdk`. `gcloud auth list` shows no credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
 
-Sandbox login cannot accept the verification code (EOF). Authenticate on a machine you control, then reply with the project id only.
-
-Auth URL generated (one-time, do not reuse if expired): https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=wDqojmXX5VMzgiKPGxSmJvCEBxKoFA&prompt=consent&token_usage=remote&access_type=offline&code_challenge=dyGt4m4164_nE0IMSha_e-u6qHOH47CaTpkMlfKGJls&code_challenge_method=S256
+Sandbox login cannot accept the verification code (EOF). Authenticate on a machine you control, then reply with the project id only. Do not paste verification codes or ID documents into chat.
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -27,9 +25,10 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 
 - Catalog, pay dry-run ledger, orders, quotes, credit-note preview, retainers
 - `js/checkout-gate.js` refuses agent checkout without `confirm=true`
-- Worker dry-run when `STRIPE_SECRET_KEY` is absent
+- Worker dry-run when `STRIPE_SECRET_KEY` is absent; live keys force dry-run unless `STRIPE_LIVE_OK=1`
 - Operator pages: `readiness.html`, `gcp-access.html`
-- Local automation dry-runs ready
+- Local automation dry-runs ready (`tools/`, `cloud/automation/`)
+- Agent orders, invoice-preview, intake, and credit-note all refuse without `confirm=true` when source=agent and force `charged: false`
 
 ## Still waiting
 
