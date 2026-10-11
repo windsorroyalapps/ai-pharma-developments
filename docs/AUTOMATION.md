@@ -17,6 +17,7 @@
 - Ledger summary: `node tools/ledger-summary.js` over `.apd-ledger` (gitignored)
 - Agent order contract: `confirm=true` required, never charges from the agent path
 - Consult form falls back to mailto until `INTAKE_URL` is a real worker URL
+- Agent order simulator: `node tools/agent-order-dry-run.js` (enforces gate, charged=false)
 
 ## After operator auth
 
