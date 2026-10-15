@@ -36,7 +36,7 @@ function readJsonl(file) {
 function summarizeDir(dir) {
   const root = dir || process.env.APD_LEDGER_DIR;
   if (!root || !fs.existsSync(root)) {
-    return { files: 0, rows: 0, queued: 0, refused: 0, charged: 0, live_charges: false };
+    return { files: 0, rows: 0, queued: 0, refused: 0, charged: 0, live_charges: false, credit_notes: 0, intakes: 0 };
   }
   const files = fs.readdirSync(root).filter((name) => name.endsWith('.jsonl'));
   const rows = files.flatMap((name) => readJsonl(path.join(root, name)));
@@ -44,8 +44,10 @@ function summarizeDir(dir) {
     dir: root,
     files: files.length,
     rows: rows.length,
-    queued: rows.filter((row) => row.ok === true || row.status === 'queued' || row.event === 'dry_run_session').length,
-    refused: rows.filter((row) => row.status === 'refused' || row.ok === false).length,
+    queued: rows.filter((row) => row.ok === true || row.status === 'queued' || row.event === 'dry_run_session' || row.event === 'agent_order_queued').length,
+    refused: rows.filter((row) => row.status === 'refused' || row.ok === false || (row.reason && String(row.reason).includes('confirm=true'))).length,
+    credit_notes: rows.filter((row) => row.event === 'credit_note_preview').length,
+    intakes: rows.filter((row) => row.event === 'consult_intake' || row.event === 'consult_intake_fallback').length,
     charged: 0,
     live_charges: false,
   };
