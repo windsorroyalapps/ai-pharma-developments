@@ -3,14 +3,15 @@
   var board = {
     live_charges: false,
     confirm_gate: true,
-    checked_at: '2026-10-09T13:11:00+10:00',
+    checked_at: '2026-10-16T09:10:00+10:00',
     secret_names: ['stripe-secret-key', 'stripe-webhook-secret', 'stripe-publishable-key'],
     github_actions_vars: ['GCP_PROJECT_ID', 'GCP_REGION', 'GCP_WIF_PROVIDER', 'GCP_DEPLOY_SA'],
     blockers: [
-      'gcloud auth: no credentialed account in this sandbox; project unset; IAM not mutated',
+      'gcloud auth: no credentialed account in this sandbox (Cloud SDK 589.0.0 installed); project unset; IAM not mutated',
       'Sandbox login exits with EOF. Authenticate on a machine you control, then reply with the project id only.',
       'GitHub Actions vars unset until bootstrap: GCP_PROJECT_ID, GCP_REGION, GCP_WIF_PROVIDER, GCP_DEPLOY_SA',
-      'Secret Manager versions missing: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key'
+      'Secret Manager versions missing: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key',
+      'Stripe Dashboard identity verification still required before any live keys'
     ]
   };
   var list = document.getElementById('blocker-list');
@@ -21,5 +22,5 @@
     li.textContent = item;
     list.appendChild(li);
   });
-  live.textContent = 'Checked ' + board.checked_at + '. live_charges=' + board.live_charges + '. Agent checkout requires confirm=true. Region default australia-southeast1.';
+  live.textContent = 'Checked ' + board.checked_at + '. live_charges=' + board.live_charges + '. Agent checkout requires confirm=true. Region default australia-southeast1. Dry-run ledger, gate, health, and intake fallback ready.';
 })();

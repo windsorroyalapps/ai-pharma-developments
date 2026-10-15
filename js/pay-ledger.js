@@ -17,7 +17,13 @@
       return row.event === 'local_dry_run_refused' || row.event === 'gpay_dry_run_refused' || (row.confirm === false && row.source === 'agent');
     }).length;
     var confirmed = rows.filter(function (row) { return row.confirm === true; }).length;
-    summary.textContent = rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · dry-run only';
+    var cents = rows.reduce(function (sum, row) {
+      if (Number.isInteger(row.amount_cents)) return sum + row.amount_cents;
+      if (row.amount_aud != null) return sum + Math.round(Number(row.amount_aud) * 100);
+      return sum;
+    }, 0);
+    var aud = (cents / 100).toFixed(2);
+    summary.textContent = rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · dry-run only';
     list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet.';
   }
 

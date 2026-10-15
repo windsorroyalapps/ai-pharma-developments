@@ -13,7 +13,12 @@
   function saveLocal(payload) {
     var rows = [];
     try { rows = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { rows = []; }
-    rows.push(Object.assign({ ts: new Date().toISOString(), charged: false, channel: 'local_fallback' }, payload));
+    rows.push(Object.assign({
+      ts: new Date().toISOString(),
+      charged: false,
+      channel: 'local_fallback',
+      event: 'consult_intake_fallback'
+    }, payload));
     localStorage.setItem(KEY, JSON.stringify(rows.slice(-30)));
     return rows.length;
   }
@@ -45,7 +50,7 @@
     var endpoint = window.INTAKE_URL || '';
     var placeholder = !endpoint || endpoint.indexOf('YOUR-CLOUD-RUN-URL') !== -1;
     if (placeholder) {
-      show('Saved locally (' + saved + '). Worker not deployed. Opening email draft.');
+      show('Saved locally (' + saved + '). Worker not deployed. Opening email draft. No charge.');
       mailto(payload);
       return;
     }

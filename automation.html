@@ -98,8 +98,9 @@
       localStorage.setItem(KEY, JSON.stringify(kept));
       document.getElementById('queue').textContent = JSON.stringify(kept, null, 2);
       var queued = kept.filter(function (row) { return row.confirm === true || row.type === 'consult_intake'; }).length;
+      var refused = kept.filter(function (row) { return row.type === 'agent_order_refused' || row.confirm === false; }).length;
       document.getElementById('queue-summary').textContent =
-        kept.length + ' rows · ' + queued + ' queued · charged: 0 · live charges blocked';
+        kept.length + ' rows · ' + queued + ' queued · ' + refused + ' refused · charged: 0 · live charges blocked';
     }
     function fillSku(item) {
       document.getElementById('sku').value = item.sku;
@@ -122,12 +123,36 @@
       var url = document.getElementById('health-url').value;
       var out = document.getElementById('health-out');
       if (!url || url.indexOf('YOUR-CLOUD-RUN-URL') !== -1) {
-        out.textContent = JSON.stringify({ ok: false, idle: true, dry_run: true, live_charges: false, confirm_gate: true, note: 'Cloud Run URL not set' }, null, 2);
+        out.textContent = JSON.stringify({
+          ok: false,
+          idle: true,
+          dry_run: true,
+          live_charges: false,
+          confirm_gate: true,
+          service: 'apd-payment-worker',
+          note: 'Cloud Run URL not set. Local gate and ledger still enforced.'
+        }, null, 2);
         return;
       }
       out.textContent = 'Checking...';
-      fetch(url).then(function (r) { return r.text(); }).then(function (t) { out.textContent = t; }).catch(function (err) {
-        out.textContent = 'Worker unreachable. Local confirm gate still enforced. ' + err;
+      fetch(url).then(function (r) { return r.text(); }).then(function (t) {
+        try {
+          var parsed = JSON.parse(t);
+          parsed.checked_at = new Date().toISOString();
+          out.textContent = JSON.stringify(parsed, null, 2);
+        } catch (e) {
+          out.textContent = t;
+        }
+      }).catch(function (err) {
+        out.textContent = JSON.stringify({
+          ok: false,
+          unreachable: true,
+          dry_run: true,
+          live_charges: false,
+          confirm_gate: true,
+          error: String(err),
+          note: 'Worker unreachable. Local confirm gate still enforced.'
+        }, null, 2);
       });
     });
     document.getElementById('intake-form').addEventListener('submit', function (event) {
@@ -151,13 +176,27 @@
       event.preventDefault();
       var data = new FormData(event.target);
       var status = document.getElementById('agent-status');
-      if (data.get('confirm') !== 'true') {
-        status.textContent = 'Refused: agent orders require confirm=true. No row queued.';
+      var amount = Number(data.get('amount_cents'));
+      var confirmed = data.get('confirm') === 'true';
+      if (!confirmed) {
+        var rows = load();
+        rows.push({
+          type: 'agent_order_refused',
+          ts: new Date().toISOString(),
+          sku: String(data.get('sku') || ''),
+          description: String(data.get('description') || ''),
+          amount_cents: Number.isInteger(amount) ? amount : null,
+          confirm: false,
+          reason: 'agent orders require confirm=true',
+          charged: false,
+          fulfilled: false
+        });
+        save(rows);
+        status.textContent = 'Refused: agent orders require confirm=true. Refusal logged. No charge.';
         return;
       }
-      var amount = Number(data.get('amount_cents'));
       if (!Number.isInteger(amount) || amount < 100) {
-        status.textContent = 'Refused: amount_cents must be an integer >= 100.';
+        status.textContent = 'Refused: amount_cents must be an integer >= 100. No row queued.';
         return;
       }
       var rows = load();

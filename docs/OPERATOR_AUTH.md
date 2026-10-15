@@ -1,6 +1,6 @@
 # Operator auth — unblock GCP privileges
 
-Sandbox state on 2026-10-07: Cloud SDK 588.0.0 installed. `gcloud auth list` shows no credentialed accounts. ADC missing. IAM was not mutated.
+Sandbox state on 2026-10-16: Cloud SDK 589.0.0 installed. `gcloud auth list` shows no credentialed accounts. Project unset. IAM was not mutated. Bootstrap and apply-after-auth scripts not executed.
 
 ## Login (operator machine or this session)
 
@@ -24,6 +24,10 @@ Paste the verification code back in chat after the login URL. Do not paste refre
 
 WIF pool `github-apd` binds `windsorroyalapps/ai-pharma-developments` to `apd-deploy-sa`. No JSON keys. Runtime SA is not Owner.
 
+After bootstrap, report SA emails and WIF provider resource name.
+
 ## Stripe
 
-Test secret versions only until Dashboard identity verification. Do not commit ID documents. Skills: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
+Test secret versions only until Dashboard identity verification. Do not commit ID documents or secret key values. Skills: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`.
+
+Dry-run features (pay.html ledger with AUD preview, automation.html confirm=true gate with refusal logging, worker health probe, consult intake local fallback) are ready and do not charge.
