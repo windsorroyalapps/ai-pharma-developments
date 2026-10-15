@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-15 ~10:13 AEDT. IAM was not mutated. gcloud is installed in this sandbox at `$HOME/google-cloud-sdk` (v589). `gcloud auth list` reports no credentialed accounts. Project unset. `cloud/iam/bootstrap.sh` was not run.
+Rechecked 2026-10-16 09:00 AEDT. IAM was not mutated. gcloud command not found in this sandbox session (no SDK present). Project unset. `cloud/iam/bootstrap.sh` was not run.
 
 A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. That URL is bound to the dead sandbox process and must not be reused. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code or ID documents into chat.
 
