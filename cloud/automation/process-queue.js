@@ -74,6 +74,27 @@ function processItem(item) {
       mode: 'dry_run',
     };
   }
+  if (type === 'subscription_preview') {
+    const amount = Number(item.amount_cents);
+    if (!Number.isInteger(amount) || amount < 100) {
+      return { ok: false, status: 'invalid', reason: 'subscription_preview requires amount_cents integer >= 100', charged: false };
+    }
+    return {
+      ok: true,
+      status: 'preview',
+      type: 'subscription_preview',
+      id: 'sub_preview_' + crypto.randomBytes(4).toString('hex'),
+      sku: item.sku || null,
+      amount_cents: amount,
+      interval: item.interval || 'month',
+      email: item.email || null,
+      source,
+      confirm: item.confirm === true,
+      charged: false,
+      billed: false,
+      mode: 'dry_run',
+    };
+  }
   const amount = Number(item.amount_cents);
   if (!Number.isInteger(amount) || amount < 100) {
     return { ok: false, status: 'invalid', reason: 'amount_cents must be integer >= 100', charged: false };

@@ -29,6 +29,14 @@
     "source": "website"
   },
   {
+    "type": "subscription_preview",
+    "sku": "agent-retainer",
+    "amount_cents": 50000,
+    "interval": "month",
+    "email": "ops@example.com",
+    "source": "website"
+  },
+  {
     "sku": "agent-retainer",
     "amount_cents": 50000,
     "currency": "aud",
