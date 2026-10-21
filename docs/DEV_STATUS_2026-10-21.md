@@ -3,7 +3,7 @@
 ## GCP access
 - Google Cloud SDK 590.0.0 installed in sandbox.
 - No active credentials. Project unset.
-- Operator must authenticate on a controlled machine (`gcloud auth login --no-launch-browser`), set project ID, then run `cloud/iam/bootstrap.sh`.
+- Auth login URL generated (sandbox EOF expected). Operator must complete auth on controlled machine, set project ID, then run `cloud/iam/bootstrap.sh`.
 - Least-privilege SAs, WIF, secret shells defined. No mutations performed.
 
 ## Payments / Stripe
