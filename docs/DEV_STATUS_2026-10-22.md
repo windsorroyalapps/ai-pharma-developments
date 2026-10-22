@@ -1,7 +1,7 @@
 # Development status — 2026-10-22
 
 ## GCP access privileges
-- gcloud SDK installed in sandbox session.
+- gcloud SDK installed in sandbox session (Google Cloud SDK 590.0.0).
 - No active account. Auth URL generated but sandbox process cannot accept verification code (EOF).
 - Operator must authenticate on a controlled machine:
   ```
