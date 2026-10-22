@@ -1,14 +1,24 @@
-# Payment and GCP status — 2026-10-16 09:15 AEDT
+# Payment and GCP status — 2026-10-22 20:11 AEDT
 
-Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required.
+Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required for payment API or Stripe integration.
 
-Identity documents stay out of git, skills, and chat. Complete Stripe identity verification in the Stripe Dashboard only. Live charges stay blocked until the operator says live and keys are confirmed.
+Identity documents stay out of git, skills, and chat. Complete Stripe identity verification in the Stripe Dashboard only. Live charges stay blocked until the operator says live and keys are confirmed. Provide ID documents when ready for Stripe access.
 
 ## Blocker
 
-Google Cloud SDK is not present in this sandbox session (`gcloud` command not found; no `/root/google-cloud-sdk` or PATH entry). No credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
+Google Cloud SDK 590.0.0 is installed in this session. No credentialed accounts (`gcloud auth list` empty). Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
 
-Sandbox login cannot accept the verification code (EOF). Authenticate on a machine you control, then reply with the project id only. Do not paste verification codes or ID documents into chat.
+Auth login URL was generated but sandbox cannot accept verification code (EOF expected). Authenticate on a machine you control:
+```bash
+gcloud auth login --no-launch-browser
+gcloud auth application-default login --no-launch-browser
+gcloud config set project YOUR_PROJECT_ID
+gcloud config set compute/region australia-southeast1
+bash cloud/iam/bootstrap.sh
+bash cloud/automation/apply-after-auth.sh
+bash cloud/iam/print-github-vars.sh
+```
+Then reply with the project id only. Do not paste verification codes or ID documents into chat.
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -39,3 +49,5 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Stripe identity in Dashboard only (provide ID docs when ready)
 - Test key versions via `cloud/iam/add-test-secrets.sh`
 - Live mode only after an explicit operator confirmation
+
+Site and automation features continue in dry-run mode.
