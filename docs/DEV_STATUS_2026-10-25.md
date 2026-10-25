@@ -1,8 +1,8 @@
-# Development status — 2026-10-25
+# Development status — 2026-10-25 (session update)
 
 ## GCP access privileges
-- gcloud SDK 590.0.1 installed in this session. No credentialed accounts. Project unset.
-- Sandbox cannot complete interactive auth (EOF on verification code). Operator must authenticate on a controlled machine:
+- gcloud SDK 590.0.1 installed. No credentialed accounts. Project unset.
+- Auth login URL generated this session (sandbox EOF on code entry expected). Operator must complete auth on controlled machine:
   ```bash
   gcloud auth login --no-launch-browser
   gcloud auth application-default login --no-launch-browser
@@ -12,19 +12,19 @@
   bash cloud/automation/apply-after-auth.sh
   bash cloud/iam/print-github-vars.sh
   ```
-- Reply with PROJECT_ID only after auth. Least-privilege bootstrap ready (apd-payment-sa, apd-deploy-sa, WIF github-apd). No Owner/Editor, no JSON keys, no mutations performed. Do not invent project IDs.
+- Reply with PROJECT_ID only. Least-privilege bootstrap ready (apd-payment-sa, apd-deploy-sa, WIF github-apd). No Owner/Editor, no JSON keys, no mutations. Do not invent project IDs.
 
 ## Payment API & Stripe
-- Existing skills (payment-api, stripe, stripe-full, apd-gcp-access, gcloud) cover all requirements. No new skills created.
-- Dry-run fully operational: confirm=true gate enforced everywhere, local ledgers, charged always 0. Test keys can be added to Secret Manager shells after bootstrap.
-- Live mode waits for Stripe identity verification in Dashboard. Provide ID documents when ready; never store them in git, skills, or chat.
+- Skills present and sufficient: payment-api, stripe, stripe-full, apd-gcp-access, gcloud. No new skills required.
+- Dry-run operational: confirm=true gate, local ledgers, charged=0. Test keys after bootstrap via add-test-secrets.sh.
+- Live mode blocked until Stripe Dashboard identity verification. Provide ID documents when ready (never in git/skills/chat).
 
-## Site & automation features (continued without live keys)
-- All pages, worker dry-run, local automation tools, and gated flows remain ready.
-- Expanded status tracking and future improvement notes.
-- Background: continue automation for site features; avatar interface noted as future.
+## Site & automation features (continued)
+- All pages, worker dry-run, local tools, gated flows ready.
+- Status tracking updated.
+- Future: xAI-powered realistic 3D avatar interface (background automation noted).
 
-Next: operator auth + PROJECT_ID → bootstrap → test secrets → deploy worker → set GitHub Actions vars.
+Next: operator auth + PROJECT_ID → bootstrap → test secrets → deploy → GitHub Actions vars.
 Charged = 0 until explicit live confirmation.
 
-Future improvement log: multi-currency beyond AUD, subscription mode, Firestore ledger migration, xAI-powered avatar interface for operator chat.
+Future improvement log: multi-currency, subscriptions, Firestore ledger, Hugging Face video gen integration for demos, realistic 3D avatar for operator interface.
