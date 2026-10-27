@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-22 20:11 AEDT
+# Payment and GCP status — 2026-10-28 09:08 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required for payment API or Stripe integration.
 
@@ -6,19 +6,20 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity v
 
 ## Blocker
 
-Google Cloud SDK 590.0.0 is installed in this session. No credentialed accounts (`gcloud auth list` empty). Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
+This sandbox session: `gcloud` command not found (SDK not installed). No credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
 
-Auth login URL was generated but sandbox cannot accept verification code (EOF expected). Authenticate on a machine you control:
+Authenticate on a machine you control (do not use a sandbox-generated URL):
 ```bash
 gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
 gcloud config set project YOUR_PROJECT_ID
 gcloud config set compute/region australia-southeast1
+bash cloud/iam/auth-status.sh
 bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
 bash cloud/iam/print-github-vars.sh
 ```
-Then reply with the project id only. Do not paste verification codes or ID documents into chat.
+Then reply with the project id only. Do not paste verification codes, ID documents, or keys into chat.
 
 ## Least privilege bootstrap will create (not yet applied)
 
@@ -39,15 +40,16 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Operator pages: `readiness.html`, `gcp-access.html`, enhanced `automation.html`
 - Local automation dry-runs ready (`tools/`, `cloud/automation/`)
 - Agent orders, invoice-preview, intake, and credit-note all refuse without `confirm=true` when source=agent and force `charged: false`
-- Ledger summary now tracks credit notes and intakes separately; charged always 0
+- Ledger summary tracks credit notes, intakes, queues; charged always 0
 - Detailed gated flow: `docs/PAYMENT_FLOW.md`
 - Ledger remains append-only with forced `charged: false`
+- New: queue gate health check in tools/
 
 ## Still waiting
 
-- Operator GCP login and a real project id
+- Operator GCP login and a real project id (never invent one)
 - Stripe identity in Dashboard only (provide ID docs when ready)
 - Test key versions via `cloud/iam/add-test-secrets.sh`
 - Live mode only after an explicit operator confirmation
 
-Site and automation features continue in dry-run mode.
+Site and automation features continue in dry-run mode. No secrets committed.
