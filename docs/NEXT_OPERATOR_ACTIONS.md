@@ -1,8 +1,8 @@
 # Next operator actions
 
-Rechecked 2026-10-16 09:15 AEDT. IAM was not mutated. gcloud command not found in this sandbox session (no SDK present). Project unset. `cloud/iam/bootstrap.sh` was not run.
+Rechecked 2026-10-28 09:08 AEDT. IAM was not mutated. `gcloud` command not found in this sandbox session (SDK not installed). Project unset. `cloud/iam/bootstrap.sh` was not run.
 
-A `--no-launch-browser` login in this sandbox prints a one-time URL, then exits with EOF before a verification code can be entered. That URL is bound to the dead sandbox process and must not be reused. Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code or ID documents into chat.
+Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code, ID documents, or any keys into chat. A sandbox-generated login URL cannot be completed here.
 
 Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No additional payment skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard and you explicitly say live. Provide ID documents when ready for Stripe access.
 
@@ -43,9 +43,10 @@ node tools/support-queue.js
 node cloud/automation/process-queue.js cloud/automation/sample-queue.json
 node tools/dry-run-check.js
 node tools/checkout-gate-check.js
+node tools/queue-gate-check.js
 node tools/ledger-summary.js
 ```
 
 Operator page: `gcp-access.html`. Readiness board: `readiness.html`. Automation console: `automation.html`. Agent rows without `confirm=true` are refused. Charged stays 0.
 
-See also `docs/PAYMENT_FLOW.md` for the gated checkout path and dry-run guarantees. Site features for automation (catalog, orders, quotes, credit notes, intake, fulfillment dry-runs) are ready for further development without live keys. Continue expanding dry-run hooks and local ledgers.
+See also `docs/PAYMENT_FLOW.md` for the gated checkout path and dry-run guarantees. Site features for automation (catalog, orders, quotes, credit notes, intake, fulfillment dry-runs) are ready for further development without live keys. Continue expanding dry-run hooks, local ledgers, and confirm=true gates.
