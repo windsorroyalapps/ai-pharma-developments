@@ -18,6 +18,7 @@
 - Agent order contract: `confirm=true` required, never charges from the agent path
 - Consult form falls back to mailto until `INTAKE_URL` is a real worker URL
 - Agent order simulator: `node tools/agent-order-dry-run.js` (enforces gate, charged=false)
+- Queue gate check: `node tools/queue-gate-check.js` (validates sample queue confirm=true / charged=false)
 
 ## After operator auth
 
