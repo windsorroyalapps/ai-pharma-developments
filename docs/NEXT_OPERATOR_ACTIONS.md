@@ -1,8 +1,8 @@
 # Next operator actions
 
-Rechecked 2026-10-28 09:08 AEDT. IAM was not mutated. `gcloud` command not found in this sandbox session (SDK not installed). Project unset. `cloud/iam/bootstrap.sh` was not run.
+Rechecked 2026-10-28 21:15 AEDT. IAM was not mutated. Google Cloud SDK 591.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run.
 
-Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code, ID documents, or any keys into chat. A sandbox-generated login URL cannot be completed here.
+Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code, ID documents, or any keys into chat.
 
 Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No additional payment skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard and you explicitly say live. Provide ID documents when ready for Stripe access.
 
