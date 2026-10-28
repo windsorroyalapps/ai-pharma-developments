@@ -2,20 +2,25 @@
 
 ## GCP / IAM
 
-- Skills: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full` loaded.
-- Sandbox: `gcloud` not installed; `gcloud auth list` equivalent empty. No project id invented or set.
-- IAM not mutated. Bootstrap scripts not executed.
-- Blockers recorded in `docs/PAYMENT_STATUS.md` and `docs/NEXT_OPERATOR_ACTIONS.md`.
+- Skills: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full` loaded. No new payment skills needed.
+- Sandbox: Google Cloud SDK 591.0.0 installed at `/root/google-cloud-sdk`. `gcloud` on PATH for this session.
+- No active account. `gcloud auth list` empty. Project unset. IAM not mutated. Bootstrap not executed.
+- Operator must complete `gcloud auth login --no-launch-browser` on a trusted machine (or paste verification code if interactive here), then supply PROJECT_ID only.
+- Blockers remain in `docs/PAYMENT_STATUS.md` and `docs/NEXT_OPERATOR_ACTIONS.md`.
 
 ## Dry-run extensions this session
 
-- Updated status docs with current blocker (no auth, no SDK).
-- Added `tools/queue-gate-check.js` to validate sample queues enforce `confirm=true` for agent items and force `charged: false`.
-- Ledger and checkout gate remain append-only / no-charge.
+- Updated status with current SDK install + auth blocker.
+- Payment API and Stripe skills already cover Checkout, webhooks, Google Pay, agent-gated `confirm=true` orders, ledger.
+- Continue expanding local dry-run features (queues, quotes, credit notes, intake, fulfillment) without live keys.
 - No Stripe keys, ID documents, or service-account JSON committed.
 
 ## Still blocked
 
-Operator must authenticate on their machine, provide project id, complete Stripe Dashboard identity verification, then explicitly authorize live mode.
+Operator authenticates, provides project id, completes Stripe identity verification with ID docs, then explicitly authorizes live mode.
 
 Continue local dry-run development until then.
+
+## Future improvement
+
+After auth + project: run `cloud/iam/bootstrap.sh` + `cloud/automation/apply-after-auth.sh`, set GitHub Actions vars, store test key versions in Secret Manager.
