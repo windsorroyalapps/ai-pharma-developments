@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-28 09:08 AEDT
+# Payment and GCP status — 2026-10-28 21:15 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required for payment API or Stripe integration.
 
@@ -6,9 +6,9 @@ Identity documents stay out of git, skills, and chat. Complete Stripe identity v
 
 ## Blocker
 
-This sandbox session: `gcloud` command not found (SDK not installed). No credentialed accounts. Project is unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
+This sandbox session: Google Cloud SDK 591.0.0 installed. `gcloud auth list` empty. Project unset. IAM was not mutated. `cloud/iam/bootstrap.sh` was not run.
 
-Authenticate on a machine you control (do not use a sandbox-generated URL):
+Authenticate on a machine you control:
 ```bash
 gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
@@ -43,7 +43,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Ledger summary tracks credit notes, intakes, queues; charged always 0
 - Detailed gated flow: `docs/PAYMENT_FLOW.md`
 - Ledger remains append-only with forced `charged: false`
-- New: queue gate health check in tools/
+- Queue gate health check in tools/
 
 ## Still waiting
 
