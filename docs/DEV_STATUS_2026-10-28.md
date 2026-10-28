@@ -1,28 +1,22 @@
-# Development status — 2026-10-28
+# Development status — 2026-10-28 (updated)
 
 ## GCP / IAM
 
-- Skills: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full` loaded. No new payment skills needed.
-- Sandbox: Google Cloud SDK 591.0.0 installed at `/root/google-cloud-sdk`. `gcloud` on PATH for this session.
-- No active account. `gcloud auth list` empty. Project unset. IAM not mutated. Bootstrap not executed.
-- Operator must complete `gcloud auth login --no-launch-browser` on a trusted machine, then supply PROJECT_ID only.
-- Blockers remain in `docs/PAYMENT_STATUS.md` and `docs/NEXT_OPERATOR_ACTIONS.md`.
-- Auth URL can be generated; complete on your machine then reply with PROJECT_ID.
+- Skills: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full` confirmed loaded. No new skills required.
+- Sandbox has no authenticated gcloud (install blocked by permissions; previous status noted SDK but current session clean). No active account. Project unset. IAM not mutated. Bootstrap not executed.
+- Operator must run `gcloud auth login --no-launch-browser` on a trusted machine you control, then reply with PROJECT_ID only. Do not paste verification codes, keys, or ID docs here.
+- After auth + PROJECT_ID: execute `bash cloud/iam/bootstrap.sh` then `bash cloud/automation/apply-after-auth.sh`.
 
-## Dry-run extensions this session
+## Payment / Stripe
 
-- Confirmed payment/Stripe skills sufficient; no additional skill created.
-- Updated status docs to reflect current unauthenticated state.
-- Continue expanding local dry-run features (queues, quotes, credit notes, intake, fulfillment, automation.html) without live keys.
-- Site features ready for further automation development.
-- No Stripe keys, ID documents, or service-account JSON committed.
+- Existing skills sufficient for Checkout, webhooks, Google Pay, ledger, agent-gated orders (confirm=true required).
+- Live mode blocked until you supply ID documents for Stripe identity verification and explicitly authorize "live".
+- Continue dry-run development of site features: automation.html, queues, quotes, credit notes, intake, fulfillment.
 
-## Still blocked
+## Next
 
-Operator authenticates, provides project id, completes Stripe identity verification with ID docs, then explicitly authorizes live mode.
-
-Continue local dry-run development until then.
+Expand local dry-run hooks and confirm=true gates. Site ready for further automation without live keys.
 
 ## Future improvement
 
-After auth + project: run `cloud/iam/bootstrap.sh` + `cloud/automation/apply-after-auth.sh`, set GitHub Actions vars, store test key versions in Secret Manager.
+Once PROJECT_ID provided and auth complete: store test Stripe key versions in Secret Manager, set GitHub Actions vars (GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA), deploy worker.
