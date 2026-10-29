@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-30 09:00 AEDT
+# Payment and GCP status — 2026-10-29 22:03 UTC
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required for payment API or Stripe integration.
 
@@ -41,16 +41,15 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Local automation dry-runs ready (`tools/`, `cloud/automation/`)
 - Agent orders, invoice-preview, intake, and credit-note all refuse without `confirm=true` when source=agent and force `charged: false`
 - Ledger summary tracks credit notes, intakes, queues; charged always 0
+- Enhanced `tools/ledger-summary.js` now reports event counts + any_charged_flag_seen safety
 - Detailed gated flow: `docs/PAYMENT_FLOW.md`
 - Ledger remains append-only with forced `charged: false`
 - Queue gate health check in tools/
-- Dry-run server health reports confirm_gate true, live_charges false
 
 ## Still waiting
 
-- Operator GCP login and a real project id (never invent one)
-- Stripe identity in Dashboard only (provide ID docs when ready)
-- Test key versions via `cloud/iam/add-test-secrets.sh`
-- Live mode only after an explicit operator confirmation
+- Operator auth + PROJECT_ID
+- Stripe Dashboard identity verification (ID docs out of git)
+- Explicit "live" confirmation before any live charges
 
-Site and automation features continue in dry-run mode. No secrets committed. Agent orders require confirm=true.
+Site and automation features continue in dry-run mode. No secrets committed.

@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-30 09:00 AEDT. IAM was not mutated. Google Cloud SDK 591.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run.
+Rechecked 2026-10-29 22:03 UTC. IAM was not mutated. Google Cloud SDK 591.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run.
 
 Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code, ID documents, or any keys into chat.
 
@@ -45,6 +45,7 @@ node tools/dry-run-check.js
 node tools/checkout-gate-check.js
 node tools/queue-gate-check.js
 node tools/ledger-summary.js
+node tools/agent-order-dry-run.js
 ```
 
 Operator page: `gcp-access.html`. Readiness board: `readiness.html`. Automation console: `automation.html`. Agent rows without `confirm=true` are refused. Charged stays 0.
