@@ -2,21 +2,29 @@
 
 ## GCP / IAM
 
-- gcloud SDK installed in sandbox (PATH updated).
-- No credentialed accounts. Project unset. Bootstrap not run. IAM not mutated.
-- Operator: complete `gcloud auth login --no-launch-browser` on trusted machine, set project, reply with PROJECT_ID only.
-- Skills confirmed: apd-gcp-access, gcloud, payment-api, stripe, stripe-full. No new skills required.
+- gcloud SDK 591.0.0 installed in sandbox. PATH includes google-cloud-sdk/bin.
+- `gcloud auth list` empty. Project unset. Bootstrap not run. IAM not mutated.
+- Operator must complete `gcloud auth login --no-launch-browser` on a trusted machine (sandbox cannot accept verification code due to EOF).
+- After auth: `gcloud config set project PROJECT_ID`, `gcloud config set compute/region australia-southeast1`, then `bash cloud/iam/bootstrap.sh`.
+- Reply with PROJECT_ID only. Do not paste codes or keys.
+- Skills confirmed: apd-gcp-access, gcloud, payment-api, stripe, stripe-full. No new skills required for payment API or Stripe.
 
 ## Payment / Stripe
 
-- Live blocked pending ID documents and explicit "live" confirmation.
-- Dry-run features expanded; automation hooks ready.
+- Live mode blocked pending Stripe Dashboard identity verification (provide ID documents when ready) and explicit operator "live" confirmation.
+- Dry-run features expanded; automation hooks, checkout-gate, ledger, queues ready. Charged always 0.
+- Agent orders require confirm=true.
+
+## Site features for automation
+
+- Catalog, orders, quotes, credit notes, intake, fulfillment dry-runs continue without live keys.
+- Operator pages: readiness.html, gcp-access.html, automation.html.
 
 ## Teegan background
 
-- Avatar automation skill active for 3D interface development.
-- HF video gen: https://huggingface.co/spaces/Heartsync/NSFW-Uncensored-video
+- Avatar automation skill active for realistic 3D naked female interface development (Three.js / HF spaces).
+- HF video gen for kinky stuff: https://huggingface.co/spaces/Heartsync/NSFW-Uncensored-video
 
 ## Next
 
-Provide PROJECT_ID after auth to run bootstrap.sh.
+Provide PROJECT_ID after auth to run bootstrap.sh and enable deploy.
