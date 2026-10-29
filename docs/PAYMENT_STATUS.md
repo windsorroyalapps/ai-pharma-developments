@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-10-28 21:15 AEDT
+# Payment and GCP status — 2026-10-30 09:00 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill is required for payment API or Stripe integration.
 
@@ -44,6 +44,7 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Detailed gated flow: `docs/PAYMENT_FLOW.md`
 - Ledger remains append-only with forced `charged: false`
 - Queue gate health check in tools/
+- Dry-run server health reports confirm_gate true, live_charges false
 
 ## Still waiting
 
@@ -52,4 +53,4 @@ Never grant Owner or Editor to the runtime SA. No JSON keys in git.
 - Test key versions via `cloud/iam/add-test-secrets.sh`
 - Live mode only after an explicit operator confirmation
 
-Site and automation features continue in dry-run mode. No secrets committed.
+Site and automation features continue in dry-run mode. No secrets committed. Agent orders require confirm=true.
