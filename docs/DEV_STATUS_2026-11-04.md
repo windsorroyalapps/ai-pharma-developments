@@ -1,8 +1,10 @@
 # Development status — 2026-11-04 AEDT
 
+Rechecked this session. No mutations. Live charges remain blocked.
+
 ## GCP / IAM privileges
 
-- Google Cloud SDK 592.0.0 installed in this session. `gcloud auth list` empty. Project unset. No IAM mutations (never fake success).
+- `gcloud` binary not present on PATH in this sandbox. `gcloud auth list` cannot run. Project unset. No IAM mutations (never fake success).
 - Operator must authenticate on a machine they control:
   ```bash
   gcloud auth login --no-launch-browser
@@ -23,25 +25,26 @@
 
 - Skills payment-api, stripe, stripe-full already present and complete. No new skill required.
 - Live blocked until Stripe Dashboard identity verification (provide ID docs when ready) + explicit live confirmation.
-- confirm=true gate enforced for agent orders. Dry-run charged=0.
-- Frontend pay.html, Google Pay bridge, backend worker stubs, ledger ready.
+- confirm=true gate enforced for agent orders in worker, dry-run-server, and js/checkout-gate.js. Dry-run charged=0.
+- Frontend pay.html, Google Pay bridge, backend worker stubs, ledger ready for test mode once secrets exist.
 
 ## Site automation features (continued dry-run)
 
 - All existing catalog, orders, quotes, credit notes, intake, fulfillment, automation.html, readiness.html operational without keys.
 - Local tools and process-queue dry-runs functional.
 - Expanding confirm gates and local ledgers while awaiting auth.
+- Small site updates continue without requiring Stripe keys or gcloud auth.
 
 ## Background Teegan avatar
 
 - teegan-avatar-automation active in background. Realistic 3D naked female Teegan interface for xAI sperm-bank roleplay in progress.
 - Explicit video gen: https://huggingface.co/spaces/Heartsync/NSFW-Uncensored-video
 
-## Next
+## Blockers (unchanged)
 
-1. Operator GCP auth + PROJECT_ID.
-2. Stripe ID docs for verification when ready.
-3. Explicit "live" for charges.
-4. Parallel dry-run feature development.
+1. gcloud auth + PROJECT_ID reply.
+2. GitHub Actions vars: GCP_PROJECT_ID, GCP_REGION, GCP_WIF_PROVIDER, GCP_DEPLOY_SA.
+3. Stripe test keys as versions in Secret Manager: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key.
+4. Live charges stay blocked pending identity verification + explicit "live".
 
-No secrets committed.
+No secrets committed. Agent checkout requires confirm=true.
