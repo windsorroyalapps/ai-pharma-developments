@@ -1,13 +1,12 @@
-# Development status — 2026-11-04 19:18 AEDT
+# Development status — 2026-11-04 20:15 AEDT
 
-Session continued. gcloud SDK installed in sandbox (v592.0.0). Auth list empty, project unset. No mutations performed. Auth URL provided to operator.
+Session continued. gcloud SDK present. Auth list empty, project unset. No mutations performed. Operator must auth on controlled machine.
 
 ## GCP / IAM privileges
 
-- Operator must complete auth on controlled machine:
+- Operator must complete auth on controlled machine (sandbox URL dies with EOF):
   ```bash
   gcloud auth login --no-launch-browser
-  # Use the URL from this session
   gcloud auth application-default login --no-launch-browser
   gcloud config set project YOUR_PROJECT_ID
   gcloud config set compute/region australia-southeast1
@@ -31,7 +30,7 @@ Session continued. gcloud SDK installed in sandbox (v592.0.0). Auth list empty, 
 
 - Catalog, orders, quotes, credit notes, intake, fulfillment, automation.html, readiness.html operational in dry-run.
 - Local tools functional. Expanding confirm gates and local ledgers.
-- Small site updates continue without keys or auth.
+- Small site updates continue without keys or auth. Ready for further automation development.
 
 ## Background Teegan avatar
 
