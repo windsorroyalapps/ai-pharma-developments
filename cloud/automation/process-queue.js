@@ -95,6 +95,23 @@ function processItem(item) {
       mode: 'dry_run',
     };
   }
+  if (type === 'fulfillment') {
+    if (!item.order_id) {
+      return { ok: false, status: 'invalid', reason: 'fulfillment requires order_id', charged: false };
+    }
+    return {
+      ok: true,
+      status: 'queued',
+      type: 'fulfillment',
+      id: 'ful_' + crypto.randomBytes(6).toString('hex'),
+      order_id: String(item.order_id).slice(0, 80),
+      note: item.note ? String(item.note).slice(0, 300) : null,
+      source,
+      confirm: item.confirm === true,
+      charged: false,
+      mode: 'dry_run',
+    };
+  }
   const amount = Number(item.amount_cents);
   if (!Number.isInteger(amount) || amount < 100) {
     return { ok: false, status: 'invalid', reason: 'amount_cents must be integer >= 100', charged: false };
