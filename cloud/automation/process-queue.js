@@ -75,7 +75,25 @@ function processItem(item) {
     };
   }
   if (type === 'subscription_preview') {
-    const amount = Number(item.amount_cents);
+    if (type === 'support_ticket') {
+    if (!item.email || !item.subject) {
+      return { ok: false, status: 'invalid', reason: 'support_ticket requires email and subject', charged: false };
+    }
+    return {
+      ok: true,
+      status: 'queued',
+      type: 'support_ticket',
+      id: 'sup_' + crypto.randomBytes(6).toString('hex'),
+      email: String(item.email).slice(0, 200),
+      subject: String(item.subject).slice(0, 200),
+      body: item.body ? String(item.body).slice(0, 1000) : null,
+      source,
+      confirm: item.confirm === true,
+      charged: false,
+      mode: 'dry_run',
+    };
+  }
+  const amount = Number(item.amount_cents);
     if (!Number.isInteger(amount) || amount < 100) {
       return { ok: false, status: 'invalid', reason: 'subscription_preview requires amount_cents integer >= 100', charged: false };
     }

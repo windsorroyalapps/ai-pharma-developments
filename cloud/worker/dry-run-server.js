@@ -75,6 +75,7 @@ const server = http.createServer((req, res) => {
       intake: true,
       credit_notes: true,
       invoice_preview: true,
+      support_ticket: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });

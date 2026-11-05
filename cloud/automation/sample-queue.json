@@ -24,7 +24,9 @@
   },
   {
     "type": "invoice_preview",
-    "skus": ["consult-intro"],
+    "skus": [
+      "consult-intro"
+    ],
     "email": "ops@example.com",
     "source": "website"
   },
@@ -49,5 +51,12 @@
     "currency": "aud",
     "source": "agent",
     "confirm": true
+  },
+  {
+    "type": "support_ticket",
+    "email": "support@example.com",
+    "subject": "Dry-run ticket",
+    "body": "No charge, just queue",
+    "source": "website"
   }
 ]
