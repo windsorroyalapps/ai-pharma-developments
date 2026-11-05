@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-10-29 22:03 UTC. IAM was not mutated. Google Cloud SDK 591.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run.
+Rechecked 2026-11-05 22:05 UTC. IAM was not mutated. Google Cloud SDK 592.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run.
 
 Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code, ID documents, or any keys into chat.
 
@@ -50,4 +50,4 @@ node tools/agent-order-dry-run.js
 
 Operator page: `gcp-access.html`. Readiness board: `readiness.html`. Automation console: `automation.html`. Agent rows without `confirm=true` are refused. Charged stays 0.
 
-See also `docs/PAYMENT_FLOW.md` for the gated checkout path and dry-run guarantees. Site features for automation (catalog, orders, quotes, credit notes, intake, fulfillment dry-runs) are ready for further development without live keys. Continue expanding dry-run hooks, local ledgers, and confirm=true gates.
+See also `docs/PAYMENT_FLOW.md` and `docs/PAYMENT_STATUS.md`. Site features for automation (catalog, orders, quotes, credit notes, intake, fulfillment dry-runs) are ready for further development without live keys. Continue expanding dry-run hooks, local ledgers, and confirm=true gates.
