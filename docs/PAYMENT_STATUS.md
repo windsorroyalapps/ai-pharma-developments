@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-11-06 09:15 AEDT
+# Payment and GCP status — 2026-11-05 22:50 UTC
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill required for payment API or Stripe.
 
@@ -14,10 +14,6 @@ gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
 ```
 
-Or open this URL, complete sign-in, then paste only the verification code back (never secrets or ID docs):
-
-https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=pMgHuFJ83EFQDu0PdFLZ68Q7x6xSyM&prompt=consent&token_usage=remote&access_type=offline&code_challenge=_VqTm6uZs1G8v9V4e1qxZm3s-d5_X3a_VmKNab4ieDQ&code_challenge_method=S256
-
 After auth succeeds, reply with PROJECT_ID only, then run:
 ```bash
 gcloud config set project YOUR_PROJECT_ID
@@ -29,11 +25,10 @@ bash cloud/iam/print-github-vars.sh
 
 ## Built in dry-run (continue developing)
 - Confirm=true gates on all agent orders (`/agent-order`, intake, checkout)
-- Local JSONL ledgers, catalog, quotes, credit notes, fulfillment stubs
+- Local JSONL ledgers, catalog, quotes, credit notes, fulfillment + support_ticket stubs
 - Worker dry-run mode + `cloud/worker/dry-run-server.js` (runs without Stripe keys or GCP)
 - Operator pages: pay.html, readiness.html, automation.html, gcp-access.html
-- Tools: agent-order-dry-run, checkout-gate-check, ledger-summary, etc.
-- Extended process-queue.js with fulfillment type (confirm=true for agents, charged=false)
-- Added GET /catalog to dry-run-server for operator console
+- Tools: agent-order-dry-run, checkout-gate-check, ledger-summary, queue-gate-check, etc.
+- process-queue.js: order, consult_intake, invoice_preview, subscription_preview, fulfillment, support_ticket — all agent-gated, charged=false
 
-Continue expanding automation features without live keys or GCP mutations.
+Continue expanding automation features without live keys or GCP mutations. Secrets remain names only: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key.
