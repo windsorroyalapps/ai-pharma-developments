@@ -58,5 +58,11 @@
     "subject": "Dry-run ticket",
     "body": "No charge, just queue",
     "source": "website"
+  },
+  {
+    "type": "fulfillment",
+    "order_id": "ord_sample_001",
+    "note": "Dry-run fulfillment after payment",
+    "source": "website"
   }
 ]
