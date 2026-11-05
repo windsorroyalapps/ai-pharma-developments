@@ -51,3 +51,7 @@ Workload Identity User on the deploy SA, member (numeric project number, not pro
 4. `bash cloud/iam/bootstrap.sh`
 5. `bash cloud/automation/apply-after-auth.sh`
 6. Add Stripe test key versions only. Live keys wait for Stripe identity verification and an explicit live confirmation.
+
+## Current sandbox status (2026-11-06)
+
+gcloud has no active account. Project unset. Login is still required. Do not mutate IAM until operator authenticates on a controlled machine and provides PROJECT_ID. Bootstrap and apply-after-auth scripts remain ready but unrun.
