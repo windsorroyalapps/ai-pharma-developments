@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-11-06 09:10 AEDT
+# Payment and GCP status — 2026-11-06 09:12 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill required for payment API or Stripe.
 
@@ -16,7 +16,7 @@ gcloud auth application-default login --no-launch-browser
 
 Or open this URL, complete sign-in, then paste only the verification code back (never secrets or ID docs):
 
-https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=TvPEOwxL53OZoKK4VZxN2diatc4LOk&prompt=consent&token_usage=remote&access_type=offline&code_challenge=T34PLDfieJKr3_1MfH2S3-OwVJgIyO2TpxhBlyJv_ww&code_challenge_method=S256
+https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=qY6swCun3ZbqMKlnZmKE5O0j41o9SY&prompt=consent&token_usage=remote&access_type=offline&code_challenge=ePBsTch5d8Mdy6REyPU7Zpeki1rhoLs8YVBxCIJCdoM&code_challenge_method=S256
 
 After auth succeeds, reply with PROJECT_ID only, then run:
 ```bash
@@ -33,5 +33,6 @@ bash cloud/iam/print-github-vars.sh
 - Worker dry-run mode + `cloud/worker/dry-run-server.js`
 - Operator pages: pay.html, readiness.html, automation.html, gcp-access.html
 - Tools: agent-order-dry-run, checkout-gate-check, ledger-summary, etc.
+- Extended `cloud/automation/process-queue.js` with `fulfillment` type (still confirm=true for agents, charged=false)
 
 Continue expanding automation features without live keys or GCP mutations.
