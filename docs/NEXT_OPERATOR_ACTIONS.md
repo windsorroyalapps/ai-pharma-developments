@@ -1,6 +1,6 @@
 # Next operator actions
 
-Rechecked 2026-11-06 09:35 AEDT. IAM was not mutated. Google Cloud SDK 592.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run. Auth login URL generated for operator (do not paste verification code).
+Rechecked 2026-11-05 22:50 UTC. IAM was not mutated. Google Cloud SDK 592.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run.
 
 Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code, ID documents, or any keys into chat.
 
@@ -50,8 +50,8 @@ node tools/agent-order-dry-run.js
 
 Operator page: `gcp-access.html`. Readiness board: `readiness.html`. Automation console: `automation.html`. Agent rows without `confirm=true` are refused. Charged stays 0.
 
-See also `docs/PAYMENT_FLOW.md` and `docs/PAYMENT_STATUS.md`. Site features for automation (catalog, orders, quotes, credit notes, intake, fulfillment dry-runs) are ready for further development without live keys. Continue expanding dry-run hooks, local ledgers, and confirm=true gates. Fulfillment queue type added to process-queue.js. Support queue summary now includes recheck_note.
+See also `docs/PAYMENT_FLOW.md` and `docs/PAYMENT_STATUS.md`. Site features for automation (catalog, orders, quotes, credit notes, intake, fulfillment, support_ticket dry-runs) are ready for further development without live keys. Continue expanding dry-run hooks, local ledgers, and confirm=true gates.
 
-## Recheck 2026-11-06 09:42 AEDT
+## Recheck 2026-11-05 22:50 UTC
 
-gcloud SDK 592 present. Auth list empty. Project unset. IAM not mutated. Added support_ticket dry-run type to process-queue.js. Auth login still required before any bootstrap.
+gcloud SDK 592 present. Auth list empty. Project unset. IAM not mutated. process-queue.js support_ticket handler confirmed clean (no nested syntax error). Auth login still required before any bootstrap.
