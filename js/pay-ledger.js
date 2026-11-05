@@ -23,8 +23,9 @@
       return sum;
     }, 0);
     var aud = (cents / 100).toFixed(2);
-    summary.textContent = rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · dry-run only';
-    list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet.';
+    var last = rows.length ? (rows[rows.length - 1].event || 'unknown') : 'none';
+    summary.textContent = rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · last: ' + last + ' · dry-run only (no live charges)';
+    list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet. Dry-run mode active.';
   }
 
   window.apdRecordLedger = function (record) {

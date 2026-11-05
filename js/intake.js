@@ -63,7 +63,7 @@
       show('Request queued on worker. Local copy kept. Opening email draft.');
       mailto(payload);
     }).catch(function () {
-      show('Worker unreachable. Local fallback kept (' + saved + '). Opening email draft.');
+      show('Worker unreachable. Local fallback kept (' + saved + '). Opening email draft. Dry-run mode.');
       mailto(payload);
     });
   });
