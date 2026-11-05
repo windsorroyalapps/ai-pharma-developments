@@ -2,6 +2,7 @@
 /**
  * Local support-ticket queue. No Stripe calls. No secrets.
  * Agent rows without confirm=true are refused.
+ * Dry-run only. Live charges blocked.
  */
 const fs = require('fs');
 const path = require('path');
@@ -45,6 +46,13 @@ for (const row of rows) {
   fs.appendFileSync(outFile, JSON.stringify(rec) + '\n');
 }
 
-const summary = { accepted, refused, charged: 0, file: outFile };
+const summary = {
+  accepted,
+  refused,
+  charged: 0,
+  file: outFile,
+  dry_run: true,
+  recheck_note: '2026-11-06 09:35 AEDT - no gcloud auth, no IAM mutation, confirm=true gate active',
+};
 console.log(JSON.stringify(summary));
 if (accepted < 1) process.exit(1);
