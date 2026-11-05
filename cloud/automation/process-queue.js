@@ -34,9 +34,11 @@ function refuse(reason) {
 function processItem(item) {
   const source = item.source || 'website';
   const type = item.type || 'order';
+
   if (source === 'agent' && item.confirm !== true) {
     return refuse('agent orders require confirm=true');
   }
+
   if (type === 'consult_intake') {
     if (!item.email || !item.need) {
       return { ok: false, status: 'invalid', reason: 'consult_intake requires email and need', charged: false };
@@ -55,6 +57,26 @@ function processItem(item) {
       mode: 'dry_run',
     };
   }
+
+  if (type === 'support_ticket') {
+    if (!item.email || !item.subject) {
+      return { ok: false, status: 'invalid', reason: 'support_ticket requires email and subject', charged: false };
+    }
+    return {
+      ok: true,
+      status: 'queued',
+      type: 'support_ticket',
+      id: 'sup_' + crypto.randomBytes(6).toString('hex'),
+      email: String(item.email).slice(0, 200),
+      subject: String(item.subject).slice(0, 200),
+      body: item.body ? String(item.body).slice(0, 1000) : null,
+      source,
+      confirm: item.confirm === true,
+      charged: false,
+      mode: 'dry_run',
+    };
+  }
+
   if (type === 'invoice_preview') {
     const skus = Array.isArray(item.skus) ? item.skus.map(String) : [];
     if (!skus.length) {
@@ -74,26 +96,9 @@ function processItem(item) {
       mode: 'dry_run',
     };
   }
+
   if (type === 'subscription_preview') {
-    if (type === 'support_ticket') {
-    if (!item.email || !item.subject) {
-      return { ok: false, status: 'invalid', reason: 'support_ticket requires email and subject', charged: false };
-    }
-    return {
-      ok: true,
-      status: 'queued',
-      type: 'support_ticket',
-      id: 'sup_' + crypto.randomBytes(6).toString('hex'),
-      email: String(item.email).slice(0, 200),
-      subject: String(item.subject).slice(0, 200),
-      body: item.body ? String(item.body).slice(0, 1000) : null,
-      source,
-      confirm: item.confirm === true,
-      charged: false,
-      mode: 'dry_run',
-    };
-  }
-  const amount = Number(item.amount_cents);
+    const amount = Number(item.amount_cents);
     if (!Number.isInteger(amount) || amount < 100) {
       return { ok: false, status: 'invalid', reason: 'subscription_preview requires amount_cents integer >= 100', charged: false };
     }
@@ -113,6 +118,7 @@ function processItem(item) {
       mode: 'dry_run',
     };
   }
+
   if (type === 'fulfillment') {
     if (!item.order_id) {
       return { ok: false, status: 'invalid', reason: 'fulfillment requires order_id', charged: false };
@@ -130,6 +136,8 @@ function processItem(item) {
       mode: 'dry_run',
     };
   }
+
+  // default: order
   const amount = Number(item.amount_cents);
   if (!Number.isInteger(amount) || amount < 100) {
     return { ok: false, status: 'invalid', reason: 'amount_cents must be integer >= 100', charged: false };
