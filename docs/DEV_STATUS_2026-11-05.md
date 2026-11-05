@@ -1,10 +1,10 @@
-# Development status — 2026-11-05 09:15 AEDT
+# Development status — 2026-11-05 17:20 AEDT
 
 Session continued. gcloud SDK installed and ready. Auth list empty (no credentialed accounts). Project unset. No GCP mutations performed. Operator must complete auth on controlled machine (sandbox non-interactive login dies with EOF).
 
 ## GCP / IAM privileges
 
-- Operator must auth:
+- Operator must auth on a machine they control:
   ```bash
   gcloud auth login --no-launch-browser
   gcloud auth application-default login --no-launch-browser
@@ -17,7 +17,7 @@ Session continued. gcloud SDK installed and ready. Auth list empty (no credentia
   ```
 - Reply with PROJECT_ID only. Do not paste verification codes, keys, or ID docs.
 - Bootstrap creates least-privilege: apd-payment-sa (secretmanager.secretAccessor, logging.logWriter, run.invoker), apd-deploy-sa (run.admin, artifactregistry.writer, cloudbuild.builds.editor, iam.serviceAccountUser), WIF pool github-apd bound strictly to windsorroyalapps/ai-pharma-developments, secret shells only for stripe-secret-key / stripe-webhook-secret / stripe-publishable-key.
-- Skills apd-gcp-access + gcloud sufficient. No new skill required.
+- Skills apd-gcp-access + gcloud sufficient. No new skill required for GCP access privileges.
 
 ## Payment API / Stripe
 
@@ -31,7 +31,7 @@ Session continued. gcloud SDK installed and ready. Auth list empty (no credentia
 - Catalog, orders, quotes, credit notes, intake, fulfillment, automation.html, readiness.html, gcp-access.html fully operational in dry-run.
 - Local tools/ scripts functional for queues, ledgers, gates, previews.
 - Expanding confirm gates, local JSONL ledgers, and agent-order dry-runs without keys or auth.
-- Ready for further feature development.
+- Ready for further feature development. Continuing dry-run expansions.
 
 ## Background Teegan avatar
 
