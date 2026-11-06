@@ -1,57 +1,49 @@
-# Next operator actions
+# Next operator actions — 2026-11-06
 
-Rechecked 2026-11-05 22:50 UTC. IAM was not mutated. Google Cloud SDK 592.0.0 installed in sandbox. `gcloud auth list` empty. Project unset. `cloud/iam/bootstrap.sh` was not run.
+## Immediate (required for GCP privileges)
 
-Authenticate on a machine you control, then reply with the project id only. Do not paste the verification code, ID documents, or any keys into chat.
+1. On your machine run:
+   ```
+   gcloud auth login --no-launch-browser
+   gcloud auth application-default login --no-launch-browser
+   ```
+2. Reply in chat with **PROJECT_ID only** (no codes, no keys).
+3. Then:
+   ```
+   gcloud config set project PROJECT_ID
+   gcloud config set compute/region australia-southeast1
+   bash cloud/iam/bootstrap.sh
+   bash cloud/automation/apply-after-auth.sh
+   bash cloud/iam/print-github-vars.sh
+   ```
 
-Skills already present: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No additional payment skill is required. Live Stripe stays blocked until identity verification is finished in the Stripe Dashboard and you explicitly say live. Provide ID documents when ready for Stripe access.
+## After bootstrap
 
-## 1. Authenticate, then bootstrap
+- Paste **test** Stripe keys only:
+  ```
+  echo -n sk_test_... | gcloud secrets versions add stripe-secret-key --data-file=-
+  echo -n whsec_... | gcloud secrets versions add stripe-webhook-secret --data-file=-
+  echo -n pk_test_... | gcloud secrets versions add stripe-publishable-key --data-file=-
+  ```
+- Set GitHub Actions repository variables from print-github-vars.sh output.
+- Deploy worker:
+  ```
+  cd cloud/worker
+  gcloud builds submit --tag australia-southeast1-docker.pkg.dev/PROJECT/apd-repo/apd-payment-worker:latest
+  gcloud run deploy apd-payment-worker --image ... --region australia-southeast1 --service-account apd-payment-sa@PROJECT.iam.gserviceaccount.com --allow-unauthenticated
+  ```
+- Update `window.CREATE_CHECKOUT_SESSION_URL` and `window.STRIPE_PUBLISHABLE_KEY` in pay.html.
 
-```bash
-gcloud auth login --no-launch-browser
-gcloud auth application-default login --no-launch-browser
-gcloud config set project YOUR_PROJECT_ID
-gcloud config set compute/region australia-southeast1
-bash cloud/iam/auth-status.sh
-bash cloud/iam/bootstrap.sh
-bash cloud/automation/apply-after-auth.sh
-bash cloud/iam/print-github-vars.sh
-```
+## Stripe live (later)
 
-Bootstrap creates (least privilege, no Owner, no JSON keys):
+- Complete identity verification in Stripe Dashboard (you will supply ID documents there).
+- Only after verification + explicit operator "live" confirmation switch to live keys and set STRIPE_LIVE_OK=1.
 
-- `apd-payment-sa` — secretAccessor, logWriter, run.invoker
-- `apd-deploy-sa` — run.admin, artifactregistry.writer, cloudbuild.builds.editor, serviceAccountUser
-- WIF pool `github-apd` bound to `windsorroyalapps/ai-pharma-developments`
-- Secret shells only: `stripe-secret-key`, `stripe-webhook-secret`, `stripe-publishable-key`
+## Already ready (no auth needed)
 
-## 2. GitHub Actions variables
+- Full dry-run payment + agent order gates
+- Local ledgers, queue processor, credit notes, fulfillment stubs
+- All static pages + automation.html
+- Skills: apd-gcp-access, payment-api, stripe, stripe-full
 
-- `GCP_PROJECT_ID`
-- `GCP_REGION` = `australia-southeast1`
-- `GCP_WIF_PROVIDER`
-- `GCP_DEPLOY_SA`
-
-## 3. Local automation (no charge)
-
-```bash
-node tools/run-local-automation.js
-node tools/evidence-queue.js
-node tools/webhook-event-dry-run.js
-node tools/support-queue.js
-node cloud/automation/process-queue.js cloud/automation/sample-queue.json
-node tools/dry-run-check.js
-node tools/checkout-gate-check.js
-node tools/queue-gate-check.js
-node tools/ledger-summary.js
-node tools/agent-order-dry-run.js
-```
-
-Operator page: `gcp-access.html`. Readiness board: `readiness.html`. Automation console: `automation.html`. Agent rows without `confirm=true` are refused. Charged stays 0.
-
-See also `docs/PAYMENT_FLOW.md` and `docs/PAYMENT_STATUS.md`. Site features for automation (catalog, orders, quotes, credit notes, intake, fulfillment, support_ticket dry-runs) are ready for further development without live keys. Continue expanding dry-run hooks, local ledgers, and confirm=true gates.
-
-## Recheck 2026-11-05 22:50 UTC
-
-gcloud SDK 592 present. Auth list empty. Project unset. IAM not mutated. process-queue.js support_ticket handler confirmed clean (no nested syntax error). Auth login still required before any bootstrap.
+Continue expanding dry-run features and site automation while waiting.
