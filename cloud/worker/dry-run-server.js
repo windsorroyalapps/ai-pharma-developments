@@ -76,8 +76,19 @@ const server = http.createServer((req, res) => {
       credit_notes: true,
       invoice_preview: true,
       support_ticket: true,
+      catalog: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
+    });
+  }
+  if (req.method === 'GET' && req.url === '/catalog') {
+    return send(res, 200, {
+      ok: true,
+      dry_run: true,
+      live_charges: false,
+      currency: 'aud',
+      items: CATALOG,
+      note: 'SKU catalog for dry-run quotes and credit notes. Never charges.',
     });
   }
   if (req.method === 'GET' && req.url === '/ledger/summary') {

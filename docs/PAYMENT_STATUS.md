@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-11-05 22:50 UTC
+# Payment and GCP status — 2026-11-09 09:00 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill required for payment API or Stripe.
 
@@ -27,6 +27,7 @@ bash cloud/iam/print-github-vars.sh
 - Confirm=true gates on all agent orders (`/agent-order`, intake, checkout)
 - Local JSONL ledgers, catalog, quotes, credit notes, fulfillment + support_ticket stubs
 - Worker dry-run mode + `cloud/worker/dry-run-server.js` (runs without Stripe keys or GCP)
+- New: GET /catalog returns SKU list (AUD, dry-run only)
 - Operator pages: pay.html, readiness.html, automation.html, gcp-access.html
 - Tools: agent-order-dry-run, checkout-gate-check, ledger-summary, queue-gate-check, etc.
 - process-queue.js: order, consult_intake, invoice_preview, subscription_preview, fulfillment, support_ticket — all agent-gated, charged=false
