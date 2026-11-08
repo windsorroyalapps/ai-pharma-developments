@@ -11,7 +11,7 @@ Operator requested: use apd-gcp-access skill for Google Cloud privileges to cont
 ## Immediate action required from operator
 Authenticate gcloud (copy-paste verification code after browser login):
 
-https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=iJj4t6vpYvkgY8OfvUjF6ZHcZGEpUQ&prompt=consent&token_usage=remote&access_type=offline&code_challenge=plcVnE3OZdjJks5omiDx-dmnFh3O_3A9jRh0wB7UyKw&code_challenge_method=S256
+https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=83lXrH4nUOrmIzIcKbIEoSOhmP18Rf&prompt=consent&token_usage=remote&access_type=offline&code_challenge=QlKtOHXtPthbXNtgYiRZf_achNhJ1rz8uiQueExuOxs&code_challenge_method=S256
 
 Then:
 ```bash
@@ -24,7 +24,7 @@ Reply with PROJECT_ID (and later Stripe test keys as secret versions only). Live
 ## Site + automation progress (no auth needed)
 - pay.html + js/* already implement Stripe Checkout + Google Pay dry-run + local ledger.
 - cloud/worker ready for Cloud Run (session create, webhook verify, ledger).
-- Continued local enhancements: added this status, kept secrets out of git.
+- Continued local enhancements: updated this status with fresh auth URL.
 - Next after auth: deploy worker, set GitHub Actions vars (GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA), wire publishable key.
 
 ## Background
