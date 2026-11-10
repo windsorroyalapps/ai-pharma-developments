@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-11-09 09:00 AEDT
+# Payment and GCP status — 2026-11-11 09:00 AEDT
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill required for payment API or Stripe.
 
@@ -6,7 +6,7 @@ Identity documents stay out of git. Complete Stripe ID verification in Dashboard
 
 ## Blocker
 
-Sandbox: gcloud installed (SDK 592). No active account. Project unset. IAM not mutated. bootstrap.sh not run.
+Sandbox: gcloud SDK 593.0.0 installed. No active account. Project unset. IAM not mutated. bootstrap.sh not run.
 
 **Authenticate now (operator machine):**
 ```bash
@@ -24,12 +24,13 @@ bash cloud/iam/print-github-vars.sh
 ```
 
 ## Built in dry-run (continue developing)
-- Confirm=true gates on all agent orders (`/agent-order`, intake, checkout)
+- Confirm=true gates on all agent orders (`/agent-order`, intake, checkout, quote)
 - Local JSONL ledgers, catalog, quotes, credit notes, fulfillment + support_ticket stubs
 - Worker dry-run mode + `cloud/worker/dry-run-server.js` (runs without Stripe keys or GCP)
-- New: GET /catalog returns SKU list (AUD, dry-run only)
+- GET /catalog returns SKU list (AUD, dry-run only)
+- POST /quote builds multi-item dry-run quote from catalog SKUs (agent requires confirm=true, charged=false)
 - Operator pages: pay.html, readiness.html, automation.html, gcp-access.html
-- Tools: agent-order-dry-run, checkout-gate-check, ledger-summary, queue-gate-check, etc.
+- Tools: agent-order-dry-run, checkout-gate-check, ledger-summary, queue-gate-check, quote-preview, etc.
 - process-queue.js: order, consult_intake, invoice_preview, subscription_preview, fulfillment, support_ticket — all agent-gated, charged=false
 
 Continue expanding automation features without live keys or GCP mutations. Secrets remain names only: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key.

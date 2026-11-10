@@ -77,6 +77,7 @@ const server = http.createServer((req, res) => {
       invoice_preview: true,
       support_ticket: true,
       catalog: true,
+      quote: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });
@@ -103,6 +104,41 @@ const server = http.createServer((req, res) => {
     try { body = JSON.parse(Buffer.concat(chunks).toString() || '{}'); }
     catch (err) { return send(res, 400, { error: 'invalid json' }); }
 
+    if (req.url === '/quote') {
+      const source = body.source || 'website';
+      if (source === 'agent' && body.confirm !== true) {
+        return send(res, 403, { error: 'agent orders require confirm=true' });
+      }
+      const items = Array.isArray(body.items) ? body.items : [];
+      if (items.length === 0) return send(res, 400, { error: 'items array required' });
+      const lines = [];
+      let total = 0;
+      for (const row of items) {
+        const sku = String(row.sku || '');
+        const qty = Number(row.quantity || 1);
+        const cat = CATALOG.find((c) => c.sku === sku);
+        if (!cat || !Number.isInteger(qty) || qty < 1 || qty > 99) {
+          return send(res, 400, { error: 'invalid sku or quantity' });
+        }
+        const line_cents = cat.amount_cents * qty;
+        total += line_cents;
+        lines.push({ sku, name: cat.name, quantity: qty, unit_cents: cat.amount_cents, line_cents });
+      }
+      const id = 'qt_dry_' + crypto.randomBytes(6).toString('hex');
+      const quote = {
+        id,
+        dry_run: true,
+        charged: false,
+        currency: 'aud',
+        source,
+        confirm: body.confirm === true,
+        lines,
+        total_cents: total,
+        note: 'dry-run multi-item quote. Never charges.',
+      };
+      append('quote_preview', quote);
+      return send(res, 200, quote);
+    }
     if (req.url === '/create-checkout-session' || req.url === '/agent-order') {
       const order = validate(Object.assign({}, body, req.url === '/agent-order' ? { source: 'agent' } : {}));
       if (order.error) return send(res, order.status, { error: order.error });
