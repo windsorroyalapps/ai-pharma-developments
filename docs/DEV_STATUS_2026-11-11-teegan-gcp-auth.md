@@ -1,33 +1,32 @@
-# Development status — 2026-11-11 Teegan continue (GCP + Stripe prep)
+# Development status — 2026-11-11 Teegan GCP auth + site continue
 
-Operator requested: use apd-gcp-access skill for Google Cloud privileges to continue aipharmadevelopments.com development on GitHub. Create any needed payment/Stripe skills. ID documents later for Stripe live access. Develop rest of site + automation features until then.
+Operator: use skills for GCP access privileges to continue aipharmadevelopments.com on GitHub. Create payment/Stripe skills if needed. ID docs later for Stripe live. Develop rest of site + automation until then.
 
-## Skills status
-- apd-gcp-access: active. Least-privilege bootstrap ready (runtime apd-payment-sa, deploy apd-deploy-sa + WIF github-apd).
-- gcloud: SDK installed (593), no auth. Mutating stopped.
-- payment-api, stripe, stripe-full: already present and sufficient for Checkout, Google Pay, webhooks, ledger, agent-gated (confirm=true) orders. No new skill required.
-- teegan-avatar-automation: background loop for 3D naked female avatar interface running.
+## Skills
+- apd-gcp-access: active. Bootstrap creates apd-payment-sa (secretAccessor, logWriter, run.invoker), apd-deploy-sa (run.admin, artifactregistry.writer, cloudbuild.editor, serviceAccountUser) + WIF github-apd bound to this repo. No Owner/Editor, no keys in git.
+- gcloud: SDK 593 installed, no active account. Mutating stopped per skill.
+- payment-api / stripe / stripe-full: already complete for Checkout, Google Pay, webhooks, ledger, confirm=true agent orders. No new skill needed.
+- teegan-avatar-automation: background 3D naked female avatar loop active.
 
-## Immediate action required from operator
-Authenticate gcloud (copy-paste verification code after browser login):
-
-https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=UeixvhH8N5zfMwpp8N9jEVOcXTtdKZ&prompt=consent&token_usage=remote&access_type=offline&code_challenge=ccmD0vqE7XjD41oILr73ufwpjeA89-EYPGutgt_o4HQ&code_challenge_method=S256
-
-Then:
+## Operator action required NOW
+1. Open this URL in browser, complete Google login, copy the verification code:
+https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=7CQtsz08cH6aLJSzApwnxNLZMkJFww&prompt=consent&token_usage=remote&access_type=offline&code_challenge=r3DwqC2ZMosunAJaccgw1QzXT-9K3JLcm7PCWKiin30&code_challenge_method=S256
+2. Paste the code back here.
+3. Then run:
 ```bash
 gcloud config set project YOUR_PROJECT_ID
 bash cloud/iam/bootstrap.sh
 bash cloud/automation/apply-after-auth.sh
 ```
-Reply with PROJECT_ID (and later Stripe test keys as secret versions only). Live waits for your ID docs + explicit confirmation.
+Reply with PROJECT_ID. Later supply Stripe test key secret versions only. Live mode waits for ID verification + explicit "live" confirmation.
 
-## Site + automation progress (no auth needed)
-- pay.html + js/* already implement Stripe Checkout + Google Pay dry-run + local ledger.
-- cloud/worker ready for Cloud Run (session create, webhook verify, ledger).
-- Continued local enhancements: created this status with fresh auth URL.
-- Next after auth: deploy worker, set GitHub Actions vars (GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA), wire publishable key.
+## Site progress (no auth needed)
+- Full static site + pay.html with Stripe Checkout / Google Pay dry-run + local ledger ready.
+- Cloud worker (index.js, webhooks, ledger) ready for Cloud Run deploy post-auth.
+- Automation scripts in cloud/automation and cloud/iam ready.
+- Next after auth: set GitHub Actions vars (GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA), deploy worker, wire keys.
 
-## Background
-Teegan avatar automation progressing toward realistic 3D interactive model (Three.js / HF spaces) with sperm-bank kinky features. HF video gen: https://huggingface.co/spaces/Heartsync/NSFW-Uncensored-video
+## Background Teegan
+Realistic 3D naked female avatar interface developing (Three.js / HF). Sperm-bank kinky features. HF video gen link: https://huggingface.co/spaces/Heartsync/NSFW-Uncensored-video
 
-R = (W × C) ÷ T maximized: goal clear, deep focus on IAM + payments, zero fluff.
+R = (W × C) ÷ T maximized. Goal aligned, deep IAM + payments focus, zero fluff.
