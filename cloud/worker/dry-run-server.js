@@ -95,6 +95,23 @@ const server = http.createServer((req, res) => {
   if (req.method === 'GET' && req.url === '/ledger/summary') {
     return send(res, 200, summarizeDir());
   }
+  if (req.method === 'GET' && req.url === '/ledger/export') {
+    const fs = require('fs');
+    const path = require('path');
+    const dir = process.env.APD_LEDGER_DIR || path.join(process.cwd(), '.apd-ledger');
+    const files = ['worker.jsonl', 'automation.jsonl'];
+    let out = '';
+    for (const f of files) {
+      const fp = path.join(dir, f);
+      if (fs.existsSync(fp)) out += fs.readFileSync(fp, 'utf8');
+    }
+    res.writeHead(200, {
+      'Content-Type': 'application/x-ndjson',
+      'Content-Disposition': 'attachment; filename="apd-ledger-export.jsonl"',
+      'Access-Control-Allow-Origin': '*',
+    });
+    return res.end(out || '{}\n');
+  }
   if (req.method !== 'POST') return send(res, 404, { error: 'not found' });
 
   const chunks = [];
