@@ -31,6 +31,16 @@
       <div id="catalog"></div>
     </section>
     <section class="card" style="margin-top:1.5rem">
+      <h2>Local multi-item quote</h2>
+      <p>Build a dry-run quote from catalog SKUs. Agent source requires confirm=true. Never charges.</p>
+      <div id="quote-items"></div>
+      <button class="btn" id="add-quote-line" type="button">Add line</button>
+      <button class="btn btn-primary" id="build-quote" type="button" style="margin-top:1rem">Build quote</button>
+      <label><input id="quote-confirm" type="checkbox" value="true" /> confirm=true (required if source=agent)</label>
+      <p id="quote-status" role="status"></p>
+      <pre id="quote-out" style="white-space:pre-wrap"></pre>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
       <h2>Consult intake</h2>
       <form id="intake-form">
         <label>Name<input name="name" required /></label>
@@ -118,6 +128,88 @@
       catalog.appendChild(button);
     });
     save(load());
+
+    // Quote builder
+    var quoteLines = [];
+    function renderQuoteLines() {
+      var container = document.getElementById('quote-items');
+      container.innerHTML = '';
+      quoteLines.forEach(function (line, idx) {
+        var div = document.createElement('div');
+        div.style.marginBottom = '0.5rem';
+        var sel = document.createElement('select');
+        (window.APD_CATALOG || []).forEach(function (item) {
+          var opt = document.createElement('option');
+          opt.value = item.sku;
+          opt.textContent = item.name;
+          if (item.sku === line.sku) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', function () { quoteLines[idx].sku = sel.value; });
+        var qty = document.createElement('input');
+        qty.type = 'number';
+        qty.min = 1;
+        qty.max = 99;
+        qty.value = line.quantity;
+        qty.style.width = '4rem';
+        qty.addEventListener('change', function () { quoteLines[idx].quantity = Number(qty.value); });
+        var rem = document.createElement('button');
+        rem.type = 'button';
+        rem.className = 'btn';
+        rem.textContent = 'Remove';
+        rem.addEventListener('click', function () { quoteLines.splice(idx, 1); renderQuoteLines(); });
+        div.appendChild(sel);
+        div.appendChild(qty);
+        div.appendChild(rem);
+        container.appendChild(div);
+      });
+    }
+    document.getElementById('add-quote-line').addEventListener('click', function () {
+      quoteLines.push({ sku: (window.APD_CATALOG || [])[0]?.sku || 'consult-30', quantity: 1 });
+      renderQuoteLines();
+    });
+    document.getElementById('build-quote').addEventListener('click', function () {
+      var confirmed = document.getElementById('quote-confirm').checked;
+      var status = document.getElementById('quote-status');
+      var out = document.getElementById('quote-out');
+      if (quoteLines.length === 0) {
+        status.textContent = 'Add at least one line.';
+        return;
+      }
+      var payload = { source: 'website', confirm: confirmed, items: quoteLines };
+      // Local simulation of /quote
+      var total = 0;
+      var lines = [];
+      var valid = true;
+      quoteLines.forEach(function (line) {
+        var cat = (window.APD_CATALOG || []).find(function (c) { return c.sku === line.sku; });
+        if (!cat || !Number.isInteger(line.quantity) || line.quantity < 1) { valid = false; return; }
+        var line_cents = cat.amount_cents * line.quantity;
+        total += line_cents;
+        lines.push({ sku: line.sku, name: cat.name, quantity: line.quantity, unit_cents: cat.amount_cents, line_cents: line_cents });
+      });
+      if (!valid) {
+        status.textContent = 'Invalid SKU or quantity.';
+        return;
+      }
+      var quote = {
+        id: 'qt_local_' + Math.random().toString(16).slice(2, 10),
+        dry_run: true,
+        charged: false,
+        currency: 'aud',
+        source: 'website',
+        confirm: confirmed,
+        lines: lines,
+        total_cents: total,
+        note: 'local dry-run multi-item quote. Never charges.'
+      };
+      var rows = load();
+      rows.push(Object.assign({ type: 'quote_preview', ts: new Date().toISOString() }, quote));
+      save(rows);
+      status.textContent = 'Quote built locally. No charge.';
+      out.textContent = JSON.stringify(quote, null, 2);
+    });
+    renderQuoteLines();
 
     document.getElementById('health-check').addEventListener('click', function () {
       var url = document.getElementById('health-url').value;
