@@ -42,9 +42,14 @@
 ## Already ready (no auth needed)
 
 - Full dry-run payment + agent order gates (`confirm=true` enforced)
-- Local ledgers, queue processor (CLI + new server `/queue/process`), credit notes, fulfillment stubs
+- Local ledgers, queue processor (CLI + server `/queue/process`), credit notes, fulfillment stubs
+- Support queue: GET `/support/queue` on dry-run server (reads ledger, never charges)
 - All static pages + automation.html
 - Skills: apd-gcp-access, payment-api, stripe, stripe-full
 - Payment flow docs updated (this file + AGENT_ORDERS.md + AUTOMATION.md)
+
+## Recheck
+
+Last checked: 2026-11-13 09:36 AEDT. gcloud unauthenticated (no credentialed account). Next recheck: 2026-11-13 18:00 AEDT.
 
 Continue expanding dry-run features and site automation while waiting for operator auth.

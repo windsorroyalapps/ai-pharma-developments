@@ -76,6 +76,7 @@ const server = http.createServer((req, res) => {
       credit_notes: true,
       invoice_preview: true,
       support_ticket: true,
+      support_queue: true,
       catalog: true,
       quote: true,
       queues: true,
@@ -108,10 +109,46 @@ const server = http.createServer((req, res) => {
     }
     res.writeHead(200, {
       'Content-Type': 'application/x-ndjson',
-      'Content-Disposition': 'attachment; filename="apd-ledger-export.jsonl"',
+      'Content-Disposition': 'attachment; filename=\"apd-ledger-export.jsonl\"',
       'Access-Control-Allow-Origin': '*',
     });
     return res.end(out || '{}\n');
+  }
+  if (req.method === 'GET' && req.url === '/support/queue') {
+    const fs = require('fs');
+    const path = require('path');
+    const dir = process.env.APD_LEDGER_DIR || path.join(process.cwd(), '.apd-ledger');
+    let tickets = [];
+    if (fs.existsSync(dir)) {
+      const files = fs.readdirSync(dir).filter((n) => n.endsWith('.jsonl'));
+      for (const f of files) {
+        const lines = fs.readFileSync(path.join(dir, f), 'utf8').split('\n').filter(Boolean);
+        for (const line of lines) {
+          try {
+            const row = JSON.parse(line);
+            if (row.event === 'support_ticket' || (row.type === 'support_ticket' && row.ok === true)) {
+              tickets.push({
+                id: row.id || null,
+                email: row.email || null,
+                subject: row.subject || null,
+                source: row.source || null,
+                confirm: row.confirm === true,
+                ts: row.ts || null,
+                charged: false,
+              });
+            }
+          } catch (e) { /* skip bad line */ }
+        }
+      }
+    }
+    return send(res, 200, {
+      ok: true,
+      dry_run: true,
+      live_charges: false,
+      count: tickets.length,
+      recent: tickets.slice(-20).reverse(),
+      note: 'dry-run support queue. never charges. confirm=true enforced on agent source.',
+    });
   }
   if (req.method !== 'POST') return send(res, 404, { error: 'not found' });
 
