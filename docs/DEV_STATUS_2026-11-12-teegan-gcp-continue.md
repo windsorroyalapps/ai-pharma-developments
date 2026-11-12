@@ -11,7 +11,7 @@ Operator: use skills for GCP access privileges to continue aipharmadevelopments.
 ## Immediate operator action
 Authenticate gcloud (browser login, paste verification code):
 
-https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=OQ58vwGtJZ1PvUr9vnL7PQT1ollSWW&prompt=consent&token_usage=remote&access_type=offline&code_challenge=7zOlY2HvGawxCIYjChhyvp04R4iC60fvbv0_8_0vi9k&code_challenge_method=S256
+https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=d6vm1SPgaPbED5KUr48hR4gh3gkYk4&prompt=consent&token_usage=remote&access_type=offline&code_challenge=C39SyblXG3WbvfDaxCwBpr0tpZviXkzCN-_RWMsKDzA&code_challenge_method=S256
 
 Then:
 ```bash
@@ -24,7 +24,7 @@ Provide PROJECT_ID. Stripe test key versions later (names only). Live after ID d
 ## Site + automation (no auth)
 - pay.html + JS already dry-run Stripe Checkout + Google Pay + local ledger + confirm=true gate.
 - cloud/worker Node ready for Cloud Run (session create, webhook, ledger).
-- Continued: status update, privilege docs current.
+- Continued: status update with fresh auth URL, privilege docs current.
 - Next after auth: deploy worker, set GitHub Actions vars (GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA), wire keys.
 
 ## Background
