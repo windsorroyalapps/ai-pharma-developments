@@ -24,13 +24,14 @@
     }, 0);
     var aud = (cents / 100).toFixed(2);
     var last = rows.length ? (rows[rows.length - 1].event || 'unknown') : 'none';
-    summary.textContent = rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · last: ' + last + ' · dry-run only (no live charges)';
-    list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet. Dry-run mode active.';
+    var banner = 'DRY-RUN MODE ACTIVE — charged always forced to 0 — no live Stripe charges possible';
+    summary.textContent = banner + ' · ' + rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · last: ' + last;
+    list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet. Dry-run mode active. Use the form above to record a preview row.';
   }
 
   window.apdRecordLedger = function (record) {
     var rows = load();
-    rows.push(Object.assign({ ts: new Date().toISOString(), charged: false }, record, { charged: false }));
+    rows.push(Object.assign({ ts: new Date().toISOString(), charged: false, dry_run: true }, record, { charged: false }));
     localStorage.setItem(KEY, JSON.stringify(rows.slice(-50)));
     render();
   };
@@ -41,12 +42,12 @@
   if (exportBtn) {
     exportBtn.addEventListener('click', function () {
       var lines = load().map(function (row) {
-        return JSON.stringify(Object.assign({}, row, { charged: false }));
+        return JSON.stringify(Object.assign({}, row, { charged: false, dry_run: true }));
       }).join('\n');
       var blob = new Blob([lines + (lines ? '\n' : '')], { type: 'application/x-ndjson' });
       var a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = 'apd-pay-ledger.jsonl';
+      a.download = 'apd-pay-ledger-dry-run.jsonl';
       a.click();
     });
   }

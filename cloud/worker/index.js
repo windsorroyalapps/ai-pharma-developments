@@ -59,7 +59,7 @@ function readiness() {
   return {
     ok: true,
     service: 'apd-payment-worker',
-    version: '1.0.1-dry',
+    version: '1.0.2-dry',
     ts: new Date().toISOString(),
     stripe_configured: Boolean(STRIPE_SECRET_KEY),
     stripe_key_mode: keyMode,
@@ -72,7 +72,8 @@ function readiness() {
     credit_notes: true,
     subscription_preview: true,
     fulfillment_topic: process.env.FULFILLMENT_TOPIC || null,
-    note: 'Dry-run only until operator GCP auth + Stripe test keys + identity verification',
+    note: 'Dry-run only until operator GCP auth + Stripe test keys + identity verification. Auth blocker active in sandbox.',
+    auth_blocker: true,
     blockers: [
       !STRIPE_SECRET_KEY ? 'stripe_test_key_missing' : null,
       !STRIPE_WEBHOOK_SECRET ? 'stripe_webhook_secret_missing' : null,

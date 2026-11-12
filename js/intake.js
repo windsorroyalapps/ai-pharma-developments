@@ -16,6 +16,7 @@
     rows.push(Object.assign({
       ts: new Date().toISOString(),
       charged: false,
+      dry_run: true,
       channel: 'local_fallback',
       event: 'consult_intake_fallback'
     }, payload));
@@ -79,7 +80,9 @@
   function renderLocal() {
     if (!localView) return;
     var rows = readRows();
-    localView.textContent = rows.length ? JSON.stringify(rows, null, 2) : 'No local intake saved.';
+    localView.textContent = rows.length
+      ? 'DRY-RUN FALLBACK · ' + rows.length + ' local intake(s) · charged: 0\n' + JSON.stringify(rows, null, 2)
+      : 'No local intake saved. Worker placeholder or unreachable uses this fallback. No charges.';
   }
 
   if (exportBtn) {

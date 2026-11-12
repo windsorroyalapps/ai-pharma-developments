@@ -82,7 +82,8 @@
       <p>Probes <code>/ready</code>. Placeholder URL stays idle and does not call Stripe.</p>
       <label>Health URL<input id="health-url" value="https://YOUR-CLOUD-RUN-URL/ready"></label>
       <button class="btn" id="health-check" type="button" style="margin-top:1rem">Check worker health</button>
-      <pre id="health-out" style="white-space:pre-wrap">Idle. Deploy the dry-run worker before probing.</pre>
+      <button class="btn" id="health-local" type="button" style="margin-top:1rem">Show local dry-run status</button>
+      <pre id="health-out" style="white-space:pre-wrap">Idle. Deploy the dry-run worker before probing. Local confirm=true gate and ledgers remain enforced.</pre>
     </section>
     <section class="card" style="margin-top:1.5rem">
       <h2>Local queue</h2>
@@ -222,7 +223,8 @@
           live_charges: false,
           confirm_gate: true,
           service: 'apd-payment-worker',
-          note: 'Cloud Run URL not set. Local gate and ledger still enforced.'
+          version: '1.0.2-dry',
+          note: 'Cloud Run URL not set. Local gate and ledger still enforced. GCP auth blocker active.'
         }, null, 2);
         return;
       }
@@ -246,6 +248,18 @@
           note: 'Worker unreachable. Local confirm gate still enforced.'
         }, null, 2);
       });
+    });
+    document.getElementById('health-local').addEventListener('click', function () {
+      document.getElementById('health-out').textContent = JSON.stringify({
+        ok: true,
+        local_only: true,
+        dry_run: true,
+        live_charges: false,
+        confirm_gate: true,
+        charged_forced: 0,
+        service: 'apd-local-automation',
+        note: 'Browser-side dry-run. No network call. Agent orders still require confirm=true checkbox.'
+      }, null, 2);
     });
     document.getElementById('intake-form').addEventListener('submit', function (event) {
       event.preventDefault();
