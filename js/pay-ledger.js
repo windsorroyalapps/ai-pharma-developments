@@ -17,6 +17,8 @@
       return row.event === 'local_dry_run_refused' || row.event === 'gpay_dry_run_refused' || (row.confirm === false && row.source === 'agent');
     }).length;
     var confirmed = rows.filter(function (row) { return row.confirm === true; }).length;
+    var agent = rows.filter(function (row) { return row.source === 'agent'; }).length;
+    var website = rows.filter(function (row) { return row.source !== 'agent'; }).length;
     var cents = rows.reduce(function (sum, row) {
       if (Number.isInteger(row.amount_cents)) return sum + row.amount_cents;
       if (row.amount_aud != null) return sum + Math.round(Number(row.amount_aud) * 100);
@@ -25,7 +27,7 @@
     var aud = (cents / 100).toFixed(2);
     var last = rows.length ? (rows[rows.length - 1].event || 'unknown') : 'none';
     var banner = 'DRY-RUN MODE ACTIVE — charged always forced to 0 — no live Stripe charges possible';
-    summary.textContent = banner + ' · ' + rows.length + ' local rows · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · last: ' + last;
+    summary.textContent = banner + ' · ' + rows.length + ' local rows · agent ' + agent + ' · website ' + website + ' · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · last: ' + last;
     list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet. Dry-run mode active. Use the form above to record a preview row.';
   }
 
@@ -55,8 +57,10 @@
   var clearBtn = document.getElementById('pay-ledger-clear');
   if (clearBtn) {
     clearBtn.addEventListener('click', function () {
-      localStorage.removeItem(KEY);
-      render();
+      if (confirm('Clear local dry-run ledger? This cannot be undone.')) {
+        localStorage.removeItem(KEY);
+        render();
+      }
     });
   }
 
