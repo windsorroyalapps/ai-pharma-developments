@@ -78,6 +78,7 @@ const server = http.createServer((req, res) => {
       support_ticket: true,
       catalog: true,
       quote: true,
+      queues: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });
@@ -203,6 +204,7 @@ const server = http.createServer((req, res) => {
       const row = append('consult_intake_fallback', {
         name: String(body.name).slice(0, 120),
         email: String(body.email).slice(0, 200),
+        need: String(body.need).slice(0, 4000),
         charged: false,
       });
       return send(res, 200, { ok: true, charged: false, queued: true, row });
@@ -211,6 +213,106 @@ const server = http.createServer((req, res) => {
       if (!body.session_id) return send(res, 400, { error: 'session_id required' });
       const row = append('dry_run_settled', { session_id: String(body.session_id).slice(0, 80), note: 'local settle only' });
       return send(res, 200, { ok: true, charged: false, row });
+    }
+    if (req.url === '/queue/process') {
+      const items = Array.isArray(body.items) ? body.items : [];
+      if (items.length === 0) return send(res, 400, { error: 'items array required' });
+      const results = [];
+      for (const item of items) {
+        const source = item.source || 'website';
+        const type = item.type || 'order';
+        if (source === 'agent' && item.confirm !== true) {
+          const refused = {
+            ok: false,
+            status: 'refused',
+            reason: 'agent orders require confirm=true',
+            charged: false,
+            type,
+            source,
+          };
+          append('queue_refused', refused);
+          results.push(refused);
+          continue;
+        }
+        let processed;
+        if (type === 'consult_intake') {
+          if (!item.email || !item.need) {
+            processed = { ok: false, status: 'invalid', reason: 'consult_intake requires email and need', charged: false, type, source };
+          } else {
+            processed = {
+              ok: true, status: 'queued', type: 'consult_intake',
+              id: 'int_' + crypto.randomBytes(4).toString('hex'),
+              email: String(item.email).slice(0, 200),
+              name: item.name ? String(item.name).slice(0, 120) : null,
+              need: String(item.need).slice(0, 500),
+              source, confirm: item.confirm === true, charged: false, mode: 'dry_run',
+            };
+          }
+        } else if (type === 'support_ticket') {
+          if (!item.email || !item.subject) {
+            processed = { ok: false, status: 'invalid', reason: 'support_ticket requires email and subject', charged: false, type, source };
+          } else {
+            processed = {
+              ok: true, status: 'queued', type: 'support_ticket',
+              id: 'sup_' + crypto.randomBytes(4).toString('hex'),
+              email: String(item.email).slice(0, 200),
+              subject: String(item.subject).slice(0, 200),
+              body: item.body ? String(item.body).slice(0, 1000) : null,
+              source, confirm: item.confirm === true, charged: false, mode: 'dry_run',
+            };
+          }
+        } else if (type === 'invoice_preview' || type === 'subscription_preview') {
+          processed = {
+            ok: true, status: 'preview', type,
+            id: (type === 'subscription_preview' ? 'sub_' : 'inv_') + crypto.randomBytes(4).toString('hex'),
+            sku: item.sku || null,
+            amount_cents: item.amount_cents || null,
+            source, confirm: item.confirm === true, charged: false, billed: false, mode: 'dry_run',
+          };
+        } else if (type === 'fulfillment') {
+          if (!item.order_id) {
+            processed = { ok: false, status: 'invalid', reason: 'fulfillment requires order_id', charged: false, type, source };
+          } else {
+            processed = {
+              ok: true, status: 'queued', type: 'fulfillment',
+              id: 'ful_' + crypto.randomBytes(4).toString('hex'),
+              order_id: String(item.order_id).slice(0, 80),
+              source, confirm: item.confirm === true, charged: false, mode: 'dry_run',
+            };
+          }
+        } else {
+          // default order
+          const amount = Number(item.amount_cents);
+          if (!Number.isInteger(amount) || amount < 100) {
+            processed = { ok: false, status: 'invalid', reason: 'amount_cents must be integer >= 100', charged: false, type, source };
+          } else {
+            processed = {
+              ok: true, status: 'queued', type: 'order',
+              id: 'q_' + crypto.randomBytes(4).toString('hex'),
+              sku: item.sku || null,
+              amount_cents: amount,
+              source, confirm: item.confirm === true, charged: false, mode: 'dry_run',
+            };
+          }
+        }
+        if (processed.ok) append('queue_processed', processed);
+        else append('queue_refused', processed);
+        results.push(processed);
+      }
+      const summary = {
+        total: results.length,
+        queued: results.filter((r) => r.ok && r.status === 'queued').length,
+        previews: results.filter((r) => r.ok && r.status === 'preview').length,
+        refused: results.filter((r) => !r.ok).length,
+        charged: 0,
+        live_charges: false,
+      };
+      return send(res, 200, {
+        ok: true,
+        summary,
+        results,
+        note: 'dry-run queue process. confirm=true gate applied. never charges.',
+      });
     }
     return send(res, 404, { error: 'not found' });
   });
