@@ -78,6 +78,7 @@ const server = http.createServer((req, res) => {
       support_ticket: true,
       catalog: true,
       quote: true,
+      queues: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });
@@ -193,6 +194,54 @@ const server = http.createServer((req, res) => {
       if (!body.session_id) return send(res, 400, { error: 'session_id required' });
       const row = append('dry_run_settled', { session_id: String(body.session_id).slice(0, 80), note: 'local settle only' });
       return send(res, 200, { ok: true, charged: false, row });
+    }
+    if (req.url === '/queue/process') {
+      const items = Array.isArray(body.items) ? body.items : [];
+      if (items.length === 0) return send(res, 400, { error: 'items array required' });
+      const results = [];
+      for (const item of items) {
+        const source = item.source || 'website';
+        if (source === 'agent' && item.confirm !== true) {
+          const refused = {
+            ok: false,
+            status: 'refused',
+            reason: 'agent orders require confirm=true',
+            charged: false,
+            type: item.type || 'order',
+            source,
+          };
+          append('queue_refused', refused);
+          results.push(refused);
+          continue;
+        }
+        const processed = {
+          ok: true,
+          status: 'queued',
+          type: item.type || 'order',
+          id: 'q_' + crypto.randomBytes(4).toString('hex'),
+          source,
+          confirm: item.confirm === true,
+          charged: false,
+          mode: 'dry_run',
+          sku: item.sku || null,
+          amount_cents: item.amount_cents || null,
+        };
+        append('queue_processed', processed);
+        results.push(processed);
+      }
+      const summary = {
+        total: results.length,
+        queued: results.filter((r) => r.ok).length,
+        refused: results.filter((r) => !r.ok).length,
+        charged: 0,
+        live_charges: false,
+      };
+      return send(res, 200, {
+        ok: true,
+        summary,
+        results,
+        note: 'dry-run queue process. confirm=true gate applied. never charges.',
+      });
     }
     return send(res, 404, { error: 'not found' });
   });

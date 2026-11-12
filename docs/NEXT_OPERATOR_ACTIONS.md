@@ -1,4 +1,4 @@
-# Next operator actions — 2026-11-09
+# Next operator actions — 2026-11-13
 
 ## Immediate (required for GCP privileges)
 
@@ -42,7 +42,7 @@
 ## Already ready (no auth needed)
 
 - Full dry-run payment + agent order gates (`confirm=true` enforced)
-- Local ledgers, queue processor, credit notes, fulfillment stubs
+- Local ledgers, queue processor (CLI + new server `/queue/process`), credit notes, fulfillment stubs
 - All static pages + automation.html
 - Skills: apd-gcp-access, payment-api, stripe, stripe-full
 - Payment flow docs updated (this file + AGENT_ORDERS.md + AUTOMATION.md)
