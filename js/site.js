@@ -80,6 +80,6 @@
       status.classList.add("show");
     }
 
-    window.location.href = `mailto:troy.windsor1989@gmail.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:hello@aipharmadevelopments.com?subject=${subject}&body=${body}`;
   });
 })();
