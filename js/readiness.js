@@ -3,13 +3,13 @@
   var board = {
     live_charges: false,
     confirm_gate: true,
-    checked_at: '2026-11-18T09:05:00+11:00',
+    checked_at: '2026-11-23T10:22:00+11:00',
     secret_names: ['stripe-secret-key', 'stripe-webhook-secret', 'stripe-publishable-key'],
     github_actions_vars: ['GCP_PROJECT_ID', 'GCP_REGION', 'GCP_WIF_PROVIDER', 'GCP_DEPLOY_SA'],
     blockers: [
-      'gcloud auth: no credentialed account (SDK installed in sandbox this cycle). Project unset. IAM not mutated. Login still required.',
-      'Authenticate on a machine you control with gcloud auth login --no-launch-browser, then reply with PROJECT_ID only. Do not invent project IDs.',
-      'GitHub Actions vars unset until bootstrap: GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA',
+      'gcloud auth: no credentialed account in this environment. Project unset. IAM not mutated. Login required on controlled machine.',
+      'Authenticate: gcloud auth login --no-launch-browser then reply with PROJECT_ID only. Do not invent IDs.',
+      'GitHub Actions vars unset: GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA',
       'Secret Manager versions missing: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key (test keys only after operator pastes).',
       'Stripe Dashboard identity verification still required before any live keys. Do not store ID documents in git or skills.'
     ]
@@ -22,5 +22,5 @@
     li.textContent = item;
     list.appendChild(li);
   });
-  live.textContent = 'Checked ' + board.checked_at + '. live_charges=' + board.live_charges + '. Agent checkout refuses unless confirm=true. Region default australia-southeast1. Dry-run queue processing, invoice preview, consult intake, local ledger, and least-privilege docs ready. No live charges. GCP auth login still required.';
+  live.textContent = 'Checked ' + board.checked_at + '. live_charges=' + board.live_charges + '. Agent checkout refuses unless confirm=true. Region default australia-southeast1. Dry-run queue, invoice preview, consult intake, local ledger, least-privilege docs ready. No live charges. GCP auth still required.';
 })();
