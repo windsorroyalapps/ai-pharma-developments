@@ -15,6 +15,7 @@
 - `automation.html` local intake + agent-order queue (`apd_automation_queue`), JSONL import/export, local settle
 - Keyless worker: `node cloud/worker/dry-run-server.js` (confirm=true gate, no Stripe package)
 - New server route: POST `/queue/process` with `{ "items": [ ... ] }` — applies confirm=true gate, writes ledger, never charges
+- Queue processor now supports credit_note previews (charged=false)
 - Ledger summary: `node tools/ledger-summary.js` over `.apd-ledger` (gitignored)
 - Agent order contract: `confirm=true` required, never charges from the agent path
 - Consult form falls back to mailto until `INTAKE_URL` is a real worker URL

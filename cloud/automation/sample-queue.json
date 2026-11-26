@@ -39,6 +39,14 @@
     "source": "website"
   },
   {
+    "type": "credit_note",
+    "sku": "consult-intro",
+    "amount_cents": 5000,
+    "reason": "partial dry-run adjustment",
+    "related_invoice": "inv_dry_sample",
+    "source": "website"
+  },
+  {
     "sku": "agent-retainer",
     "amount_cents": 50000,
     "currency": "aud",

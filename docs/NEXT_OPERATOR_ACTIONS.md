@@ -1,4 +1,4 @@
-# Next operator actions — 2026-11-17
+# Next operator actions — 2026-11-27
 
 ## Immediate (required for GCP privileges)
 
@@ -46,10 +46,10 @@
 ## Already ready (no auth needed)
 
 - Full dry-run payment + agent order gates (`confirm=true` enforced)
-- Local ledgers, queue processor, credit notes, fulfillment stubs
+- Local ledgers, queue processor (now includes credit_note previews), credit notes, fulfillment stubs
 - Static site + automation.html + status readiness board
 - Worker dry-run server: `node cloud/worker/dry-run-server.js`
 
 ## Recheck
 
-Last checked: 2026-11-17. gcloud unauthenticated (no credentialed account). Continue dry-run site/automation work while waiting for operator auth + PROJECT_ID.
+Last checked: 2026-11-27. gcloud unauthenticated (no credentialed account). Continue dry-run site/automation work while waiting for operator auth + PROJECT_ID.

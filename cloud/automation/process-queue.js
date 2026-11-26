@@ -119,6 +119,29 @@ function processItem(item) {
     };
   }
 
+  if (type === 'credit_note') {
+    const amount = Number(item.amount_cents);
+    if (!item.sku || !Number.isInteger(amount) || amount < 100) {
+      return { ok: false, status: 'invalid', reason: 'credit_note requires sku and amount_cents integer >= 100', charged: false };
+    }
+    return {
+      ok: true,
+      status: 'preview',
+      type: 'credit_note',
+      id: 'cn_preview_' + crypto.randomBytes(4).toString('hex'),
+      sku: String(item.sku).slice(0, 80),
+      amount_cents: amount,
+      reason: item.reason ? String(item.reason).slice(0, 240) : 'dry-run adjustment',
+      related_invoice: item.related_invoice ? String(item.related_invoice).slice(0, 80) : null,
+      source,
+      confirm: item.confirm === true,
+      charged: false,
+      refunded: false,
+      stripe_refund: false,
+      mode: 'dry_run',
+    };
+  }
+
   if (type === 'fulfillment') {
     if (!item.order_id) {
       return { ok: false, status: 'invalid', reason: 'fulfillment requires order_id', charged: false };
@@ -173,6 +196,7 @@ const summary = {
   previews: results.filter((r) => r.ok && r.status === 'preview').length,
   refused: results.filter((r) => !r.ok).length,
   charged: 0,
+  live_charges: false,
 };
 console.log(JSON.stringify({ summary, results }, null, 2));
 if (results.some((r) => r.source === 'agent' && r.ok && r.confirm !== true)) process.exit(2);
