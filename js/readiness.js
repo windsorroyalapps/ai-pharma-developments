@@ -3,7 +3,7 @@
   var board = {
     live_charges: false,
     confirm_gate: true,
-    checked_at: '2026-11-26T03:20:00Z',
+    checked_at: '2026-11-27T09:05:00+11:00',
     secret_names: ['stripe-secret-key', 'stripe-webhook-secret', 'stripe-publishable-key'],
     github_actions_vars: ['GCP_PROJECT_ID', 'GCP_REGION', 'GCP_WIF_PROVIDER', 'GCP_DEPLOY_SA'],
     blockers: [
