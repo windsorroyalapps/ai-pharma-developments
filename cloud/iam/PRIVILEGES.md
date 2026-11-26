@@ -55,3 +55,5 @@ Workload Identity User on the deploy SA, member (numeric project number, not pro
 ## Current sandbox status (2026-11-26)
 
 gcloud SDK 594.0.1 installed. No active account. Project unset. Login is still required. Do not mutate IAM until operator authenticates on a controlled machine and provides PROJECT_ID. Bootstrap and apply-after-auth scripts remain ready but unrun. No project ID invented.
+
+See docs/DEV_STATUS_2026-11-26-teegan-gcp-continue.md for fresh auth URL and next steps.
