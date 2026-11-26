@@ -52,8 +52,8 @@ Workload Identity User on the deploy SA, member (numeric project number, not pro
 5. `bash cloud/automation/apply-after-auth.sh`
 6. Add Stripe test key versions only. Live keys wait for Stripe identity verification and an explicit live confirmation.
 
-## Current sandbox status (2026-11-26)
+## Current sandbox status (2026-11-27)
 
-gcloud SDK 594.0.1 installed. No active account. Project unset. Login is still required. Do not mutate IAM until operator authenticates on a controlled machine and provides PROJECT_ID. Bootstrap and apply-after-auth scripts remain ready but unrun. No project ID invented.
+gcloud not installed on PATH in this environment. No active account. Project unset. Login is still required. Do not mutate IAM until operator authenticates on a controlled machine and provides PROJECT_ID. Bootstrap and apply-after-auth scripts remain ready but unrun. No project ID invented. No Stripe live keys or identity documents stored.
 
-See docs/DEV_STATUS_2026-11-26-teegan-gcp-continue.md for fresh auth URL and next steps.
+See docs/DEV_STATUS_2026-11-27-teegan.md for this session's probe and next steps.
