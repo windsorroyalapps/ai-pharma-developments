@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Automation | AI Pharma Developments</title>
+  <meta name="description" content="Agent automation features for AI Pharma Developments: payment hooks, order ledgers, GCP workflows." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">AI</span>
+        <span>AI Pharma Developments</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="index.html#solutions">Solutions</a>
+        <a href="support.html">Support</a>
+        <a href="pay.html">Pay</a>
+        <a class="active" href="automation.html">Automation</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding:3rem 0">
+    <div class="eyebrow">Agent systems</div>
+    <h1>Automation & Agent Features</h1>
+    <p class="lead">Backend automation for orders, payments, and fulfillment. Agent-gated with confirm=true. Integrates with Stripe, Cloud Run, Secret Manager, and Pub/Sub.</p>
+
+    <div class="grid-2" style="margin-top:1.5rem">
+      <section class="card">
+        <h2>Payment Automation</h2>
+        <ul>
+          <li>Stripe Checkout Session creation via Cloud Run worker</li>
+          <li>Webhook handling for checkout.session.completed</li>
+          <li>Append-only ledger (JSONL / Firestore)</li>
+          <li>Google Pay via Stripe gateway</li>
+          <li>Agent orders require explicit confirm=true</li>
+        </ul>
+        <p>See <a href="pay.html">pay.html</a> for frontend. Secrets in Secret Manager only.</p>
+      </section>
+
+      <section class="card">
+        <h2>GCP & WIF</h2>
+        <ul>
+          <li>Least-privilege SAs: apd-payment-sa, apd-deploy-sa</li>
+          <li>Workload Identity Federation for GitHub Actions (no keys)</li>
+          <li>Region: australia-southeast1</li>
+          <li>Bootstrap via cloud/iam/bootstrap.sh after gcloud auth</li>
+        </ul>
+        <p>Operator must authenticate gcloud and set project before IAM changes.</p>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:1.5rem">
+      <h2>Future Automation</h2>
+      <p>On payment success: create Stripe Customer, trigger Pub/Sub for fulfillment agent, optional email receipts. Subscriptions and multi-currency planned.</p>
+      <p>Local dry-run server available in cloud/worker/dry-run-server.js for testing without live keys.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© <span id="year"></span> AI Pharma Developments</div>
+      <div><a href="mailto:hello@aipharmadevelopments.com">hello@aipharmadevelopments.com</a></div>
+    </div>
+  </footer>
+  <script src="js/site.js"></script>
+</body>
+</html>
