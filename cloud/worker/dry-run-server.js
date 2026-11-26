@@ -80,6 +80,7 @@ const server = http.createServer((req, res) => {
       catalog: true,
       quote: true,
       queues: true,
+      stats: true,
       blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
       ledger: summarizeDir(),
     });
@@ -96,6 +97,40 @@ const server = http.createServer((req, res) => {
   }
   if (req.method === 'GET' && req.url === '/ledger/summary') {
     return send(res, 200, summarizeDir());
+  }
+  if (req.method === 'GET' && req.url === '/stats') {
+    const summary = summarizeDir();
+    const fs = require('fs');
+    const path = require('path');
+    const dir = process.env.APD_LEDGER_DIR || path.join(process.cwd(), '.apd-ledger');
+    let breakdown = { quotes: 0, credit_notes: 0, intakes: 0, support: 0, refused: 0, previews: 0, orders: 0 };
+    if (fs.existsSync(dir)) {
+      const files = fs.readdirSync(dir).filter((n) => n.endsWith('.jsonl'));
+      for (const f of files) {
+        const lines = fs.readFileSync(path.join(dir, f), 'utf8').split('\n').filter(Boolean);
+        for (const line of lines) {
+          try {
+            const row = JSON.parse(line);
+            if (row.event === 'quote_preview' || row.type === 'quote_preview') breakdown.quotes++;
+            else if (row.event === 'credit_note_preview' || row.type === 'credit_note') breakdown.credit_notes++;
+            else if (row.event === 'consult_intake' || row.event === 'consult_intake_fallback' || row.type === 'consult_intake') breakdown.intakes++;
+            else if (row.event === 'support_ticket' || row.type === 'support_ticket') breakdown.support++;
+            else if (row.status === 'refused' || row.ok === false) breakdown.refused++;
+            else if (row.status === 'preview') breakdown.previews++;
+            else if (row.event === 'dry_run_session' || row.event === 'agent_order_queued' || row.type === 'order') breakdown.orders++;
+          } catch (e) { /* skip */ }
+        }
+      }
+    }
+    return send(res, 200, {
+      ok: true,
+      dry_run: true,
+      live_charges: false,
+      charged: 0,
+      summary,
+      breakdown,
+      note: 'dry-run ledger stats. Never charges.',
+    });
   }
   if (req.method === 'GET' && req.url === '/ledger/export') {
     const fs = require('fs');
