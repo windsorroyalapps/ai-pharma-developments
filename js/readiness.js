@@ -3,11 +3,11 @@
   var board = {
     live_charges: false,
     confirm_gate: true,
-    checked_at: '2026-11-23T10:22:00+11:00',
+    checked_at: '2026-11-26T03:20:00Z',
     secret_names: ['stripe-secret-key', 'stripe-webhook-secret', 'stripe-publishable-key'],
     github_actions_vars: ['GCP_PROJECT_ID', 'GCP_REGION', 'GCP_WIF_PROVIDER', 'GCP_DEPLOY_SA'],
     blockers: [
-      'gcloud auth: no credentialed account in this environment. Project unset. IAM not mutated. Login required on controlled machine.',
+      'gcloud SDK 594.0.1 installed in sandbox. No active account. Project unset. IAM not mutated. Login required on controlled machine.',
       'Authenticate: gcloud auth login --no-launch-browser then reply with PROJECT_ID only. Do not invent IDs.',
       'GitHub Actions vars unset: GCP_PROJECT_ID, GCP_REGION=australia-southeast1, GCP_WIF_PROVIDER, GCP_DEPLOY_SA',
       'Secret Manager versions missing: stripe-secret-key, stripe-webhook-secret, stripe-publishable-key (test keys only after operator pastes).',
