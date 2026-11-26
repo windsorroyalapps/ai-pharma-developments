@@ -5,9 +5,9 @@
 - No credentialed accounts. Project unset.
 - IAM not mutated (apd-gcp-access skill forbids until operator auth).
 
-## Fresh Auth URL for operator (expires quickly)
+## Fresh Auth URL for operator (expires quickly — use now)
 Visit in browser on machine you control:
-https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=0szyp1Z3E3qiyrjZylQQJFP09Q5U2m&prompt=consent&token_usage=remote&access_type=offline&code_challenge=slKDBiPnd04KLoR-UrjfBh9Y1RwgdAjOiNSGW4U93XE&code_challenge_method=S256
+https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fappengine.admin+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fsqlservice.login+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcompute+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Faccounts.reauth&state=TSOLTZRh4MBpVEtGkFFsxmtY1ugDHj&prompt=consent&token_usage=remote&access_type=offline&code_challenge=lcj0bRj0Io1hxFL6-KnRgmeBn4-bzfRS8CdiSRtd0nk&code_challenge_method=S256
 
 After verification code:
 ```bash
