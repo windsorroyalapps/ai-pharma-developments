@@ -306,6 +306,20 @@ const server = http.createServer((req, res) => {
             amount_cents: item.amount_cents || null,
             source, confirm: item.confirm === true, charged: false, billed: false, mode: 'dry_run',
           };
+        } else if (type === 'credit_note') {
+          const amount = Number(item.amount_cents);
+          if (!item.sku || !Number.isInteger(amount) || amount < 100) {
+            processed = { ok: false, status: 'invalid', reason: 'credit_note requires sku and amount_cents integer >= 100', charged: false, type, source };
+          } else {
+            processed = {
+              ok: true, status: 'preview', type: 'credit_note',
+              id: 'cn_' + crypto.randomBytes(4).toString('hex'),
+              sku: String(item.sku).slice(0, 80),
+              amount_cents: amount,
+              reason: item.reason ? String(item.reason).slice(0, 240) : 'dry-run adjustment',
+              source, confirm: item.confirm === true, charged: false, refunded: false, stripe_refund: false, mode: 'dry_run',
+            };
+          }
         } else if (type === 'fulfillment') {
           if (!item.order_id) {
             processed = { ok: false, status: 'invalid', reason: 'fulfillment requires order_id', charged: false, type, source };
