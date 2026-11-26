@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-11-18 09:05 AEDT (Teegan cycle)
+# Payment and GCP status — 2026-11-27 09:05 AEDT (Teegan cycle)
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill required for payment API or Stripe.
 
@@ -6,7 +6,7 @@ Identity documents stay out of git. Complete Stripe ID verification in Dashboard
 
 ## Blocker
 
-Sandbox: gcloud SDK installed this session (`gcloud --version` succeeds). `gcloud auth list` returns no active account. Project unset. IAM not mutated. `cloud/iam/bootstrap.sh` not run. No project ID invented.
+Sandbox: gcloud SDK 594.0.1 installed this session (`gcloud --version` succeeds). `gcloud auth list` returns no credentialed accounts. Project unset. IAM not mutated. `cloud/iam/bootstrap.sh` not run. No project ID invented.
 
 **Authenticate now (operator machine):**
 ```bash
@@ -25,7 +25,7 @@ bash cloud/iam/print-github-vars.sh
 
 ## Built / improved this cycle (dry-run only)
 
-- Confirmed gcloud present but unauthenticated; blocker recorded.
+- Confirmed gcloud present but unauthenticated; blocker recorded and refreshed.
 - Dry-run server (`cloud/worker/dry-run-server.js`) and ledger remain solid: agent items refuse unless confirm=true; charged always false.
 - Status / readiness board timestamp refreshed.
 - No secrets or ID documents stored. Live charges still blocked.
