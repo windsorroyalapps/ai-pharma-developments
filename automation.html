@@ -41,6 +41,18 @@
       <pre id="quote-out" style="white-space:pre-wrap"></pre>
     </section>
     <section class="card" style="margin-top:1.5rem">
+      <h2>Credit note preview (local)</h2>
+      <p>Preview a credit note / adjustment. Never refunds. Agent source requires confirm=true.</p>
+      <form id="credit-form">
+        <label>SKU<input name="sku" id="cn-sku" required /></label>
+        <label>Amount cents<input name="amount_cents" type="number" min="100" required /></label>
+        <label>Reason<input name="reason" placeholder="dry-run adjustment" /></label>
+        <label><input name="confirm" type="checkbox" value="true" /> confirm=true (required if source=agent)</label>
+        <button class="btn btn-primary" type="submit" style="margin-top:1rem">Preview credit note</button>
+      </form>
+      <p id="credit-status" role="status"></p>
+    </section>
+    <section class="card" style="margin-top:1.5rem">
       <h2>Consult intake</h2>
       <form id="intake-form">
         <label>Name<input name="name" required /></label>
@@ -117,6 +129,8 @@
       document.getElementById('sku').value = item.sku;
       document.getElementById('description').value = item.name;
       document.getElementById('amount_cents').value = item.amount_cents;
+      var cn = document.getElementById('cn-sku');
+      if (cn) cn.value = item.sku;
     }
     var catalog = document.getElementById('catalog');
     (window.APD_CATALOG || []).forEach(function (item) {
@@ -211,6 +225,36 @@
       out.textContent = JSON.stringify(quote, null, 2);
     });
     renderQuoteLines();
+
+    // Credit note form
+    document.getElementById('credit-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      var data = new FormData(event.target);
+      var status = document.getElementById('credit-status');
+      var amount = Number(data.get('amount_cents'));
+      var confirmed = data.get('confirm') === 'true';
+      var sku = String(data.get('sku') || '');
+      if (!sku || !Number.isInteger(amount) || amount < 100) {
+        status.textContent = 'SKU and amount_cents integer >= 100 required.';
+        return;
+      }
+      var rows = load();
+      rows.push({
+        type: 'credit_note',
+        ts: new Date().toISOString(),
+        id: 'cn_local_' + Math.random().toString(16).slice(2, 10),
+        sku: sku,
+        amount_cents: amount,
+        reason: String(data.get('reason') || 'dry-run adjustment'),
+        confirm: confirmed,
+        charged: false,
+        refunded: false,
+        stripe_refund: false
+      });
+      save(rows);
+      status.textContent = 'Credit note preview queued locally. No refund.';
+      event.target.reset();
+    });
 
     document.getElementById('health-check').addEventListener('click', function () {
       var url = document.getElementById('health-url').value;
