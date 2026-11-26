@@ -18,7 +18,8 @@
       charged: false,
       dry_run: true,
       channel: 'local_fallback',
-      event: 'consult_intake_fallback'
+      event: 'consult_intake_fallback',
+      note: 'Worker URL is placeholder or unreachable. No charge possible.'
     }, payload));
     localStorage.setItem(KEY, JSON.stringify(rows.slice(-30)));
     return rows.length;
@@ -31,7 +32,9 @@
       'Org: ' + payload.org,
       'Window: ' + payload.when,
       '',
-      payload.need
+      payload.need,
+      '',
+      '— saved as local dry-run fallback; no charge —'
     ].join('\n');
     location.href = 'mailto:hello@aipharmadevelopments.com?subject=' +
       encodeURIComponent('Consult request — AI Pharma Developments') +
@@ -51,7 +54,7 @@
     var endpoint = window.INTAKE_URL || '';
     var placeholder = !endpoint || endpoint.indexOf('YOUR-CLOUD-RUN-URL') !== -1;
     if (placeholder) {
-      show('Saved locally (' + saved + '). Worker not deployed. Opening email draft. No charge.');
+      show('Saved locally (' + saved + '). Worker not deployed (GCP auth pending). Opening email draft. Dry-run only — no charge.');
       mailto(payload);
       return;
     }
@@ -61,10 +64,10 @@
       body: JSON.stringify(payload)
     }).then(function (res) {
       if (!res.ok) throw new Error('intake failed');
-      show('Request queued on worker. Local copy kept. Opening email draft.');
+      show('Request queued on worker. Local copy kept. Opening email draft. Still dry-run until keys confirmed.');
       mailto(payload);
     }).catch(function () {
-      show('Worker unreachable. Local fallback kept (' + saved + '). Opening email draft. Dry-run mode.');
+      show('Worker unreachable. Local fallback kept (' + saved + '). Opening email draft. Dry-run mode. No charge.');
       mailto(payload);
     });
   });
@@ -81,8 +84,8 @@
     if (!localView) return;
     var rows = readRows();
     localView.textContent = rows.length
-      ? 'DRY-RUN FALLBACK · ' + rows.length + ' local intake(s) · charged: 0\n' + JSON.stringify(rows, null, 2)
-      : 'No local intake saved. Worker placeholder or unreachable uses this fallback. No charges.';
+      ? 'DRY-RUN FALLBACK · ' + rows.length + ' local intake(s) · charged: 0 · GCP/Stripe live still blocked\n' + JSON.stringify(rows, null, 2)
+      : 'No local intake saved. Worker placeholder or unreachable uses this fallback. No charges. Awaiting GCP login and Stripe identity verification.';
   }
 
   if (exportBtn) {

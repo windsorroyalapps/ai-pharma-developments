@@ -26,9 +26,9 @@
     }, 0);
     var aud = (cents / 100).toFixed(2);
     var last = rows.length ? (rows[rows.length - 1].event || 'unknown') : 'none';
-    var banner = 'DRY-RUN MODE ACTIVE — charged always forced to 0 — no live Stripe charges possible';
+    var banner = 'DRY-RUN MODE ACTIVE — charged always forced to 0 — no live Stripe charges possible. GCP auth and Stripe Dashboard identity verification still required for live.';
     summary.textContent = banner + ' · ' + rows.length + ' local rows · agent ' + agent + ' · website ' + website + ' · confirmed ' + confirmed + ' · refused ' + refused + ' · charged ' + charged + ' · preview ' + aud + ' AUD · last: ' + last;
-    list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet. Dry-run mode active. Use the form above to record a preview row.';
+    list.textContent = rows.length ? JSON.stringify(rows.slice(-12), null, 2) : 'No local ledger rows yet. Dry-run mode active. Use the form above to record a preview row. No charges will ever be created from this page.';
   }
 
   window.apdRecordLedger = function (record) {
@@ -57,7 +57,7 @@
   var clearBtn = document.getElementById('pay-ledger-clear');
   if (clearBtn) {
     clearBtn.addEventListener('click', function () {
-      if (confirm('Clear local dry-run ledger? This cannot be undone.')) {
+      if (confirm('Clear local dry-run ledger? This cannot be undone. No charges were ever made.')) {
         localStorage.removeItem(KEY);
         render();
       }

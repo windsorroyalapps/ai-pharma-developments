@@ -81,7 +81,8 @@ const server = http.createServer((req, res) => {
       quote: true,
       queues: true,
       stats: true,
-      blockers: ['gcp_auth_missing', 'stripe_test_key_missing'],
+      blockers: ['gcp_auth_missing', 'stripe_test_key_missing', 'stripe_identity_verification_pending'],
+      note: 'Dry-run only. No live charges until operator GCP login and Stripe Dashboard identity verification complete. confirm=true gate enforced for agents.',
       ledger: summarizeDir(),
     });
   }
