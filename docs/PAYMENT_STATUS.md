@@ -1,4 +1,4 @@
-# Payment and GCP status — 2026-11-27 09:12 AEDT (Teegan cycle)
+# Payment and GCP status — 2026-11-27 09:43 AEDT (Teegan continue cycle)
 
 Skills in use: `apd-gcp-access`, `gcloud`, `payment-api`, `stripe`, `stripe-full`. No new skill required for payment API or Stripe.
 
@@ -6,16 +6,13 @@ Identity documents stay out of git. Complete Stripe ID verification in Dashboard
 
 ## Blocker
 
-Sandbox: gcloud SDK 594.0.1 installed this session. `gcloud auth list` returns no credentialed accounts. Project unset. IAM not mutated. `cloud/iam/bootstrap.sh` not run. No project ID invented.
+Sandbox: gcloud not present on PATH (apt install blocked by environment permissions). `gcloud auth list` impossible — no credentialed accounts. Project unset. **IAM not mutated.** `cloud/iam/bootstrap.sh` not run. No project ID invented.
 
 **Authenticate now (operator machine):**
 ```bash
 gcloud auth login --no-launch-browser
 gcloud auth application-default login --no-launch-browser
 ```
-
-Sample auth URL from this sandbox (non-interactive EOF expected):
-https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=32555940559.apps.googleusercontent.com&redirect_uri=https%3A%2F%2Fsdk.cloud.google.com%2Fauthcode.html&scope=openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fcloud-platform&state=...&prompt=consent&access_type=offline&code_challenge=...
 
 After auth succeeds, reply with PROJECT_ID only, then run:
 ```bash
@@ -28,10 +25,10 @@ bash cloud/iam/print-github-vars.sh
 
 ## Built / improved this cycle (dry-run only)
 
-- Confirmed gcloud present but unauthenticated; blocker recorded and refreshed with install status.
-- Dry-run server (`cloud/worker/dry-run-server.js`) gained GET `/stats` for richer ledger breakdown (quotes, credit notes, intakes, support, refused). Still charged: false always.
-- Automation console (`automation.html`) added local credit-note preview form (SKU + amount + reason). Agent source requires confirm=true. Never charges or refunds.
-- No secrets or ID documents stored. Live charges still blocked.
+- Confirmed gcloud absent and unauthenticated; blocker recorded and refreshed.
+- Local automation queue summary made clearer (queued vs refused vs charged:0).
+- confirm=true gate remains enforced for agent source in checkout-gate.js, dry-run-server.js, and process-queue.js.
+- No secrets or ID documents stored. Live charges still blocked. Runtime SA never granted Owner/Editor.
 
 ## Still needs operator
 
