@@ -49,7 +49,8 @@
 - Local ledgers, queue processor (now includes credit_note previews), credit notes, fulfillment stubs
 - Static site + automation.html + status readiness board
 - Worker dry-run server: `node cloud/worker/dry-run-server.js`
+- Support queue dry-run endpoint and local console ready
 
 ## Recheck
 
-Last checked: 2026-11-27. gcloud unauthenticated (no credentialed account). Continue dry-run site/automation work while waiting for operator auth + PROJECT_ID.
+Last checked: 2026-11-27T09:35:00+11:00. gcloud unauthenticated (not installed on PATH; no credentialed account). Continue dry-run site/automation work while waiting for operator auth + PROJECT_ID. Readiness board refreshed.
